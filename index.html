@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAGo Server | 官方导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==================== CSS变量定义 ==================== */
+        :root {
+            --server-icon-url: url('https://raw.githubusercontent.com/ERX399/SEVER-mc/main/server.png');
+            --accent-yellow: #f6b93b;
+            --light-blue: #a0d2ff;
+            --text-white: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.15);
+        }
+        
+        /* ==================== 基础样式 ==================== */
+        body {
+            min-height: 100vh;
+            color: var(--text-white);
+            background: #111;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* 允许特定元素选择文本 */
+        .card, .footer-info, .about-text, .disclaimer {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
+        /* ==================== 背景图层 ==================== */
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 1.5s ease-in-out;
+        }
+        
+        /* 背景遮罩层 */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+            transition: background 0.8s ease;
+        }
+        
+        /* UI隐藏模式下的遮罩淡化 */
+        .hide-ui .bg-overlay {
+            background: rgba(0, 0, 0, 0.05);
+        }
+        
+        /* ==================== UI元素动画 ==================== */
+        .ui-element {
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            opacity: 1;
+        }
+        
+        .hide-ui .ui-element {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(15px);
+        }
+        
+        /* ==================== 主容器 ==================== */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px 20px 100px;
+        }
+        
+        /* ==================== 头部区域 ==================== */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* 服务器图标 */
+        .server-icon { 
+            width: 85px; 
+            height: 85px; 
+            border-radius: 22px; 
+            margin: 0 auto 15px; 
+            border: 2px solid var(--glass-border); 
+            background-image: var(--server-icon-url); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
+            display: block;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        
+        /* 版本信息标签 */
+        .version-info {
+            font-size: 0.85rem;
+            margin: 10px 0 25px;
+            padding: 6px 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light-blue);
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        /* ==================== 卡片组件 ==================== */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        /* 卡片标题（带装饰线） */
+        h2 {
+            font-size: 1.05rem;
+            color: var(--light-blue);
+            margin: 0 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        h2::before, h2::after {
+            content: "";
+            width: 25px;
+            height: 1px;
+            background: var(--light-blue);
+        }
+        
+        /* ==================== 地址复制框 ==================== */
+        .addr-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .addr-box:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0.98);
+        }
+        
+        .addr-box span {
+            font-size: 0.75rem;
+            color: var(--light-blue);
+            display: block;
+            margin-bottom: 3px;
+        }
+        
+        .addr-box strong {
+            color: var(--accent-yellow);
+            font-size: 1.15rem;
+            font-family: monospace;
+        }
+        
+        /* ==================== 社区信息行 ==================== */
+        .comm-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none; /* 移除链接下划线 */
+            color: inherit; /* 继承父元素颜色 */
+        }
+        
+        .comm-row span:first-child {
+            font-weight: bold;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .comm-row span:last-child {
+            color: var(--light-blue);
+            font-weight: bold;
+        }
+        
+        /* 加入按钮 */
+        .btn-join {
+            background: linear-gradient(135deg, #6ba4ff, #4a86e9);
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-top: 10px;
+            display: block;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+        
+        /* ==================== 免责声明 ==================== */
+        .disclaimer {
+            border-left: 3px solid var(--light-blue);
+            padding: 10px;
+            text-align: left;
+            background: var(--glass-bg);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        /* ==================== 运行时间计时器 ==================== */
+        #timer {
+            color: var(--accent-yellow);
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 8px 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto 30px;
+            text-align: center;
+            width: 60%;
+        }
+        
+        /* ==================== 页脚 ==================== */
+        .footer-info {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.4);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 25px 10px 10px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        
+        /* 服务器提示 */
+        .server-note {
+            font-size: 0.8rem;
+            color: var(--accent-yellow);
+            margin-bottom: 15px;
+            padding: 8px 12px;
+            background: rgba(246, 185, 59, 0.1);
+            border: 1px solid rgba(246, 185, 59, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        /* ==================== 背景控制按钮 ==================== */
+        .bg-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .bg-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .bg-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+        
+        /* ==================== UI隐藏按钮 ==================== */
+        .hide-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hide-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+        
+        /* ==================== 音乐播放器 ==================== */
+        #player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            z-index: 9999;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        /* 播放器展开状态 */
+        #player.expanded {
+            width: 300px;
+            height: 130px;
+            border-radius: 20px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+        
+        /* 播放器图标按钮 */
+        .cd-box {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+        }
+        
+        .cd-box svg {
+            width: 22px;
+            height: 22px;
+            fill: #fff;
+        }
+        
+        /* 播放器内部UI */
+        .inner-ui {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        #player.expanded .inner-ui {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* 音乐信息 */
+        .m-info {
+            text-align: center;
+            padding: 0 5px;
+        }
+        
+        .m-title {
+            font-size: 14px;
+            color: #fff;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        /* 进度条 */
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .p-bg {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .p-fill {
+            height: 100%;
+            background: var(--light-blue);
+            width: 0%;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .p-fill::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -3px;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 4px rgba(0,0,0,0.3);
+            transform: scale(0);
+            transition: transform 0.2s;
+        }
+        
+        #player.expanded .p-fill::after {
+            transform: scale(1);
+        }
+        
+        /* 控制按钮区 */
+        .ctrl-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ctrl-btns {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .ctrl-btns button {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            transition: transform 0.1s, background 0.2s;
+        }
+        
+        .ctrl-btns button:active {
+            transform: scale(0.92);
+        }
+        
+        .ctrl-btns svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
+        }
+        
+        /* 时间显示 */
+        .m-time {
+            font-size: 10px;
+            color: var(--light-blue);
+            font-family: monospace;
+            min-width: 70px;
+            text-align: right;
+        }
+        
+        /* ==================== 提示框 ==================== */
+        #toast {
+            visibility: hidden;
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #222;
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            z-index: 10002;
+            font-size: 0.8rem;
+            box-sizing: border-box;
+        }
+        
+        #toast.show {
+            visibility: visible;
+            animation: fadeInOut 1.5s;
+        }
+        
+        @keyframes fadeInOut {
+            0%,100% {opacity:0;}
+            20%,80% {opacity:1;}
+        }
+        
+        /* 关于文本 */
+        .about-text {
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        /* ==================== 响应式设计 ==================== */
+        @media (max-width: 767px) {
+            .container {
+                padding: 20px 15px 80px;
+            }
+            
+            .server-icon {
+                width: 75px;
+                height: 75px;
+                border-radius: 18px;
+                margin-bottom: 12px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card {
+                padding: 16px;
+                margin-bottom: 12px;
+                border-radius: 15px;
+            }
+            
+            .bg-controls {
+                top: 15px;
+                left: 15px;
+            }
+            
+            #player {
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .hide-btn {
+                top: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== 背景图层 ==================== -->
+    <div class="background-container">
+        <div class="bg-image" id="bgImage1"></div>
+        <div class="bg-image" id="bgImage2" style="opacity:0;"></div>
+    </div>
+    <div class="bg-overlay"></div>
+    
+    <!-- ==================== 背景控制按钮 ==================== -->
+    <div class="bg-controls ui-element">
+        <div class="bg-btn" onclick="backgroundModule.changeBackground()" title="更换背景">
+            <i class="fas fa-sync-alt"></i>
+        </div>
+    </div>
+    
+    <!-- ==================== UI隐藏按钮 ==================== -->
+    <!-- 注意：此按钮不使用 ui-element 类，确保隐藏UI后仍能点击恢复 -->
+    <button class="hide-btn" onclick="uiModule.toggleUI()">
+        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+    </button>
+    
+    <!-- ==================== 提示框 ==================== -->
+    <div id="toast">已复制</div>
+    
+    <!-- ==================== 音乐播放器 ==================== -->
+    <div id="player" class="ui-element">
+        <div class="cd-box" onclick="musicPlayerModule.toggleExpand()">
+            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+        </div>
+        
+        <div class="inner-ui">
+            <div class="m-info">
+                <span class="m-title" id="mName">正在初始化...</span>
+            </div>
+            
+            <div class="progress-container" onclick="musicPlayerModule.seek(event)">
+                <div class="p-bg">
+                    <div class="p-fill" id="pBar"></div>
+                </div>
+            </div>
+            
+            <div class="ctrl-row">
+                <div class="ctrl-btns">
+                    <button onclick="musicPlayerModule.prevTrack()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                    <button onclick="musicPlayerModule.toggleMusic()">
+                        <svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <svg id="pauseIco" style="display:none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button onclick="musicPlayerModule.nextTrack()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                </div>
+                <div class="m-time"><span id="cTime">00:00</span> / <span id="tTime">00:00</span></div>
+            </div>
+        </div>
+        <audio id="audio"></audio>
+    </div> 
+    
+    <!-- ==================== 主内容区 ==================== -->
+    <div class="container ui-element">
+        <!-- 头部 -->
+        <header>
+            <div class="server-icon"></div>
+            <h1>HAGo Server</h1>
+            <div class="version-info">9 周目 | 1.18.x - 1.21.x | 离线服</div>
+        </header>
+        
+        <!-- 关于我们卡片 -->
+        <div class="card">
+            <h2>关于我们</h2>
+            <div class="about-text">
+                始于 2022 年 6 月 13 日<br>
+                由热爱 MC 的少年共同创建<br>
+                目前已开启 9 周目 欢迎加入
+            </div>
+        </div>
+
+        <!-- 连接地址卡片 -->
+        <div class="card">
+            <h2>连接地址</h2>
+            <div class="server-note">注意：本服务器需绑定QQ</div>
+            <div class="addr-box" onclick="utilsModule.copyText('mc.qianxin520.xyz')">
+                <span>主线路</span>
+                <strong>mc.qianxin520.xyz</strong>
+            </div>
+            <div class="addr-box" onclick="utilsModule.copyText('mc.520pro.top')">
+                <span>副线路</span>
+                <strong>mc.520pro.top</strong>
+            </div>
+        </div>
+
+        <!-- 官方社区卡片 -->
+        <div class="card">
+            <h2>官方社区</h2>
+            <div class="comm-list">
+                <div class="comm-row">
+                    <span>官方 QQ 交流群</span>
+                    <span style="color:var(--accent-yellow)">771976804</span>
+                </div>
+                <a href="https://kdocs.cn/l/cgWcf35aLjPg" target="_blank" class="comm-row">
+                    <span>服务器文档</span>
+                    <span>点击跳转</span>
+                </a>
+                <a href="https://f.wps.cn/g/NB3cyCFf/" target="_blank" class="comm-row">
+                    <span>服务器反馈</span>
+                    <span>点击跳转</span>
+                </a>
+            </div>
+            <a href="https://qm.qq.com/q/SFImYropqu" class="btn-join" target="_blank">立即加入玩家交流群</a>
+        </div>
+
+        <!-- 免责声明 -->
+        <div class="disclaimer">
+            免责声明：<br>
+            本页面背景图由第三方接口随机生成，展示内容不代表本站立场<br>
+            如遇不适内容请点击上方按钮更换背景
+        </div>
+
+        <!-- 运行时间计时器 -->
+        <div id="timer">00 天 00 时 00 分 00 秒</div>
+
+        <!-- 页脚 -->
+        <footer class="footer-info">
+            <div>Powered by GitHub & Acofork API</div>
+            <div style="margin-top:5px;">
+                CDN 提供<br>
+                Alibaba ESA / Cloudflare / Tencent EdgeOne
+            </div>
+            <div style="margin-top:15px;">© 2022-2026 HAGo Server Team</div>
+        </footer>
+    </div>
+    
+    <!-- ==================== JavaScript模块 ==================== -->
+    <script>
+        /**
+         * ==================== 页面保护模块 ====================
+         * 防止直接下载和查看源代码
+         */
+        const protectionModule = {
+            /**
+             * 初始化保护功能
+             */
+            init() {
+                this.disableRightClick();
+                this.disableShortcuts();
+                this.detectDevTools();
+                this.obfuscateHTML();
+            },
+            
+            /**
+             * 禁用右键菜单
+             */
+            disableRightClick() {
+                document.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    utilsModule.showToast('右键菜单已禁用');
+                });
+            },
+            
+            /**
+             * 禁用快捷键
+             */
+            disableShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    // 禁用F12、Ctrl+Shift+I、Ctrl+U、Ctrl+S等快捷键
+                    const disabledKeys = {
+                        'F12': true,
+                        'I': e.ctrlKey && e.shiftKey,
+                        'u': e.ctrlKey,
+                        's': e.ctrlKey && !e.shiftKey
+                    };
+                    
+                    if (disabledKeys[e.key] || disabledKeys[e.code]) {
+                        e.preventDefault();
+                        utilsModule.showToast('此操作已被禁用');
+                    }
+                });
+            },
+            
+            /**
+             * 检测开发者工具
+             */
+            detectDevTools() {
+                // 定期检查开发者工具是否打开
+                setInterval(() => {
+                    const widthThreshold = window.outerWidth - window.innerWidth > 160;
+                    const heightThreshold = window.outerHeight - window.innerHeight > 160;
+                    
+                    if (widthThreshold || heightThreshold) {
+                        // 如果检测到开发者工具，刷新页面
+                        window.location.reload();
+                    }
+                }, 1000);
+                
+                // 使用debugger检测
+                const debuggerCheck = () => {
+                    const start = Date.now();
+                    debugger;
+                    if (Date.now() - start > 100) {
+                        window.location.reload();
+                    }
+                };
+                setInterval(debuggerCheck, 1000);
+            },
+            
+            /**
+             * 混淆HTML内容
+             */
+            obfuscateHTML() {
+                // 页面加载完成后再显示内容
+                window.addEventListener('load', () => {
+                    document.body.style.visibility = 'visible';
+                });
+                document.body.style.visibility = 'hidden';
+            }
+        };
+
+        /**
+         * ==================== 配置模块 ====================
+         * 集中管理所有配置常量
+         */
+        const config = {
+            // 背景图API地址
+            bgApiUrl: 'https://img.072103.xyz/h',
+            // 服务器启动时间
+            serverStartDate: '2022-06-13T00:00:00',
+            // 音乐播放列表
+            playlist: [
+                { name: "星茶会", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3" },
+                { name: "I Can't Wait", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3" },
+                { name: "你最近还好吗", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E4%BD%A0%E6%9C%80%E8%BF%91%E8%BF%98%E5%A5%BD%E5%90%97.mp3" },
+                { name: "带我走", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E5%B8%A6%E6%88%91%E8%B5%B0.mp3" },
+                { name: "我们", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E6%88%91%E4%BB%AC.mp3" },
+                { name: "爱你", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3" },
+                { name: "雨爱", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3" },
+                { name: "鸟之诗-八音盒", url: "https://raw.githubusercontent.com/ERX399/SEVER-mc/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3" }
+            ]
+        };
+
+        /**
+         * ==================== 工具函数模块 ====================
+         * 通用工具函数集合
+         */
+        const utilsModule = {
+            /**
+             * 复制文本到剪贴板
+             * @param {string} text - 要复制的文本
+             */
+            copyText(text) {
+                navigator.clipboard.writeText(text).then(() => {
+                    this.showToast('已复制: ' + text);
+                }).catch(err => {
+                    console.log('复制失败:', err);
+                    // 降级方案：使用textarea复制
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    this.showToast('已复制: ' + text);
+                });
+            },
+
+            /**
+             * 显示提示框
+             * @param {string} message - 提示消息
+             */
+            showToast(message) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'show';
+                setTimeout(() => toast.className = '', 1500);
+            },
+
+            /**
+             * 格式化时间（秒转 mm:ss）
+             * @param {number} seconds - 秒数
+             * @returns {string} 格式化后的时间字符串
+             */
+            formatTime(seconds) {
+                if (isNaN(seconds) || seconds === Infinity) return "00:00";
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+            }
+        };
+
+        /**
+         * ==================== 背景管理模块 ====================
+         * 处理背景图片的加载和切换
+         */
+        const backgroundModule = {
+            // 当前显示的背景图索引（1或2）
+            currentBgIndex: 1,
+
+            /**
+             * 初始化背景系统
+             */
+            init() {
+                this.setBackgroundImage('bgImage1', true);
+                this.setBackgroundImage('bgImage2', false);
+            },
+
+            /**
+             * 设置背景图片
+             * @param {string} elementId - 背景元素ID
+             * @param {boolean} show - 是否立即显示
+             */
+            setBackgroundImage(elementId, show = false) {
+                const element = document.getElementById(elementId);
+                // 添加随机参数避免缓存
+                const randomParam = '?t=' + new Date().getTime();
+                element.style.backgroundImage = `url('${config.bgApiUrl}${randomParam}')`;
+                
+                if (show) {
+                    element.style.opacity = 1;
+                }
+            },
+
+            /**
+             * 切换背景图片（带淡入淡出效果）
+             */
+            changeBackground() {
+                const currentElement = document.getElementById(`bgImage${this.currentBgIndex}`);
+                const nextElement = document.getElementById(`bgImage${3 - this.currentBgIndex}`);
+                
+                // 淡出当前背景
+                currentElement.style.opacity = 0;
+                
+                // 淡入新背景
+                setTimeout(() => {
+                    this.setBackgroundImage(`bgImage${3 - this.currentBgIndex}`, true);
+                }, 300);
+                
+                // 预加载下一张背景图
+                setTimeout(() => {
+                    this.setBackgroundImage(`bgImage${this.currentBgIndex}`, false);
+                }, 5000);
+                
+                // 切换索引
+                this.currentBgIndex = 3 - this.currentBgIndex;
+            }
+        };
+
+        /**
+         * ==================== 计时器模块 ====================
+         * 计算并显示服务器运行时间
+         */
+        const timerModule = {
+            /**
+             * 更新服务器运行时间显示
+             */
+            update() {
+                const start = new Date(config.serverStartDate).getTime();
+                const diff = new Date().getTime() - start;
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('timer').innerText = `${d} 天 ${h} 时 ${m} 分 ${s} 秒`;
+            },
+
+            /**
+             * 启动计时器
+             */
+            start() {
+                this.update();
+                setInterval(() => this.update(), 1000);
+            }
+        };
+
+        /**
+         * ==================== UI控制模块 ====================
+         * 处理界面显示/隐藏等UI交互
+         */
+        const uiModule = {
+            /**
+             * 切换UI元素的显示/隐藏
+             */
+            toggleUI() {
+                document.body.classList.toggle('hide-ui');
+            }
+        };
+
+        /**
+         * ==================== 音乐播放器模块 ====================
+         * 完整的音乐播放控制功能
+         */
+        const musicPlayerModule = {
+            // DOM元素引用
+            audio: document.getElementById("audio"),
+            pBar: document.getElementById('pBar'),
+            player: document.getElementById('player'),
+            
+            // 播放器状态
+            currentIndex: 0,
+            isPlaying: false,
+
+            /**
+             * 初始化播放器
+             */
+            init() {
+                this.loadTrack(0);
+                this.bindEvents();
+            },
+
+            /**
+             * 绑定音频事件监听
+             */
+            bindEvents() {
+                this.audio.addEventListener('timeupdate', () => this.updateProgress());
+                this.audio.addEventListener('loadedmetadata', () => this.updateTotalTime());
+                this.audio.addEventListener('ended', () => this.nextTrack());
+                this.audio.addEventListener('error', e => {
+                    console.error("音频加载错误:", e);
+                    document.getElementById("mName").innerText = "音频加载失败";
+                });
+            },
+
+            /**
+             * 切换播放器展开/收起状态
+             */
+            toggleExpand() {
+                this.player.classList.toggle('expanded');
+            },
+
+            /**
+             * 收起播放器（用于点击外部时）
+             */
+            collapse() {
+                if (this.player.classList.contains('expanded')) {
+                    this.toggleExpand();
+                }
+            },
+
+            /**
+             * 加载指定索引的曲目
+             * @param {number} index - 曲目索引
+             */
+            loadTrack(index) {
+                this.currentIndex = (index + config.playlist.length) % config.playlist.length;
+                document.getElementById("mName").innerText = config.playlist[this.currentIndex].name;
+                this.audio.src = config.playlist[this.currentIndex].url;
+                this.audio.load();
+                this.pBar.style.width = '0%';
+                document.getElementById('cTime').innerText = '00:00';
+                document.getElementById('tTime').innerText = '00:00';
+                
+                if (this.isPlaying) {
+                    this.audio.play().then(() => this.updateIco(true)).catch(e => {
+                        console.log("自动播放失败:", e);
+                        this.isPlaying = false;
+                        this.updateIco(false);
+                    });
+                }
+            },
+
+            /**
+             * 播放/暂停切换
+             */
+            toggleMusic() {
+                if (!this.audio.src || this.audio.src === '') {
+                    this.loadTrack(this.currentIndex);
+                }
+                
+                if (this.audio.paused) {
+                    this.audio.play().then(() => {
+                        this.isPlaying = true;
+                        this.updateIco(true);
+                    }).catch(e => {
+                        console.log("播放失败:", e);
+                        this.audio.load();
+                        this.audio.play().then(() => {
+                            this.isPlaying = true;
+                            this.updateIco(true);
+                        }).catch(e2 => console.log("再次播放失败:", e2));
+                    });
+                } else {
+                    this.audio.pause();
+                    this.isPlaying = false;
+                    this.updateIco(false);
+                }
+            },
+
+            /**
+             * 下一曲
+             */
+            nextTrack() {
+                this.loadTrack(this.currentIndex + 1);
+            },
+
+            /**
+             * 上一曲
+             */
+            prevTrack() {
+                this.loadTrack(this.currentIndex - 1);
+            },
+
+            /**
+             * 更新播放/暂停图标
+             * @param {boolean} isPlaying - 是否正在播放
+             */
+            updateIco(isPlaying) {
+                document.getElementById('playIco').style.display = isPlaying ? 'none' : 'block';
+                document.getElementById('pauseIco').style.display = isPlaying ? 'block' : 'none';
+            },
+
+            /**
+             * 更新进度条和时间显示
+             */
+            updateProgress() {
+                if (this.audio.duration) {
+                    const currentTime = this.audio.currentTime;
+                    const duration = this.audio.duration;
+                    this.pBar.style.width = `${(currentTime / duration) * 100}%`;
+                    document.getElementById('cTime').innerText = utilsModule.formatTime(currentTime);
+                    document.getElementById('tTime').innerText = utilsModule.formatTime(duration);
+                }
+            },
+
+            /**
+             * 更新总时长显示
+             */
+            updateTotalTime() {
+                if (this.audio.duration && !isNaN(this.audio.duration)) {
+                    document.getElementById('tTime').innerText = utilsModule.formatTime(this.audio.duration);
+                }
+            },
+
+            /**
+             * 进度条点击跳转
+             * @param {Event} event - 点击事件
+             */
+            seek(event) {
+                if (!this.audio.duration) return;
+                const clickPosition = event.offsetX;
+                const barWidth = event.currentTarget.offsetWidth;
+                this.audio.currentTime = (clickPosition / barWidth) * this.audio.duration;
+            }
+        };
+
+        /**
+         * ==================== 应用初始化 ====================
+         * 页面加载完成后执行所有模块的初始化
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // 首先初始化页面保护
+            protectionModule.init();
+            
+            // 初始化背景系统
+            backgroundModule.init();
+            
+            // 启动运行时间计时器
+            timerModule.start();
+            
+            // 初始化音乐播放器
+            musicPlayerModule.init();
+            
+            // 点击页面其他地方收起播放器
+            document.addEventListener('click', (e) => {
+                if (!musicPlayerModule.player.contains(e.target)) {
+                    musicPlayerModule.collapse();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
