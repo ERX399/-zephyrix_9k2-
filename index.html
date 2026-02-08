@@ -174,7 +174,7 @@
         
         .cd-box svg { width: 22px; height: 22px; fill: #fff; }
         
-        /* 播放器进度条样式 */
+        /* 播放器进度条样式 - 修复显示问题 */
         .progress-container { 
             width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer;
             position: relative; -webkit-tap-highlight-color: transparent;
@@ -219,6 +219,35 @@
         .ctrl-btns svg { width: 18px; height: 18px; fill: #fff; }
         
         .m-time { font-size: 10px; color: var(--blue); font-family: monospace; min-width: 70px; text-align: right; }
+        
+        /* 播放器内部UI */
+        .inner-ui { 
+            opacity: 0; pointer-events: none; transition: opacity 0.3s; height: 100%; 
+            display: flex; flex-direction: column; justify-content: space-between; 
+        }
+        
+        /* 修复：确保播放器展开时内部UI完全可见 */
+        #player.expanded .inner-ui { 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
+        
+        .m-info { 
+            text-align: center; 
+            padding: 0 5px; 
+            overflow: hidden;
+        }
+        
+        .m-title { 
+            font-size: 14px; 
+            color: #fff; 
+            font-weight: bold; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            display: block; 
+            margin-bottom: 8px; 
+        }
         
         #toast {
             visibility: hidden; position: fixed; top: 40px; left: 50%; transform: translateX(-50%);
@@ -672,6 +701,11 @@
                 this.audio.addEventListener('ended', () => this.nextTrack());
                 
                 this.addProgressEvents();
+                
+                // 修复：确保播放器内部UI初始化
+                setTimeout(() => {
+                    this.player.style.visibility = 'visible';
+                }, 100);
             },
             
             addProgressEvents() {
@@ -954,11 +988,8 @@
                     return;
                 }
                 
-                // 修复：使用简单的字符串比较，避免复杂哈希计算
-                // 密码是"qianxin520"，但经过简单编码混淆
-                const decodedPassword = this.decodeString("cWlhblhpbjUyMA==");
-                
-                if (password === decodedPassword) {
+                // 修复：使用简单的字符串比较，密码是"qianxin520"
+                if (password === "qianxin520") {
                     this.closeDialog();
                     this.disableAllProtection();
                     utils.showToast('主题设置已应用，保护功能已解除');
@@ -970,14 +1001,9 @@
                     document.body.appendChild(unlockMsg);
                     setTimeout(() => { if (unlockMsg.parentNode) unlockMsg.remove(); }, 3000);
                 } else {
+                    // 修复：移除密码错误提示，直接关闭对话框
                     this.closeDialog();
-                    utils.showToast('密码错误');
                 }
-            },
-            
-            // 简单的解码函数
-            decodeString(encoded) {
-                return atob(encoded);
             },
             
             disableAllProtection() {
