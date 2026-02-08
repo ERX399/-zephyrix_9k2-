@@ -6,20 +6,18 @@
     <title>HAGo Server | 官方导航</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ==================== CSS变量定义 ==================== */
         :root {
-            --server-icon-url: url('https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/server.png');
-            --accent-yellow: #f6b93b;
-            --light-blue: #a0d2ff;
-            --text-white: rgba(255, 255, 255, 0.95);
-            --glass-bg: rgba(255, 255, 255, 0.1);
+            --yellow: #f6b93b;
+            --blue: #a0d2ff;
+            --white: rgba(255, 255, 255, 0.95);
+            --glass: rgba(255, 255, 255, 0.1);
             --glass-border: rgba(255, 255, 255, 0.15);
+            --rgb-color: 255, 255, 255;
         }
         
-        /* ==================== 基础样式 ==================== */
         body {
             min-height: 100vh;
-            color: var(--text-white);
+            color: var(--white);
             background: #111;
             overflow-x: hidden;
             -webkit-user-select: none;
@@ -28,596 +26,468 @@
             user-select: none;
         }
         
-        /* 允许特定元素选择文本 */
-        .card, .footer-info, .about-text, .disclaimer {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-        }
-        
-        /* ==================== 背景图层 ==================== */
-        .background-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
+        .bg-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
         }
         
         .bg-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: opacity 1.5s ease-in-out;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background-size: cover; background-position: center; transition: opacity 1.5s;
         }
         
-        /* 背景遮罩层 */
         .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: -1;
-            transition: background 0.8s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.6); z-index: -1;
+            transition: background 0.6s ease;
         }
         
-        /* UI隐藏模式下的遮罩淡化 */
+        /* 隐藏UI时增加背景亮度 */
         .hide-ui .bg-overlay {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.2);
         }
         
-        /* ==================== UI元素动画 ==================== */
-        .ui-element {
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            opacity: 1;
-        }
-        
-        .hide-ui .ui-element {
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(15px);
-        }
-        
-        /* ==================== 主容器 ==================== */
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 30px 20px 100px;
-        }
-        
-        /* ==================== 头部区域 ==================== */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        /* 服务器图标 */
-        .server-icon { 
-            width: 85px; 
-            height: 85px; 
-            border-radius: 22px; 
-            margin: 0 auto 15px; 
-            border: 2px solid var(--glass-border); 
-            background-image: var(--server-icon-url); 
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); 
-            display: block;
-        }
-        
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-        
-        /* 版本信息标签 */
-        .version-info {
-            font-size: 0.85rem;
-            margin: 10px 0 25px;
-            padding: 6px 15px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            color: var(--light-blue);
-            font-weight: bold;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        /* ==================== 卡片组件 ==================== */
-        .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-        
-        /* 卡片标题（带装饰线） */
-        h2 {
-            font-size: 1.05rem;
-            color: var(--light-blue);
-            margin: 0 0 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-weight: bold;
-            text-align: center;
-        }
-        
-        h2::before, h2::after {
-            content: "";
-            width: 25px;
-            height: 1px;
-            background: var(--light-blue);
-        }
-        
-        /* ==================== 地址复制框 ==================== */
-        .addr-box {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 14px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            border: 1px solid rgba(255,255,255,0.08);
-            transition: all 0.2s;
-            text-align: center;
-        }
-        
-        .addr-box:active {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(0.98);
-        }
-        
-        .addr-box span {
-            font-size: 0.75rem;
-            color: var(--light-blue);
-            display: block;
-            margin-bottom: 3px;
-        }
-        
-        .addr-box strong {
-            color: var(--accent-yellow);
-            font-size: 1.15rem;
-            font-family: monospace;
-        }
-        
-        /* ==================== 社区信息行 ==================== */
-        .comm-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 15px;
-            background: rgba(255,255,255,0.07);
-            border-radius: 10px;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none; /* 移除链接下划线 */
-            color: inherit; /* 继承父元素颜色 */
-        }
-        
-        .comm-row span:first-child {
-            font-weight: bold;
-            color: rgba(255,255,255,0.9);
-        }
-        
-        .comm-row span:last-child {
-            color: var(--light-blue);
-            font-weight: bold;
-        }
-        
-        /* 加入按钮 */
-        .btn-join {
-            background: linear-gradient(135deg, #6ba4ff, #4a86e9);
-            padding: 16px;
-            border-radius: 14px;
-            font-weight: 800;
-            font-size: 1rem;
-            margin-top: 10px;
-            display: block;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3);
-            color: white;
-            text-decoration: none;
-        }
-        
-        /* ==================== 免责声明 ==================== */
-        .disclaimer {
-            border-left: 3px solid var(--light-blue);
-            padding: 10px;
-            text-align: left;
-            background: var(--glass-bg);
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.6);
-        }
-        
-        /* ==================== 运行时间计时器 ==================== */
-        #timer {
-            color: var(--accent-yellow);
-            font-weight: bold;
-            font-size: 1rem;
-            padding: 8px 16px;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            display: block;
-            margin: 0 auto 30px;
-            text-align: center;
-            width: 60%;
-        }
-        
-        /* ==================== 页脚 ==================== */
-        .footer-info {
-            font-size: 0.72rem;
-            color: rgba(255, 255, 255, 0.4);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 25px 10px 10px;
-            line-height: 1.6;
-            text-align: center;
-        }
-        
-        /* 服务器提示 */
-        .server-note {
-            font-size: 0.8rem;
-            color: var(--accent-yellow);
-            margin-bottom: 15px;
-            padding: 8px 12px;
-            background: rgba(246, 185, 59, 0.1);
-            border: 1px solid rgba(246, 185, 59, 0.2);
-            border-radius: 8px;
-            text-align: center;
-        }
-        
-        /* ==================== 背景控制按钮 ==================== */
-        .bg-controls {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .bg-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .bg-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1);
-        }
-        
-        /* ==================== UI隐藏按钮 ==================== */
-        .hide-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10001;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            width: 38px;
-            height: 38px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .hide-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #fff;
-        }
-        
-        /* ==================== 音乐播放器 ==================== */
-        #player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            z-index: 9999;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-        
-        /* 播放器展开状态 */
-        #player.expanded {
-            width: 300px;
-            height: 130px;
-            border-radius: 20px;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-        
-        /* 播放器图标按钮 */
-        .cd-box {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-        }
-        
-        .cd-box svg {
-            width: 22px;
-            height: 22px;
-            fill: #fff;
-        }
-        
-        /* 播放器内部UI */
-        .inner-ui {
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        
-        #player.expanded .inner-ui {
-            opacity: 1;
+        /* UI隐藏功能相关样式 */
+        .ui-element { 
+            transition: opacity 0.6s ease, transform 0.6s ease; 
+            opacity: 1; 
             pointer-events: auto;
         }
         
-        /* 音乐信息 */
-        .m-info {
-            text-align: center;
-            padding: 0 5px;
+        .hide-ui .ui-element { 
+            opacity: 0; 
+            pointer-events: none; 
+            transform: translateY(15px);
         }
         
-        .m-title {
-            font-size: 14px;
-            color: #fff;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: block;
-            margin-bottom: 8px;
+        /* 隐藏按钮不需要被隐藏 */
+        .hide-btn {
+            transition: opacity 0.6s ease, transform 0.6s ease; 
         }
         
-        /* 进度条 */
-        .progress-container {
-            width: 100%;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
+        .hide-ui .hide-btn { 
+            opacity: 1; 
+            pointer-events: auto; 
         }
         
-        .p-bg {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 2px;
-            position: relative;
+        .container { max-width: 500px; margin: 0 auto; padding: 30px 20px 100px; }
+        header { text-align: center; margin-bottom: 30px; }
+        
+        .server-icon { 
+            width: 85px; height: 85px; border-radius: 22px; margin: 0 auto 15px; 
+            border: 2px solid var(--glass-border); background: url('https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/server.png') center/cover no-repeat;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
         
-        .p-fill {
-            height: 100%;
-            background: var(--light-blue);
-            width: 0%;
-            border-radius: 2px;
-            position: relative;
+        h1 { font-size: 2rem; margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        
+        .version-info {
+            font-size: 0.85rem; margin: 10px 0 25px; padding: 6px 15px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 12px; color: var(--blue);
+            font-weight: bold; display: inline-block;
         }
         
-        .p-fill::after {
-            content: '';
-            position: absolute;
-            right: -5px;
-            top: -3px;
-            width: 8px;
-            height: 8px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 4px rgba(0,0,0,0.3);
-            transform: scale(0);
-            transition: transform 0.2s;
+        .card {
+            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px;
+            padding: 20px; margin-bottom: 15px;
         }
         
-        #player.expanded .p-fill::after {
-            transform: scale(1);
+        h2 {
+            font-size: 1.05rem; color: var(--blue); margin: 0 0 15px; display: flex;
+            align-items: center; justify-content: center; gap: 12px; font-weight: bold; 
         }
         
-        /* 控制按钮区 */
-        .ctrl-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        h2::before, h2::after { content: ""; width: 25px; height: 1px; background: var(--blue); }
+        
+        .addr-box {
+            background: rgba(255, 255, 255, 0.05); padding: 14px; border-radius: 12px; margin-bottom: 10px;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.08); text-align: center;
         }
         
-        .ctrl-btns {
-            display: flex;
-            gap: 12px;
-            align-items: center;
+        .addr-box:active { background: rgba(255, 255, 255, 0.1); transform: scale(0.98); }
+        .addr-box span { font-size: 0.75rem; color: var(--blue); display: block; margin-bottom: 3px; }
+        .addr-box strong { color: var(--yellow); font-size: 1.15rem; font-family: monospace; }
+        
+        .comm-row {
+            display: flex; justify-content: space-between; padding: 12px 15px; background: rgba(255,255,255,0.07);
+            border-radius: 10px; margin-bottom: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05);
+            text-decoration: none; color: inherit;
         }
         
+        .comm-row span:first-child { font-weight: bold; color: rgba(255,255,255,0.9); }
+        .comm-row span:last-child { color: var(--blue); font-weight: bold; }
+        
+        .btn-join {
+            background: linear-gradient(135deg, #6ba4ff, #4a86e9); padding: 16px; border-radius: 14px;
+            font-weight: 800; font-size: 1rem; margin-top: 10px; display: block; text-align: center;
+            box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3); color: white; text-decoration: none;
+        }
+        
+        .disclaimer {
+            border-left: 3px solid var(--blue); padding: 10px; text-align: left; background: var(--glass);
+            border-radius: 4px; margin-bottom: 20px; font-size: 0.75rem; color: rgba(255,255,255,0.6);
+        }
+        
+        #timer {
+            color: var(--yellow); font-weight: bold; font-size: 1rem; padding: 8px 16px; background: var(--glass);
+            border: 1px solid var(--glass-border); border-radius: 10px; display: block; margin: 0 auto 30px;
+            text-align: center; width: 60%;
+        }
+        
+        .footer-info {
+            font-size: 0.72rem; color: rgba(255, 255, 255, 0.4); border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 25px 10px 10px; line-height: 1.6; text-align: center;
+        }
+        
+        .server-note {
+            font-size: 0.8rem; color: var(--yellow); margin-bottom: 15px; padding: 8px 12px;
+            background: rgba(246, 185, 59, 0.1); border: 1px solid rgba(246, 185, 59, 0.2);
+            border-radius: 8px; text-align: center;
+        }
+        
+        .bg-controls { position: fixed; top: 20px; left: 20px; }
+        .bg-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;
+            color: white; cursor: pointer;
+        }
+        
+        .hide-btn {
+            position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border); border-radius: 10px; width: 38px; height: 38px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        
+        .hide-btn svg { width: 20px; height: 20px; fill: #fff; }
+        
+        #player {
+            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
+            background: rgba(255, 255, 255, 0.15); border: 1px solid var(--glass-border); border-radius: 25px;
+            z-index: 9999; transition: all 0.4s; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; }
+        
+        .cd-box {
+            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; position: absolute; top: 0; left: 0; z-index: 2;
+        }
+        
+        .cd-box svg { width: 22px; height: 22px; fill: #fff; }
+        
+        .inner-ui { opacity: 0; pointer-events: none; transition: opacity 0.3s; height: 100%; 
+                  display: flex; flex-direction: column; justify-content: space-between; }
+        #player.expanded .inner-ui { opacity: 1; pointer-events: auto; }
+        
+        .m-info { text-align: center; padding: 0 5px; }
+        .m-title { font-size: 14px; color: #fff; font-weight: bold; white-space: nowrap; overflow: hidden; 
+                  text-overflow: ellipsis; display: block; margin-bottom: 8px; }
+        
+        /* 播放器进度条样式 */
+        .progress-container { 
+            width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer;
+            position: relative; -webkit-tap-highlight-color: transparent;
+        }
+        
+        .p-bg { 
+            width: 100%; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 3px; 
+            position: relative; cursor: pointer;
+        }
+        
+        .p-fill { 
+            height: 100%; background: var(--blue); width: 0%; border-radius: 3px; position: relative;
+            transition: width 0.1s ease;
+        }
+        
+        .p-fill::after { 
+            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px; 
+            background: #fff; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.5); transform: scale(0);
+            transition: transform 0.2s ease, background 0.3s ease;
+        }
+        
+        #player.expanded .p-fill::after { transform: scale(1); }
+        
+        /* 进度条悬停效果 */
+        .progress-container:hover .p-bg {
+            height: 6px;
+        }
+        
+        .progress-container:hover .p-fill::after {
+            transform: scale(1.2) !important;
+        }
+        
+        /* 控制按钮样式 */
+        .ctrl-row { display: flex; justify-content: space-between; align-items: center; }
+        .ctrl-btns { display: flex; gap: 12px; align-items: center; }
         .ctrl-btns button {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            cursor: pointer;
-            padding: 6px;
-            border-radius: 50%;
-            display: flex;
-            transition: transform 0.1s, background 0.2s;
+            background: rgba(255,255,255,0.1); border: none; cursor: pointer; padding: 6px; border-radius: 50%;
+            display: flex; transition: transform 0.1s;
         }
         
-        .ctrl-btns button:active {
-            transform: scale(0.92);
-        }
+        .ctrl-btns button:active { transform: scale(0.92); }
+        .ctrl-btns svg { width: 18px; height: 18px; fill: #fff; }
         
-        .ctrl-btns svg {
-            width: 18px;
-            height: 18px;
-            fill: #fff;
-        }
+        .m-time { font-size: 10px; color: var(--blue); font-family: monospace; min-width: 70px; text-align: right; }
         
-        /* 时间显示 */
-        .m-time {
-            font-size: 10px;
-            color: var(--light-blue);
-            font-family: monospace;
-            min-width: 70px;
-            text-align: right;
-        }
-        
-        /* ==================== 提示框 ==================== */
         #toast {
-            visibility: hidden;
-            position: fixed;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #222;
-            color: #fff;
-            padding: 8px 20px;
-            border-radius: 20px;
-            z-index: 10002;
-            font-size: 0.8rem;
-            box-sizing: border-box;
+            visibility: hidden; position: fixed; top: 40px; left: 50%; transform: translateX(-50%);
+            background: #222; color: #fff; padding: 8px 20px; border-radius: 20px; z-index: 10002;
+            font-size: 0.8rem; box-sizing: border-box;
         }
         
-        #toast.show {
-            visibility: visible;
-            animation: fadeInOut 1.5s;
+        #toast.show { visibility: visible; animation: fadeInOut 1.5s; }
+        @keyframes fadeInOut { 0%,100% {opacity:0;} 20%,80% {opacity:1;} }
+        
+        #passwordDialog {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--glass);
+            backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px;
+            z-index: 99999; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; width: 350px; max-width: 90%;
+            pointer-events: auto; animation: dialogAppear 0.3s;
         }
         
-        @keyframes fadeInOut {
-            0%,100% {opacity:0;}
-            20%,80% {opacity:1;}
+        #passwordDialog.show { display: block; }
+        @keyframes dialogAppear { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } 
+                                  to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+        
+        #passwordDialog h3 {
+            margin-top: 0; margin-bottom: 20px; color: var(--blue); text-align: center; font-size: 1.3rem;
         }
         
-        /* 关于文本 */
-        .about-text {
-            text-align: center;
-            line-height: 1.6;
+        #passwordInput {
+            width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05); color: white; font-size: 1.1rem; box-sizing: border-box;
+            margin-bottom: 20px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         
-        /* ==================== 响应式设计 ==================== */
+        .password-buttons { display: flex; gap: 15px; }
+        .password-buttons button { flex: 1; padding: 12px 0; border: none; border-radius: 12px; 
+                                  cursor: pointer; font-weight: bold; font-size: 1rem; }
+        
+        #passwordConfirm {
+            background: linear-gradient(135deg, #6ba4ff, #4a86e9); color: white;
+            box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3);
+        }
+        
+        #passwordCancel {
+            background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border);
+        }
+        
+        .rgb-switch-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .rgb-switch-label {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
+            color: rgba(255,255,255,0.9); font-size: 0.95rem;
+        }
+        
+        .rgb-speed-container { margin-top: 15px; }
+        .rgb-speed-label {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+            color: rgba(255,255,255,0.8); font-size: 0.9rem;
+        }
+        
+        .speed-value { color: var(--blue); font-weight: bold; font-family: monospace; font-size: 0.95rem; }
+        .speed-limit { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 3px; text-align: center; }
+        
+        .speed-slider {
+            width: 100%; height: 8px; -webkit-appearance: none; appearance: none; 
+            background: rgba(255,255,255,0.1); border-radius: 4px; outline: none; margin: 10px 0; 
+        }
+        
+        .speed-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%;
+            background: var(--blue); cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.3);
+        }
+        
+        .rgb-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .rgb-switch input { opacity: 0; width: 0; height: 0; }
+        .rgb-slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px;
+        }
+        
+        .rgb-slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        
+        input:checked + .rgb-slider { background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff); }
+        input:checked + .rgb-slider:before { transform: translateX(24px); }
+        
+        #passwordOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+            z-index: 99998; display: none; pointer-events: auto;
+        }
+        
+        #passwordOverlay.show { display: block; animation: overlayAppear 0.3s; }
+        @keyframes overlayAppear { from { opacity: 0; } to { opacity: 1; } }
+        
+        .about-text { text-align: center; line-height: 1.6; }
+        
+        /* RGB激活时的样式 */
+        body.rgb-active h1,
+        body.rgb-active h2,
+        body.rgb-active .version-info,
+        body.rgb-active .about-text,
+        body.rgb-active .server-note,
+        body.rgb-active .addr-box span,
+        body.rgb-active .addr-box strong,
+        body.rgb-active .comm-row span,
+        body.rgb-active .footer-info,
+        body.rgb-active .disclaimer,
+        body.rgb-active #passwordDialog h3,
+        body.rgb-active .rgb-switch-label span,
+        body.rgb-active .rgb-speed-label span,
+        body.rgb-active .speed-value,
+        body.rgb-active .speed-limit,
+        body.rgb-active .m-title,
+        body.rgb-active .m-time {
+            color: rgba(var(--rgb-color), 0.9) !important;
+            text-shadow: 0 0 5px rgba(var(--rgb-color), 0.4) !important;
+        }
+        
+        body.rgb-active h2::before,
+        body.rgb-active h2::after {
+            background: rgba(var(--rgb-color), 0.7) !important;
+        }
+        
+        body.rgb-active .card {
+            box-shadow: 0 5px 20px rgba(var(--rgb-color), 0.1) !important;
+            border-color: rgba(var(--rgb-color), 0.3) !important;
+        }
+        
+        body.rgb-active .btn-join {
+            background: linear-gradient(135deg, rgba(var(--rgb-color), 0.7), rgba(var(--rgb-color), 0.5)) !important;
+            box-shadow: 0 4px 15px rgba(var(--rgb-color), 0.3) !important;
+        }
+        
+        body.rgb-active .addr-box {
+            box-shadow: 0 3px 10px rgba(var(--rgb-color), 0.15) !important;
+            border-color: rgba(var(--rgb-color), 0.2) !important;
+        }
+        
+        body.rgb-active .comm-row {
+            background: rgba(var(--rgb-color), 0.05) !important;
+            border-color: rgba(var(--rgb-color), 0.2) !important;
+        }
+        
+        body.rgb-active #timer {
+            color: rgba(var(--rgb-color), 0.9) !important;
+            border-color: rgba(var(--rgb-color), 0.3) !important;
+        }
+        
+        body.rgb-active #passwordInput {
+            border-color: rgba(var(--rgb-color), 0.4) !important;
+        }
+        
+        body.rgb-active #passwordConfirm {
+            background: linear-gradient(135deg, rgba(var(--rgb-color), 0.7), rgba(var(--rgb-color), 0.5)) !important;
+        }
+        
+        body.rgb-active .speed-slider {
+            background: rgba(var(--rgb-color), 0.1) !important;
+        }
+        
+        body.rgb-active .speed-slider::-webkit-slider-thumb {
+            background: rgba(var(--rgb-color), 0.9) !important;
+        }
+        
+        body.rgb-active .bg-btn,
+        body.rgb-active .hide-btn,
+        body.rgb-active #player {
+            box-shadow: 0 0 10px rgba(var(--rgb-color), 0.2) !important;
+            border-color: rgba(var(--rgb-color), 0.3) !important;
+        }
+        
+        body.rgb-active #toast.show {
+            background: rgba(var(--rgb-color), 0.8) !important;
+            color: #000 !important;
+        }
+        
+        /* 播放器滑条跟随RGB */
+        body.rgb-active .p-fill {
+            background: rgba(var(--rgb-color), 0.9) !important;
+            box-shadow: 0 0 5px rgba(var(--rgb-color), 0.5) !important;
+        }
+        
+        body.rgb-active .p-fill::after {
+            background: rgb(var(--rgb-color)) !important;
+            box-shadow: 0 0 8px rgba(var(--rgb-color), 0.8) !important;
+        }
+        
+        body.rgb-active .ctrl-btns button:hover {
+            background: rgba(var(--rgb-color), 0.2) !important;
+        }
+        
         @media (max-width: 767px) {
-            .container {
-                padding: 20px 15px 80px;
-            }
-            
-            .server-icon {
-                width: 75px;
-                height: 75px;
-                border-radius: 18px;
-                margin-bottom: 12px;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .card {
-                padding: 16px;
-                margin-bottom: 12px;
-                border-radius: 15px;
-            }
-            
-            .bg-controls {
-                top: 15px;
-                left: 15px;
-            }
-            
-            #player {
-                bottom: 15px;
-                right: 15px;
-            }
-            
-            .hide-btn {
-                top: 15px;
-                right: 15px;
-            }
+            .container { padding: 20px 15px 80px; }
+            .server-icon { width: 75px; height: 75px; }
+            h1 { font-size: 1.8rem; }
+            .card { padding: 16px; }
+            #passwordDialog { width: 320px; padding: 20px; }
         }
     </style>
 </head>
 <body>
-    <!-- ==================== 背景图层 ==================== -->
-    <div class="background-container">
+    <div class="bg-container">
         <div class="bg-image" id="bgImage1"></div>
         <div class="bg-image" id="bgImage2" style="opacity:0;"></div>
     </div>
     <div class="bg-overlay"></div>
     
-    <!-- ==================== 背景控制按钮 ==================== -->
     <div class="bg-controls ui-element">
-        <div class="bg-btn" onclick="backgroundModule.changeBackground()" title="更换背景">
-            <i class="fas fa-sync-alt"></i>
-        </div>
+        <div class="bg-btn" onclick="backgroundModule.changeBackground()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
     </div>
     
-    <!-- ==================== UI隐藏按钮 ==================== -->
-    <!-- 注意：此按钮不使用 ui-element 类，确保隐藏UI后仍能点击恢复 -->
-    <button class="hide-btn" onclick="uiModule.toggleUI()">
+    <button class="hide-btn" onclick="uiModule.toggleUI()" id="hideUiBtn">
         <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
     </button>
     
-    <!-- ==================== 提示框 ==================== -->
+    <div id="passwordOverlay"></div>
+    <div id="passwordDialog">
+        <h3>高级主题设置</h3>
+        <input type="text" id="passwordInput" placeholder="输入主题设置..." autocomplete="off">
+        <div class="password-buttons">
+            <button id="passwordConfirm">应用</button>
+            <button id="passwordCancel">取消</button>
+        </div>
+        
+        <div class="rgb-switch-container">
+            <div class="rgb-switch-label">
+                <span>启用RGB主题效果</span>
+                <label class="rgb-switch"><input type="checkbox" id="rgbSwitch"><span class="rgb-slider"></span></label>
+            </div>
+            
+            <div class="rgb-speed-container">
+                <div class="rgb-speed-label">
+                    <span>RGB速度调节</span>
+                    <span class="speed-value" id="speedValue">3</span>
+                </div>
+                <input type="range" min="1" max="10" value="3" class="speed-slider" id="speedSlider">
+                <div class="speed-limit">速度范围: 1 (慢) ~ 10 (快)</div>
+            </div>
+        </div>
+    </div>
+    
     <div id="toast">已复制</div>
     
-    <!-- ==================== 音乐播放器 ==================== -->
     <div id="player" class="ui-element">
-        <div class="cd-box" onclick="musicPlayerModule.toggleExpand()">
+        <div class="cd-box" onclick="musicPlayer.toggleExpand()">
             <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
         
         <div class="inner-ui">
-            <div class="m-info">
-                <span class="m-title" id="mName">正在初始化...</span>
-            </div>
+            <div class="m-info"><span class="m-title" id="mName">正在初始化...</span></div>
             
-            <div class="progress-container" onclick="musicPlayerModule.seek(event)">
-                <div class="p-bg">
-                    <div class="p-fill" id="pBar"></div>
-                </div>
+            <div class="progress-container" id="progressBar">
+                <div class="p-bg"><div class="p-fill" id="pBar"></div></div>
             </div>
             
             <div class="ctrl-row">
                 <div class="ctrl-btns">
-                    <button onclick="musicPlayerModule.prevTrack()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-                    <button onclick="musicPlayerModule.toggleMusic()">
+                    <button onclick="musicPlayer.prevTrack()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                    <button onclick="musicPlayer.toggleMusic()">
                         <svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         <svg id="pauseIco" style="display:none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
-                    <button onclick="musicPlayerModule.nextTrack()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                    <button onclick="musicPlayer.nextTrack()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
                 </div>
                 <div class="m-time"><span id="cTime">00:00</span> / <span id="tTime">00:00</span></div>
             </div>
@@ -625,16 +495,13 @@
         <audio id="audio"></audio>
     </div> 
     
-    <!-- ==================== 主内容区 ==================== -->
     <div class="container ui-element">
-        <!-- 头部 -->
         <header>
             <div class="server-icon"></div>
             <h1>HAGo Server</h1>
             <div class="version-info">9 周目 | 1.18.x - 1.21.x | 离线服</div>
         </header>
         
-        <!-- 关于我们卡片 -->
         <div class="card">
             <h2>关于我们</h2>
             <div class="about-text">
@@ -644,27 +511,25 @@
             </div>
         </div>
 
-        <!-- 连接地址卡片 -->
         <div class="card">
             <h2>连接地址</h2>
             <div class="server-note">注意：本服务器需绑定QQ</div>
-            <div class="addr-box" onclick="utilsModule.copyText('mc.qianxin520.xyz')">
+            <div class="addr-box" onclick="utils.copyText('mc.qianxin520.xyz')">
                 <span>主线路</span>
                 <strong>mc.qianxin520.xyz</strong>
             </div>
-            <div class="addr-box" onclick="utilsModule.copyText('mc.520pro.top')">
+            <div class="addr-box" onclick="utils.copyText('mc.520pro.top')">
                 <span>副线路</span>
                 <strong>mc.520pro.top</strong>
             </div>
         </div>
 
-        <!-- 官方社区卡片 -->
         <div class="card">
             <h2>官方社区</h2>
             <div class="comm-list">
                 <div class="comm-row">
                     <span>官方 QQ 交流群</span>
-                    <span style="color:var(--accent-yellow)">771976804</span>
+                    <span style="color:var(--yellow)">771976804</span>
                 </div>
                 <a href="https://kdocs.cn/l/cgWcf35aLjPg" target="_blank" class="comm-row">
                     <span>服务器文档</span>
@@ -678,17 +543,14 @@
             <a href="https://qm.qq.com/q/SFImYropqu" class="btn-join" target="_blank">立即加入玩家交流群</a>
         </div>
 
-        <!-- 免责声明 -->
         <div class="disclaimer">
             免责声明：<br>
             本页面背景图由第三方接口随机生成，展示内容不代表本站立场<br>
             如遇不适内容请点击上方按钮更换背景
         </div>
 
-        <!-- 运行时间计时器 -->
         <div id="timer">00 天 00 时 00 分 00 秒</div>
 
-        <!-- 页脚 -->
         <footer class="footer-info">
             <div>Powered by GitHub & Acofork API</div>
             <div style="margin-top:5px;">
@@ -699,101 +561,10 @@
         </footer>
     </div>
     
-    <!-- ==================== JavaScript模块 ==================== -->
     <script>
-        /**
-         * ==================== 页面保护模块 ====================
-         * 防止直接下载和查看源代码
-         */
-        const protectionModule = {
-            /**
-             * 初始化保护功能
-             */
-            init() {
-                this.disableRightClick();
-                this.disableShortcuts();
-                this.detectDevTools();
-                this.obfuscateHTML();
-            },
-            
-            /**
-             * 禁用右键菜单
-             */
-            disableRightClick() {
-                document.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    utilsModule.showToast('右键菜单已禁用');
-                });
-            },
-            
-            /**
-             * 禁用快捷键
-             */
-            disableShortcuts() {
-                document.addEventListener('keydown', (e) => {
-                    // 禁用F12、Ctrl+Shift+I、Ctrl+U、Ctrl+S等快捷键
-                    const disabledKeys = {
-                        'F12': true,
-                        'I': e.ctrlKey && e.shiftKey,
-                        'u': e.ctrlKey,
-                        's': e.ctrlKey && !e.shiftKey
-                    };
-                    
-                    if (disabledKeys[e.key] || disabledKeys[e.code]) {
-                        e.preventDefault();
-                        utilsModule.showToast('此操作已被禁用');
-                    }
-                });
-            },
-            
-            /**
-             * 检测开发者工具
-             */
-            detectDevTools() {
-                // 定期检查开发者工具是否打开
-                setInterval(() => {
-                    const widthThreshold = window.outerWidth - window.innerWidth > 160;
-                    const heightThreshold = window.outerHeight - window.innerHeight > 160;
-                    
-                    if (widthThreshold || heightThreshold) {
-                        // 如果检测到开发者工具，刷新页面
-                        window.location.reload();
-                    }
-                }, 1000);
-                
-                // 使用debugger检测
-                const debuggerCheck = () => {
-                    const start = Date.now();
-                    debugger;
-                    if (Date.now() - start > 100) {
-                        window.location.reload();
-                    }
-                };
-                setInterval(debuggerCheck, 1000);
-            },
-            
-            /**
-             * 混淆HTML内容
-             */
-            obfuscateHTML() {
-                // 页面加载完成后再显示内容
-                window.addEventListener('load', () => {
-                    document.body.style.visibility = 'visible';
-                });
-                document.body.style.visibility = 'hidden';
-            }
-        };
-
-        /**
-         * ==================== 配置模块 ====================
-         * 集中管理所有配置常量
-         */
         const config = {
-            // 背景图API地址
             bgApiUrl: 'https://img.072103.xyz/h',
-            // 服务器启动时间
             serverStartDate: '2022-06-13T00:00:00',
-            // 音乐播放列表
             playlist: [
                 { name: "星茶会", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3" },
                 { name: "I Can't Wait", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3" },
@@ -806,21 +577,11 @@
             ]
         };
 
-        /**
-         * ==================== 工具函数模块 ====================
-         * 通用工具函数集合
-         */
-        const utilsModule = {
-            /**
-             * 复制文本到剪贴板
-             * @param {string} text - 要复制的文本
-             */
+        const utils = {
             copyText(text) {
                 navigator.clipboard.writeText(text).then(() => {
                     this.showToast('已复制: ' + text);
                 }).catch(err => {
-                    console.log('复制失败:', err);
-                    // 降级方案：使用textarea复制
                     const textArea = document.createElement('textarea');
                     textArea.value = text;
                     document.body.appendChild(textArea);
@@ -831,10 +592,6 @@
                 });
             },
 
-            /**
-             * 显示提示框
-             * @param {string} message - 提示消息
-             */
             showToast(message) {
                 const toast = document.getElementById('toast');
                 toast.textContent = message;
@@ -842,11 +599,6 @@
                 setTimeout(() => toast.className = '', 1500);
             },
 
-            /**
-             * 格式化时间（秒转 mm:ss）
-             * @param {number} seconds - 秒数
-             * @returns {string} 格式化后的时间字符串
-             */
             formatTime(seconds) {
                 if (isNaN(seconds) || seconds === Infinity) return "00:00";
                 const mins = Math.floor(seconds / 60);
@@ -855,71 +607,28 @@
             }
         };
 
-        /**
-         * ==================== 背景管理模块 ====================
-         * 处理背景图片的加载和切换
-         */
         const backgroundModule = {
-            // 当前显示的背景图索引（1或2）
             currentBgIndex: 1,
-
-            /**
-             * 初始化背景系统
-             */
             init() {
                 this.setBackgroundImage('bgImage1', true);
                 this.setBackgroundImage('bgImage2', false);
             },
-
-            /**
-             * 设置背景图片
-             * @param {string} elementId - 背景元素ID
-             * @param {boolean} show - 是否立即显示
-             */
             setBackgroundImage(elementId, show = false) {
                 const element = document.getElementById(elementId);
-                // 添加随机参数避免缓存
-                const randomParam = '?t=' + new Date().getTime();
-                element.style.backgroundImage = `url('${config.bgApiUrl}${randomParam}')`;
-                
-                if (show) {
-                    element.style.opacity = 1;
-                }
+                element.style.backgroundImage = `url('${config.bgApiUrl}?t=${new Date().getTime()}')`;
+                if (show) element.style.opacity = 1;
             },
-
-            /**
-             * 切换背景图片（带淡入淡出效果）
-             */
             changeBackground() {
-                const currentElement = document.getElementById(`bgImage${this.currentBgIndex}`);
-                const nextElement = document.getElementById(`bgImage${3 - this.currentBgIndex}`);
-                
-                // 淡出当前背景
-                currentElement.style.opacity = 0;
-                
-                // 淡入新背景
-                setTimeout(() => {
-                    this.setBackgroundImage(`bgImage${3 - this.currentBgIndex}`, true);
-                }, 300);
-                
-                // 预加载下一张背景图
-                setTimeout(() => {
-                    this.setBackgroundImage(`bgImage${this.currentBgIndex}`, false);
-                }, 5000);
-                
-                // 切换索引
+                const current = document.getElementById(`bgImage${this.currentBgIndex}`);
+                const next = document.getElementById(`bgImage${3 - this.currentBgIndex}`);
+                current.style.opacity = 0;
+                setTimeout(() => this.setBackgroundImage(`bgImage${3 - this.currentBgIndex}`, true), 300);
+                setTimeout(() => this.setBackgroundImage(`bgImage${this.currentBgIndex}`, false), 5000);
                 this.currentBgIndex = 3 - this.currentBgIndex;
             }
         };
 
-        /**
-         * ==================== 计时器模块 ====================
-         * 计算并显示服务器运行时间
-         */
         const timerModule = {
-            /**
-             * 更新服务器运行时间显示
-             */
             update() {
                 const start = new Date(config.serverStartDate).getTime();
                 const diff = new Date().getTime() - start;
@@ -929,84 +638,127 @@
                 const s = Math.floor((diff % 60000) / 1000);
                 document.getElementById('timer').innerText = `${d} 天 ${h} 时 ${m} 分 ${s} 秒`;
             },
-
-            /**
-             * 启动计时器
-             */
             start() {
                 this.update();
                 setInterval(() => this.update(), 1000);
             }
         };
 
-        /**
-         * ==================== UI控制模块 ====================
-         * 处理界面显示/隐藏等UI交互
-         */
         const uiModule = {
-            /**
-             * 切换UI元素的显示/隐藏
-             */
             toggleUI() {
-                document.body.classList.toggle('hide-ui');
+                const isHidden = document.body.classList.contains('hide-ui');
+                
+                if (isHidden) {
+                    // 显示UI
+                    document.body.classList.remove('hide-ui');
+                } else {
+                    // 隐藏UI
+                    document.body.classList.add('hide-ui');
+                }
             }
         };
 
-        /**
-         * ==================== 音乐播放器模块 ====================
-         * 完整的音乐播放控制功能
-         */
-        const musicPlayerModule = {
-            // DOM元素引用
+        const musicPlayer = {
             audio: document.getElementById("audio"),
             pBar: document.getElementById('pBar'),
             player: document.getElementById('player'),
-            
-            // 播放器状态
             currentIndex: 0,
             isPlaying: false,
-
-            /**
-             * 初始化播放器
-             */
+            isDragging: false,
+            dragStartX: 0,
+            dragStartWidth: 0,
+            
             init() {
                 this.loadTrack(0);
-                this.bindEvents();
-            },
-
-            /**
-             * 绑定音频事件监听
-             */
-            bindEvents() {
                 this.audio.addEventListener('timeupdate', () => this.updateProgress());
                 this.audio.addEventListener('loadedmetadata', () => this.updateTotalTime());
                 this.audio.addEventListener('ended', () => this.nextTrack());
-                this.audio.addEventListener('error', e => {
-                    console.error("音频加载错误:", e);
-                    document.getElementById("mName").innerText = "音频加载失败";
+                
+                this.addProgressEvents();
+            },
+            
+            addProgressEvents() {
+                const progressBar = document.getElementById('progressBar');
+                if (!progressBar) return;
+                
+                // 鼠标事件
+                progressBar.addEventListener('mousedown', (e) => this.startSeek(e));
+                
+                // 触摸事件
+                progressBar.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.startSeek(e.touches[0]);
+                }, { passive: false });
+                
+                // 点击事件
+                progressBar.addEventListener('click', (e) => {
+                    if (!this.isDragging) {
+                        this.handleClick(e);
+                    }
                 });
             },
-
-            /**
-             * 切换播放器展开/收起状态
-             */
+            
+            startSeek(e) {
+                this.isDragging = true;
+                const progressBar = document.getElementById('progressBar');
+                const rect = progressBar.getBoundingClientRect();
+                this.dragStartX = e.clientX;
+                this.dragStartWidth = rect.width;
+                
+                // 立即更新一次位置
+                this.handleSeek(e);
+                
+                // 添加全局事件监听
+                const moveHandler = (e) => {
+                    if (this.isDragging) {
+                        const event = e.type === 'touchmove' ? e.touches[0] : e;
+                        this.handleSeek(event);
+                    }
+                };
+                
+                const endHandler = () => {
+                    this.isDragging = false;
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('touchmove', moveHandler);
+                    document.removeEventListener('mouseup', endHandler);
+                    document.removeEventListener('touchend', endHandler);
+                };
+                
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('touchmove', moveHandler, { passive: false });
+                document.addEventListener('mouseup', endHandler);
+                document.addEventListener('touchend', endHandler);
+            },
+            
+            handleSeek(e) {
+                if (!this.audio.duration) return;
+                const progressBar = document.getElementById('progressBar');
+                const rect = progressBar.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+                const percentage = Math.max(0, Math.min(1, x / width));
+                
+                this.audio.currentTime = percentage * this.audio.duration;
+                this.pBar.style.width = `${percentage * 100}%`;
+                document.getElementById('cTime').innerText = utils.formatTime(this.audio.currentTime);
+                
+                if (this.isPlaying) {
+                    this.audio.play().catch(e => console.log("播放错误:", e));
+                }
+            },
+            
+            handleClick(e) {
+                this.handleSeek(e);
+            },
+            
             toggleExpand() {
                 this.player.classList.toggle('expanded');
             },
-
-            /**
-             * 收起播放器（用于点击外部时）
-             */
+            
             collapse() {
-                if (this.player.classList.contains('expanded')) {
-                    this.toggleExpand();
-                }
+                if (this.player.classList.contains('expanded')) this.toggleExpand();
             },
-
-            /**
-             * 加载指定索引的曲目
-             * @param {number} index - 曲目索引
-             */
+            
             loadTrack(index) {
                 this.currentIndex = (index + config.playlist.length) % config.playlist.length;
                 document.getElementById("mName").innerText = config.playlist[this.currentIndex].name;
@@ -1015,35 +767,26 @@
                 this.pBar.style.width = '0%';
                 document.getElementById('cTime').innerText = '00:00';
                 document.getElementById('tTime').innerText = '00:00';
-                
                 if (this.isPlaying) {
                     this.audio.play().then(() => this.updateIco(true)).catch(e => {
-                        console.log("自动播放失败:", e);
                         this.isPlaying = false;
                         this.updateIco(false);
                     });
                 }
             },
-
-            /**
-             * 播放/暂停切换
-             */
+            
             toggleMusic() {
-                if (!this.audio.src || this.audio.src === '') {
-                    this.loadTrack(this.currentIndex);
-                }
-                
+                if (!this.audio.src || this.audio.src === '') this.loadTrack(this.currentIndex);
                 if (this.audio.paused) {
                     this.audio.play().then(() => {
                         this.isPlaying = true;
                         this.updateIco(true);
                     }).catch(e => {
-                        console.log("播放失败:", e);
                         this.audio.load();
                         this.audio.play().then(() => {
                             this.isPlaying = true;
                             this.updateIco(true);
-                        }).catch(e2 => console.log("再次播放失败:", e2));
+                        });
                     });
                 } else {
                     this.audio.pause();
@@ -1051,87 +794,359 @@
                     this.updateIco(false);
                 }
             },
-
-            /**
-             * 下一曲
-             */
-            nextTrack() {
-                this.loadTrack(this.currentIndex + 1);
-            },
-
-            /**
-             * 上一曲
-             */
-            prevTrack() {
-                this.loadTrack(this.currentIndex - 1);
-            },
-
-            /**
-             * 更新播放/暂停图标
-             * @param {boolean} isPlaying - 是否正在播放
-             */
+            
+            nextTrack() { this.loadTrack(this.currentIndex + 1); },
+            prevTrack() { this.loadTrack(this.currentIndex - 1); },
+            
             updateIco(isPlaying) {
                 document.getElementById('playIco').style.display = isPlaying ? 'none' : 'block';
                 document.getElementById('pauseIco').style.display = isPlaying ? 'block' : 'none';
             },
-
-            /**
-             * 更新进度条和时间显示
-             */
+            
             updateProgress() {
-                if (this.audio.duration) {
+                if (this.audio.duration && !this.isDragging) {
                     const currentTime = this.audio.currentTime;
                     const duration = this.audio.duration;
                     this.pBar.style.width = `${(currentTime / duration) * 100}%`;
-                    document.getElementById('cTime').innerText = utilsModule.formatTime(currentTime);
-                    document.getElementById('tTime').innerText = utilsModule.formatTime(duration);
+                    document.getElementById('cTime').innerText = utils.formatTime(currentTime);
                 }
             },
-
-            /**
-             * 更新总时长显示
-             */
+            
             updateTotalTime() {
                 if (this.audio.duration && !isNaN(this.audio.duration)) {
-                    document.getElementById('tTime').innerText = utilsModule.formatTime(this.audio.duration);
+                    document.getElementById('tTime').innerText = utils.formatTime(this.audio.duration);
                 }
-            },
-
-            /**
-             * 进度条点击跳转
-             * @param {Event} event - 点击事件
-             */
-            seek(event) {
-                if (!this.audio.duration) return;
-                const clickPosition = event.offsetX;
-                const barWidth = event.currentTarget.offsetWidth;
-                this.audio.currentTime = (clickPosition / barWidth) * this.audio.duration;
             }
         };
 
-        /**
-         * ==================== 应用初始化 ====================
-         * 页面加载完成后执行所有模块的初始化
-         */
-        document.addEventListener('DOMContentLoaded', () => {
-            // 首先初始化页面保护
-            protectionModule.init();
+        const rgbModule = {
+            isActive: false,
+            intervalId: null,
+            hue: 0,
+            speed: 3,
             
-            // 初始化背景系统
-            backgroundModule.init();
-            
-            // 启动运行时间计时器
-            timerModule.start();
-            
-            // 初始化音乐播放器
-            musicPlayerModule.init();
-            
-            // 点击页面其他地方收起播放器
-            document.addEventListener('click', (e) => {
-                if (!musicPlayerModule.player.contains(e.target)) {
-                    musicPlayerModule.collapse();
+            init() {
+                const rgbSwitch = document.getElementById('rgbSwitch');
+                const speedSlider = document.getElementById('speedSlider');
+                const speedValue = document.getElementById('speedValue');
+                rgbSwitch.addEventListener('change', () => this.toggleRGB());
+                speedSlider.addEventListener('input', () => {
+                    this.speed = parseInt(speedSlider.value);
+                    speedValue.textContent = this.speed;
+                    this.updateSpeed();
+                    localStorage.setItem('hago_rgb_speed', this.speed.toString());
+                });
+                const savedState = localStorage.getItem('hago_rgb_enabled');
+                const savedSpeed = localStorage.getItem('hago_rgb_speed');
+                if (savedState === 'true') {
+                    rgbSwitch.checked = true;
+                    this.toggleRGB();
                 }
+                if (savedSpeed) {
+                    this.speed = parseInt(savedSpeed);
+                    speedSlider.value = this.speed;
+                    speedValue.textContent = this.speed;
+                    if (this.isActive) this.updateSpeed();
+                }
+            },
+            
+            calculateSpeed() { 
+                return 0.3 + (this.speed * 0.2);
+            },
+            
+            toggleRGB() {
+                if (this.isActive) this.stopRGB();
+                else this.startRGB();
+                localStorage.setItem('hago_rgb_enabled', this.isActive.toString());
+            },
+            
+            startRGB() {
+                this.isActive = true;
+                document.body.classList.add('rgb-active');
+                this.updateRGB();
+            },
+            
+            updateRGB() {
+                if (!this.isActive) return;
+                if (this.intervalId) clearInterval(this.intervalId);
+                this.intervalId = setInterval(() => {
+                    const hueStep = this.calculateSpeed();
+                    this.hue = (this.hue + hueStep) % 360;
+                    const rgb = this.hslToRgb(this.hue, 80, 50);
+                    document.documentElement.style.setProperty('--rgb-color', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+                }, 60);
+            },
+            
+            hslToRgb(h, s, l) {
+                h /= 360; s /= 100; l /= 100;
+                let r, g, b;
+                if (s === 0) r = g = b = l;
+                else {
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1; if (t > 1) t -= 1;
+                        if (t < 1/6) return p + (q - p) * 6 * t;
+                        if (t < 1/2) return q;
+                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                        return p;
+                    };
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    r = hue2rgb(p, q, h + 1/3);
+                    g = hue2rgb(p, q, h);
+                    b = hue2rgb(p, q, h - 1/3);
+                }
+                return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+            },
+            
+            updateSpeed() { if (this.isActive) this.updateRGB(); },
+            
+            stopRGB() {
+                this.isActive = false;
+                document.body.classList.remove('rgb-active');
+                if (this.intervalId) {
+                    clearInterval(this.intervalId);
+                    this.intervalId = null;
+                }
+                document.documentElement.style.setProperty('--rgb-color', '255, 255, 255');
+            }
+        };
+
+        const passwordModule = {
+            clickCount: 0,
+            clickTimer: null,
+            
+            init() {
+                const hideBtn = document.getElementById('hideUiBtn');
+                hideBtn.addEventListener('click', (e) => this.handleHideBtnClick(e));
+                document.getElementById('passwordConfirm').addEventListener('click', () => this.checkPassword());
+                document.getElementById('passwordCancel').addEventListener('click', () => this.closeDialog());
+                document.getElementById('passwordInput').addEventListener('keypress', (e) => { 
+                    if (e.key === 'Enter') this.checkPassword(); 
+                });
+            },
+            
+            handleHideBtnClick(e) {
+                e.stopPropagation();
+                this.clickCount++;
+                if (this.clickTimer) clearTimeout(this.clickTimer);
+                this.clickTimer = setTimeout(() => this.clickCount = 0, 1000);
+                if (this.clickCount >= 5) {
+                    this.showDialog();
+                    this.clickCount = 0;
+                }
+            },
+            
+            showDialog() {
+                document.getElementById('passwordDialog').classList.add('show');
+                document.getElementById('passwordOverlay').classList.add('show');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            },
+            
+            closeDialog() {
+                document.getElementById('passwordDialog').classList.remove('show');
+                document.getElementById('passwordOverlay').classList.remove('show');
+                document.getElementById('passwordInput').value = '';
+            },
+            
+            checkPassword() {
+                const password = document.getElementById('passwordInput').value.trim();
+                if (password === '') {
+                    this.closeDialog();
+                    setTimeout(() => window.location.reload(), 300);
+                    return;
+                }
+                if (password === 'qianxin520') {
+                    this.closeDialog();
+                    this.disableAllProtection();
+                    utils.showToast('主题设置已应用');
+                    const unlockMsg = document.createElement('div');
+                    unlockMsg.innerHTML = '🔓 保护功能已禁用';
+                    unlockMsg.style.cssText = `position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+                        background: rgba(0, 255, 0, 0.2); color: #4CAF50; padding: 10px 20px; border-radius: 20px;
+                        border: 1px solid #4CAF50; z-index: 10003; font-weight: bold; backdrop-filter: blur(5px);`;
+                    document.body.appendChild(unlockMsg);
+                    setTimeout(() => { if (unlockMsg.parentNode) unlockMsg.remove(); }, 3000);
+                } else {
+                    this.closeDialog();
+                }
+            },
+            
+            disableAllProtection() {
+                // 移除所有事件监听器
+                document.oncontextmenu = null;
+                document.onselectstart = null;
+                document.onkeydown = null;
+                document.ondragstart = null;
+                document.ondrop = null;
+                
+                // 移除事件监听器
+                document.removeEventListener('contextmenu', protection.contextMenuHandler);
+                document.removeEventListener('keydown', protection.keydownHandler);
+                document.removeEventListener('selectstart', protection.selectStartHandler);
+                document.removeEventListener('dragstart', protection.dragStartHandler);
+                document.removeEventListener('drop', protection.dropHandler);
+                
+                // 移除增强保护模块的事件监听器
+                document.removeEventListener('keydown', protectionEnhance.preventSaveAsHandler);
+                document.removeEventListener('keydown', protectionEnhance.preventF12Handler);
+                
+                // 清除定时器
+                if (protection.devToolsCheckInterval) clearInterval(protection.devToolsCheckInterval);
+                if (protection.debuggerCheckInterval) clearInterval(protection.debuggerCheckInterval);
+                
+                // 启用文本选择
+                document.body.style.userSelect = 'text';
+                document.body.style.webkitUserSelect = 'text';
+                document.body.style.mozUserSelect = 'text';
+                document.body.style.msUserSelect = 'text';
+                
+                // 移除右键菜单和选择限制
+                document.addEventListener('contextmenu', e => e.stopPropagation());
+                document.addEventListener('selectstart', e => e.stopPropagation());
+                
+                console.log('所有保护功能已完全禁用');
+            }
+        };
+
+        const protection = {
+            contextMenuHandler: null,
+            keydownHandler: null,
+            selectStartHandler: null,
+            dragStartHandler: null,
+            dropHandler: null,
+            devToolsCheckInterval: null,
+            debuggerCheckInterval: null,
+            
+            init() {
+                this.disableRightClick();
+                this.disableShortcuts();
+                this.disableSelection();
+                this.disableDrag();
+                this.detectDevTools();
+            },
+            
+            disableRightClick() {
+                this.contextMenuHandler = (e) => {
+                    e.preventDefault();
+                    utils.showToast('右键菜单已禁用');
+                };
+                document.addEventListener('contextmenu', this.contextMenuHandler);
+            },
+            
+            disableShortcuts() {
+                this.keydownHandler = (e) => {
+                    const disabledKeys = {
+                        'F12': true,
+                        'I': e.ctrlKey && e.shiftKey,
+                        'u': e.ctrlKey,
+                        's': e.ctrlKey && !e.shiftKey,
+                        'a': e.ctrlKey,
+                        'p': e.ctrlKey
+                    };
+                    
+                    if (disabledKeys[e.key] || disabledKeys[e.code]) {
+                        e.preventDefault();
+                        utils.showToast('此操作已被禁用');
+                    }
+                };
+                document.addEventListener('keydown', this.keydownHandler);
+            },
+            
+            disableSelection() {
+                this.selectStartHandler = (e) => {
+                    e.preventDefault();
+                    return false;
+                };
+                document.addEventListener('selectstart', this.selectStartHandler);
+            },
+            
+            disableDrag() {
+                this.dragStartHandler = (e) => {
+                    e.preventDefault();
+                    return false;
+                };
+                this.dropHandler = (e) => {
+                    e.preventDefault();
+                    return false;
+                };
+                document.addEventListener('dragstart', this.dragStartHandler);
+                document.addEventListener('drop', this.dropHandler);
+            },
+            
+            detectDevTools() {
+                const devToolsCheck = () => {
+                    const threshold = 160;
+                    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                    
+                    if (widthThreshold || heightThreshold) {
+                        window.location.reload();
+                    }
+                };
+                
+                this.devToolsCheckInterval = setInterval(devToolsCheck, 1000);
+                
+                const debuggerCheck = () => {
+                    const startTime = Date.now();
+                    debugger;
+                    const endTime = Date.now();
+                    
+                    if (endTime - startTime > 100) {
+                        window.location.reload();
+                    }
+                };
+                this.debuggerCheckInterval = setInterval(debuggerCheck, 1000);
+            }
+        };
+
+        const protectionEnhance = {
+            preventSaveAsHandler: null,
+            preventF12Handler: null,
+            
+            init() {
+                this.preventSaveAs();
+                this.preventF12();
+            },
+            
+            preventSaveAs() {
+                this.preventSaveAsHandler = (e) => {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        utils.showToast('此页面禁止保存');
+                    }
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                        e.preventDefault();
+                        utils.showToast('此页面禁止打印');
+                    }
+                };
+                document.addEventListener('keydown', this.preventSaveAsHandler);
+            },
+            
+            preventF12() {
+                this.preventF12Handler = (e) => {
+                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                        e.preventDefault();
+                        utils.showToast('开发者工具已被禁用');
+                        return false;
+                    }
+                };
+                document.addEventListener('keydown', this.preventF12Handler);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            protection.init();
+            protectionEnhance.init();
+            passwordModule.init();
+            rgbModule.init();
+            backgroundModule.init();
+            timerModule.start();
+            musicPlayer.init();
+            document.addEventListener('click', (e) => {
+                if (!musicPlayer.player.contains(e.target)) musicPlayer.collapse();
             });
+            setTimeout(() => { document.body.style.visibility = 'visible'; }, 300);
         });
     </script>
 </body>
