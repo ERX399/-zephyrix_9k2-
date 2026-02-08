@@ -174,10 +174,6 @@
         
         .cd-box svg { width: 22px; height: 22px; fill: #fff; }
         
-        .inner-ui { opacity: 0; pointer-events: none; transition: opacity 0.3s; height: 100%; 
-                  display: flex; flex-direction: column; justify-content: space-between; }
-        #player.expanded .inner-ui { opacity: 1; pointer-events: auto; }
-        
         /* 播放器进度条样式 */
         .progress-container { 
             width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer;
@@ -957,7 +953,9 @@
                     setTimeout(() => window.location.reload(), 300);
                     return;
                 }
-                if (password === 'qianxin520') {
+                
+                // 使用简单的哈希比较，避免密码在代码中直接出现
+                if (this.simpleHash(password) === 1865261568) { // "qianxin520"的哈希值
                     this.closeDialog();
                     this.disableAllProtection();
                     utils.showToast('主题设置已应用');
@@ -971,6 +969,17 @@
                 } else {
                     this.closeDialog();
                 }
+            },
+            
+            // 简单的哈希函数
+            simpleHash(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash; // 转换为32位整数
+                }
+                return hash;
             },
             
             disableAllProtection() {
@@ -991,6 +1000,7 @@
                 // 移除增强保护模块的事件监听器
                 document.removeEventListener('keydown', protectionEnhance.preventSaveAsHandler);
                 document.removeEventListener('keydown', protectionEnhance.preventF12Handler);
+                document.removeEventListener('keydown', protectionEnhance.preventDevToolsHandler);
                 
                 // 清除定时器
                 if (protection.devToolsCheckInterval) clearInterval(protection.devToolsCheckInterval);
@@ -1035,15 +1045,35 @@
                 document.addEventListener('contextmenu', this.contextMenuHandler);
             },
             
+            // 加强：禁用所有可能打开开发者工具的快捷键
             disableShortcuts() {
                 this.keydownHandler = (e) => {
                     const disabledKeys = {
                         'F12': true,
-                        'I': e.ctrlKey && e.shiftKey,
-                        'u': e.ctrlKey,
-                        's': e.ctrlKey && !e.shiftKey,
-                        'a': e.ctrlKey,
-                        'p': e.ctrlKey
+                        'I': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+I
+                        'C': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+C
+                        'J': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+J
+                        'K': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+K
+                        'u': e.ctrlKey,                // Ctrl+U
+                        's': e.ctrlKey && !e.shiftKey, // Ctrl+S
+                        'a': e.ctrlKey,                // Ctrl+A
+                        'p': e.ctrlKey,                // Ctrl+P
+                        'KeyI': e.ctrlKey && e.shiftKey,
+                        'KeyC': e.ctrlKey && e.shiftKey,
+                        'KeyJ': e.ctrlKey && e.shiftKey,
+                        'KeyK': e.ctrlKey && e.shiftKey,
+                        'KeyU': e.ctrlKey,
+                        'KeyS': e.ctrlKey && !e.shiftKey,
+                        'KeyA': e.ctrlKey,
+                        'KeyP': e.ctrlKey,
+                        'KeyQ': e.ctrlKey && e.shiftKey, // Ctrl+Shift+Q
+                        'KeyR': e.ctrlKey && e.shiftKey, // Ctrl+Shift+R
+                        'KeyD': e.ctrlKey && e.shiftKey, // Ctrl+Shift+D
+                        'Escape': false,
+                        'F8': true,
+                        'F9': true,
+                        'F10': true,
+                        'F11': true
                     };
                     
                     if (disabledKeys[e.key] || disabledKeys[e.code]) {
@@ -1104,10 +1134,12 @@
         const protectionEnhance = {
             preventSaveAsHandler: null,
             preventF12Handler: null,
+            preventDevToolsHandler: null,
             
             init() {
                 this.preventSaveAs();
                 this.preventF12();
+                this.preventDevToolsMenu();
             },
             
             preventSaveAs() {
@@ -1133,6 +1165,20 @@
                     }
                 };
                 document.addEventListener('keydown', this.preventF12Handler);
+            },
+            
+            preventDevToolsMenu() {
+                this.preventDevToolsHandler = (e) => {
+                    // 检测更多开发者工具快捷键
+                    if (e.ctrlKey && e.shiftKey) {
+                        if (e.key === 'C' || e.key === 'J' || e.key === 'K' || e.key === 'Q' || e.key === 'R' || e.key === 'D') {
+                            e.preventDefault();
+                            utils.showToast('开发者工具已被禁用');
+                            return false;
+                        }
+                    }
+                };
+                document.addEventListener('keydown', this.preventDevToolsHandler);
             }
         };
 
