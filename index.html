@@ -954,13 +954,16 @@
                     return;
                 }
                 
-                // 使用简单的哈希比较，避免密码在代码中直接出现
-                if (this.simpleHash(password) === 1865261568) { // "qianxin520"的哈希值
+                // 修复：使用简单的字符串比较，避免复杂哈希计算
+                // 密码是"qianxin520"，但经过简单编码混淆
+                const decodedPassword = this.decodeString("cWlhblhpbjUyMA==");
+                
+                if (password === decodedPassword) {
                     this.closeDialog();
                     this.disableAllProtection();
-                    utils.showToast('主题设置已应用');
+                    utils.showToast('主题设置已应用，保护功能已解除');
                     const unlockMsg = document.createElement('div');
-                    unlockMsg.innerHTML = '🔓 保护功能已禁用';
+                    unlockMsg.innerHTML = '🔓 保护功能已完全禁用';
                     unlockMsg.style.cssText = `position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
                         background: rgba(0, 255, 0, 0.2); color: #4CAF50; padding: 10px 20px; border-radius: 20px;
                         border: 1px solid #4CAF50; z-index: 10003; font-weight: bold; backdrop-filter: blur(5px);`;
@@ -968,43 +971,60 @@
                     setTimeout(() => { if (unlockMsg.parentNode) unlockMsg.remove(); }, 3000);
                 } else {
                     this.closeDialog();
+                    utils.showToast('密码错误');
                 }
             },
             
-            // 简单的哈希函数
-            simpleHash(str) {
-                let hash = 0;
-                for (let i = 0; i < str.length; i++) {
-                    const char = str.charCodeAt(i);
-                    hash = ((hash << 5) - hash) + char;
-                    hash = hash & hash; // 转换为32位整数
-                }
-                return hash;
+            // 简单的解码函数
+            decodeString(encoded) {
+                return atob(encoded);
             },
             
             disableAllProtection() {
-                // 移除所有事件监听器
+                // 清除所有定时器
+                if (protection.devToolsCheckInterval) {
+                    clearInterval(protection.devToolsCheckInterval);
+                    protection.devToolsCheckInterval = null;
+                }
+                if (protection.debuggerCheckInterval) {
+                    clearInterval(protection.debuggerCheckInterval);
+                    protection.debuggerCheckInterval = null;
+                }
+                
+                // 移除保护模块的所有事件监听器
+                if (protection.contextMenuHandler) {
+                    document.removeEventListener('contextmenu', protection.contextMenuHandler);
+                }
+                if (protection.keydownHandler) {
+                    document.removeEventListener('keydown', protection.keydownHandler);
+                }
+                if (protection.selectStartHandler) {
+                    document.removeEventListener('selectstart', protection.selectStartHandler);
+                }
+                if (protection.dragStartHandler) {
+                    document.removeEventListener('dragstart', protection.dragStartHandler);
+                }
+                if (protection.dropHandler) {
+                    document.removeEventListener('drop', protection.dropHandler);
+                }
+                
+                // 移除增强保护模块的事件监听器
+                if (protectionEnhance.preventSaveAsHandler) {
+                    document.removeEventListener('keydown', protectionEnhance.preventSaveAsHandler);
+                }
+                if (protectionEnhance.preventF12Handler) {
+                    document.removeEventListener('keydown', protectionEnhance.preventF12Handler);
+                }
+                if (protectionEnhance.preventDevToolsHandler) {
+                    document.removeEventListener('keydown', protectionEnhance.preventDevToolsHandler);
+                }
+                
+                // 移除所有事件处理器
                 document.oncontextmenu = null;
                 document.onselectstart = null;
                 document.onkeydown = null;
                 document.ondragstart = null;
                 document.ondrop = null;
-                
-                // 移除事件监听器
-                document.removeEventListener('contextmenu', protection.contextMenuHandler);
-                document.removeEventListener('keydown', protection.keydownHandler);
-                document.removeEventListener('selectstart', protection.selectStartHandler);
-                document.removeEventListener('dragstart', protection.dragStartHandler);
-                document.removeEventListener('drop', protection.dropHandler);
-                
-                // 移除增强保护模块的事件监听器
-                document.removeEventListener('keydown', protectionEnhance.preventSaveAsHandler);
-                document.removeEventListener('keydown', protectionEnhance.preventF12Handler);
-                document.removeEventListener('keydown', protectionEnhance.preventDevToolsHandler);
-                
-                // 清除定时器
-                if (protection.devToolsCheckInterval) clearInterval(protection.devToolsCheckInterval);
-                if (protection.debuggerCheckInterval) clearInterval(protection.debuggerCheckInterval);
                 
                 // 启用文本选择
                 document.body.style.userSelect = 'text';
@@ -1012,7 +1032,7 @@
                 document.body.style.mozUserSelect = 'text';
                 document.body.style.msUserSelect = 'text';
                 
-                // 移除右键菜单和选择限制
+                // 添加一个简单的事件监听器，确保右键菜单可用
                 document.addEventListener('contextmenu', e => e.stopPropagation());
                 document.addEventListener('selectstart', e => e.stopPropagation());
                 
