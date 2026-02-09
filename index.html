@@ -144,7 +144,7 @@
             border-radius: 8px; text-align: center;
         }
         
-        .bg-controls { position: fixed; top: 20px; left: 20px; }
+        .bg-controls { position: fixed; top: 20px; left: 20px; display: flex; gap: 10px; }
         .bg-btn {
             width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.15);
             border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;
@@ -162,10 +162,10 @@
         #player {
             position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
             background: rgba(255, 255, 255, 0.15); border: 1px solid var(--glass-border); border-radius: 25px;
-            z-index: 9999; transition: all 0.4s; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 9999; transition: all 0.4s ease; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
         
-        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; }
+        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         
         .cd-box {
             width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
@@ -185,15 +185,18 @@
             position: relative; cursor: pointer;
         }
         
-        .p-fill { 
+        .p-fill {
             height: 100%; background: var(--blue); width: 0%; border-radius: 3px; position: relative;
-            transition: width 0.1s ease;
+        }
+
+        #player:not(.dragging) .p-fill {
+            transition: width 0.1s ease, background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .p-fill::after { 
-            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px; 
+        .p-fill::after {
+            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px;
             background: #fff; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.5); transform: scale(0);
-            transition: transform 0.2s ease, background 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
         }
         
         #player.expanded .p-fill::after { transform: scale(1); }
@@ -441,6 +444,18 @@
         body.rgb-active .ctrl-btns button:hover {
             background: rgba(var(--rgb-color), 0.2) !important;
         }
+
+        body.rgb-active .footer-info a {
+            color: rgba(var(--rgb-color), 0.9) !important;
+            text-shadow: 0 0 5px rgba(var(--rgb-color), 0.4) !important;
+            text-decoration: none !important;
+            transition: all 0.3s ease !important;
+        }
+
+        body.rgb-active .footer-info a:hover {
+            color: rgb(var(--rgb-color)) !important;
+            text-shadow: 0 0 10px rgba(var(--rgb-color), 0.8) !important;
+        }
         
         @media (max-width: 767px) {
             .container { padding: 20px 15px 80px; }
@@ -459,6 +474,7 @@
     <div class="bg-overlay"></div>
     
     <div class="bg-controls ui-element">
+        <div class="bg-btn" onclick="backgroundModule.downloadBackground()" title="下载当前背景"><i class="fas fa-download"></i></div>
         <div class="bg-btn" onclick="backgroundModule.changeBackground()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
     </div>
     
@@ -524,7 +540,7 @@
     <div class="container ui-element">
         <header>
             <div class="server-icon"></div>
-            <h1>HAGo Server官方站-Beta</h1>
+            <h1>HAGo Server</h1>
             <div class="version-info">9 周目 | 1.18.x - 1.21.x | 离线服</div>
         </header>
         
@@ -582,6 +598,9 @@
             <div style="margin-top:5px;">
                 CDN 提供<br>
                 Alibaba ESA / Cloudflare / Tencent EdgeOne
+            </div>
+            <div style="margin-top:10px;">
+                <a href="https://icp.gov.moe/?keyword=20266648" target="_blank">萌ICP备20266648号</a>
             </div>
             <div style="margin-top:15px;">© 2022-2026 HAGo Server Team</div>
         </footer>
@@ -651,6 +670,83 @@
                 setTimeout(() => this.setBackgroundImage(`bgImage${3 - this.currentBgIndex}`, true), 300);
                 setTimeout(() => this.setBackgroundImage(`bgImage${this.currentBgIndex}`, false), 5000);
                 this.currentBgIndex = 3 - this.currentBgIndex;
+            },
+            downloadBackground() {
+                try {
+                    const bgImage1 = document.getElementById('bgImage1');
+                    const bgImage2 = document.getElementById('bgImage2');
+                    let currentBg = null;
+
+                    if (bgImage1.style.opacity !== '0' && bgImage1.style.display !== 'none') {
+                        currentBg = bgImage1;
+                    } else if (bgImage2.style.opacity !== '0' && bgImage2.style.display !== 'none') {
+                        currentBg = bgImage2;
+                    } else {
+                        const style1 = window.getComputedStyle(bgImage1);
+                        const style2 = window.getComputedStyle(bgImage2);
+                        if (style1.opacity === '1') {
+                            currentBg = bgImage1;
+                        } else {
+                            currentBg = bgImage2;
+                        }
+                    }
+
+                    if (!currentBg) {
+                        utils.showToast('未找到当前背景图');
+                        return;
+                    }
+
+                    const bgUrl = currentBg.style.backgroundImage.slice(5, -2);
+
+                    if (!bgUrl || bgUrl === 'none') {
+                        utils.showToast('背景图URL无效');
+                        return;
+                    }
+
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.naturalWidth;
+                        canvas.height = img.naturalHeight;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `HAGo_Background_${new Date().getTime()}.png`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                                utils.showToast('背景图下载中...');
+                            } else {
+                                utils.showToast('图片转换失败');
+                            }
+                        }, 'image/png');
+                    };
+
+                    img.onerror = () => {
+                        utils.showToast('尝试直接下载...');
+                        const a = document.createElement('a');
+                        a.href = bgUrl;
+                        a.download = `HAGo_Background_${new Date().getTime()}.jpg`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+
+                    img.src = bgUrl;
+
+                } catch (error) {
+                    console.error('下载背景图失败:', error);
+                    utils.showToast('下载失败，请重试');
+                }
             }
         };
 
@@ -732,13 +828,17 @@
             startSeek(e) {
                 this.isDragging = true;
                 const progressBar = document.getElementById('progressBar');
+                const player = document.getElementById('player');
+                progressBar.classList.add('dragging');
+                player.classList.add('dragging');
+
                 const rect = progressBar.getBoundingClientRect();
                 this.dragStartX = e.clientX;
                 this.dragStartWidth = rect.width;
-                
+
                 // 立即更新一次位置
                 this.handleSeek(e);
-                
+
                 // 添加全局事件监听
                 const moveHandler = (e) => {
                     if (this.isDragging) {
@@ -746,9 +846,11 @@
                         this.handleSeek(event);
                     }
                 };
-                
+
                 const endHandler = () => {
                     this.isDragging = false;
+                    progressBar.classList.remove('dragging');
+                    player.classList.remove('dragging');
                     document.removeEventListener('mousemove', moveHandler);
                     document.removeEventListener('touchmove', moveHandler);
                     document.removeEventListener('mouseup', endHandler);
@@ -1057,11 +1159,11 @@
                 document.body.style.webkitUserSelect = 'text';
                 document.body.style.mozUserSelect = 'text';
                 document.body.style.msUserSelect = 'text';
-                
-                // 添加一个简单的事件监听器，确保右键菜单可用
-                document.addEventListener('contextmenu', e => e.stopPropagation());
-                document.addEventListener('selectstart', e => e.stopPropagation());
-                
+
+                // 禁用防护检测
+                protection.isDisabled = true;
+                protectionEnhance.isDisabled = true;
+
                 console.log('所有保护功能已完全禁用');
             }
         };
@@ -1074,7 +1176,8 @@
             dropHandler: null,
             devToolsCheckInterval: null,
             debuggerCheckInterval: null,
-            
+            isDisabled: false,
+
             init() {
                 this.disableRightClick();
                 this.disableShortcuts();
@@ -1156,20 +1259,21 @@
                     const threshold = 160;
                     const widthThreshold = window.outerWidth - window.innerWidth > threshold;
                     const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                    
-                    if (widthThreshold || heightThreshold) {
+
+                    if (widthThreshold || heightThreshold && !this.isDisabled) {
                         window.location.reload();
                     }
                 };
-                
+
                 this.devToolsCheckInterval = setInterval(devToolsCheck, 1000);
-                
+
                 const debuggerCheck = () => {
+                    if (this.isDisabled) return;
                     const startTime = Date.now();
                     debugger;
                     const endTime = Date.now();
-                    
-                    if (endTime - startTime > 100) {
+
+                    if (endTime - startTime > 100 && !this.isDisabled) {
                         window.location.reload();
                     }
                 };
@@ -1181,7 +1285,8 @@
             preventSaveAsHandler: null,
             preventF12Handler: null,
             preventDevToolsHandler: null,
-            
+            isDisabled: false,
+
             init() {
                 this.preventSaveAs();
                 this.preventF12();
@@ -1227,7 +1332,7 @@
                 document.addEventListener('keydown', this.preventDevToolsHandler);
             }
         };
-
+//恭喜你发现了!给我的github点个Starred吧!
         document.addEventListener('DOMContentLoaded', () => {
             protection.init();
             protectionEnhance.init();
