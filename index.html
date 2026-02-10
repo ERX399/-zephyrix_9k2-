@@ -3,21 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HAGo Server - Minecraft服务器官方导航">
     <title>HAGo Server | 官方导航</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="dns-prefetch" href="https://img.072103.xyz">
+    <link rel="dns-prefetch" href="https://raw.githubusercontent.com">
+    <link rel="preconnect" href="https://img.072103.xyz" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <style>
         :root {
-            --yellow: #f6b93b;
-            --blue: #a0d2ff;
-            --white: rgba(255, 255, 255, 0.95);
-            --glass: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --rgb-color: 255, 255, 255;
+            --a: #f6b93b;
+            --b: #8cc4ff;
+            --d: rgba(255,255,255,0.95);
+            --e: rgba(255,255,255,0.1);
+            --f: rgba(255,255,255,0.15);
+            --r: 255,255,255;
         }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             min-height: 100vh;
-            color: var(--white);
+            color: var(--d);
             background: #111;
             overflow-x: hidden;
             -webkit-user-select: none;
@@ -25,1133 +31,177 @@
             -ms-user-select: none;
             user-select: none;
         }
-        
-        .bg-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-        }
-        
-        .bg-image {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background-size: cover; background-position: center; transition: opacity 1.5s;
-        }
-        
-        .bg-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.6); z-index: -1;
-            transition: background 0.6s ease;
-        }
-        
-        /* 隐藏UI时增加背景亮度 */
-        .hide-ui .bg-overlay {
-            background: rgba(0, 0, 0, 0.2);
-        }
-        
-        /* UI隐藏功能相关样式 */
-        .ui-element { 
-            transition: opacity 0.6s ease, transform 0.6s ease; 
-            opacity: 1; 
-            pointer-events: auto;
-        }
-        
-        .hide-ui .ui-element { 
-            opacity: 0; 
-            pointer-events: none; 
-            transform: translateY(15px);
-        }
-        
-        /* 隐藏按钮不需要被隐藏 */
-        .hide-btn {
-            transition: opacity 0.6s ease, transform 0.6s ease; 
-        }
-        
-        .hide-ui .hide-btn { 
-            opacity: 1; 
-            pointer-events: auto; 
-        }
-        
+        .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; }
+        .bg-image { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; will-change: opacity; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: -1; }
+        .hide-ui .bg-overlay { background: rgba(0, 0, 0, 0.2); }
+        .ui-element { transition: opacity 0.3s ease, transform 0.3s ease; opacity: 1; pointer-events: auto; }
+        .hide-ui .ui-element { opacity: 0; pointer-events: none; transform: translateY(10px); }
+        .hide-btn { transition: opacity 0.3s ease; }
+        .hide-ui .hide-btn { opacity: 1; pointer-events: auto; }
         .container { max-width: 500px; margin: 0 auto; padding: 30px 20px 100px; }
         header { text-align: center; margin-bottom: 30px; }
-        
-        .server-icon { 
-            width: 85px; height: 85px; border-radius: 22px; margin: 0 auto 15px; 
-            border: 2px solid var(--glass-border); background: url('https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/server.png') center/cover no-repeat;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        
+        .server-icon { width: 85px; height: 85px; border-radius: 22px; margin: 0 auto 15px; border: 2px solid var(--f); background: url('https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/server.png') center/cover no-repeat; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
         h1 { font-size: 2rem; margin-bottom: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        
-        .version-info {
-            font-size: 0.85rem; margin: 10px 0 25px; padding: 6px 15px; background: var(--glass);
-            border: 1px solid var(--glass-border); border-radius: 12px; color: var(--blue);
-            font-weight: bold; display: inline-block;
-        }
-        
-        .card {
-            background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px;
-            padding: 20px; margin-bottom: 15px;
-        }
-        
-        h2 {
-            font-size: 1.05rem; color: var(--blue); margin: 0 0 15px; display: flex;
-            align-items: center; justify-content: center; gap: 12px; font-weight: bold; 
-        }
-        
-        h2::before, h2::after { content: ""; width: 25px; height: 1px; background: var(--blue); }
-        
-        .addr-box {
-            background: rgba(255, 255, 255, 0.05); padding: 14px; border-radius: 12px; margin-bottom: 10px;
-            cursor: pointer; border: 1px solid rgba(255,255,255,0.08); text-align: center;
-        }
-        
-        .addr-box:active { background: rgba(255, 255, 255, 0.1); transform: scale(0.98); }
-        .addr-box span { font-size: 0.75rem; color: var(--blue); display: block; margin-bottom: 3px; }
-        .addr-box strong { color: var(--yellow); font-size: 1.15rem; font-family: monospace; }
-        
-        .comm-row {
-            display: flex; justify-content: space-between; padding: 12px 15px; background: rgba(255,255,255,0.07);
-            border-radius: 10px; margin-bottom: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05);
-            text-decoration: none; color: inherit;
-        }
-        
+        .version-info { font-size: 0.85rem; margin: 10px 0 25px; padding: 6px 15px; background: var(--e); border: 1px solid var(--f); border-radius: 12px; color: var(--b); font-weight: bold; display: inline-block; }
+        .card { background: var(--e); border: 1px solid var(--f); border-radius: 18px; padding: 20px; margin-bottom: 15px; }
+        h2 { font-size: 1.05rem; color: var(--b); margin: 0 0 15px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: bold; }
+        h2::before, h2::after { content: ""; width: 25px; height: 1px; background: var(--b); }
+        .addr-box { background: rgba(255, 255, 255, 0.05); padding: 14px; border-radius: 12px; margin-bottom: 10px; cursor: pointer;             border: 1px solid rgba(255,255,255,0.08); text-align: center; }
+        .addr-box:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
+        .addr-box span { font-size: 0.75rem; color: var(--b); display: block; margin-bottom: 3px; }
+        .addr-box strong { color: var(--a); font-size: 1.15rem; font-family: monospace; }
+        .comm-row { display: flex; justify-content: space-between; padding: 12px 15px; background: rgba(255,255,255,0.07); border-radius: 10px; margin-bottom: 8px; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.05); text-decoration: none; color: inherit; }
         .comm-row span:first-child { font-weight: bold; color: rgba(255,255,255,0.9); }
-        .comm-row span:last-child { color: var(--blue); font-weight: bold; }
-        
-        .btn-join {
-            background: linear-gradient(135deg, #6ba4ff, #4a86e9); padding: 16px; border-radius: 14px;
-            font-weight: 800; font-size: 1rem; margin-top: 10px; display: block; text-align: center;
-            box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3); color: white; text-decoration: none;
-        }
-        
-        .disclaimer {
-            border-left: 3px solid var(--blue); padding: 10px; text-align: left; background: var(--glass);
-            border-radius: 4px; margin-bottom: 20px; font-size: 0.75rem; color: rgba(255,255,255,0.6);
-        }
-        
-        #timer {
-            color: var(--yellow); font-weight: bold; font-size: 1rem; padding: 8px 16px; background: var(--glass);
-            border: 1px solid var(--glass-border); border-radius: 10px; display: block; margin: 0 auto 30px;
-            text-align: center; width: 60%;
-        }
-        
-        .footer-info {
-            font-size: 0.72rem; color: rgba(255, 255, 255, 0.4); border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 25px 10px 10px; line-height: 1.6; text-align: center;
-        }
-
-        .footer-info a {
-            color: rgba(255, 255, 255, 0.4);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-info a:hover {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .server-note {
-            font-size: 0.8rem; color: var(--yellow); margin-bottom: 15px; padding: 8px 12px;
-            background: rgba(246, 185, 59, 0.1); border: 1px solid rgba(246, 185, 59, 0.2);
-            border-radius: 8px; text-align: center;
-        }
-        
+        .comm-row span:last-child { color: var(--b); font-weight: bold; }
+        .btn-join { background: linear-gradient(135deg, #6ba4ff, #4a86e9); padding: 16px; border-radius: 14px; font-weight: 800; font-size: 1rem; margin-top: 10px; display: block; text-align: center; box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3); color: white; text-decoration: none; }
+        .disclaimer { border-left: 3px solid var(--b); padding: 10px; text-align: left; background: var(--e); border-radius: 4px; margin-bottom: 20px; font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        #timer { color: var(--a); font-weight: bold; font-size: 1rem; padding: 8px 16px; background: var(--e); border: 1px solid var(--f); border-radius: 10px; display: block; margin: 0 auto 30px; text-align: center; width: 60%; }
+        .footer-info { font-size: 0.72rem; color: rgba(255, 255, 255, 0.4); border-top: 1px solid rgba(255,255,255,0.1); padding: 25px 10px 10px; line-height: 1.6; text-align: center; }
+        .footer-info a { color: rgba(255, 255, 255, 0.4); text-decoration: none; transition: all 0.3s ease; }
+        .footer-info a:hover { color: rgba(255, 255, 255, 0.7); }
+        .server-note { font-size: 0.8rem; color: var(--a); margin-bottom: 15px; padding: 8px 12px; background: rgba(246, 185, 59, 0.1); border: 1px solid rgba(246, 185, 59, 0.2); border-radius: 8px; text-align: center; }
         .bg-controls { position: fixed; top: 20px; left: 20px; display: flex; gap: 10px; }
-        .bg-btn {
-            width: 40px; height: 40px; border-radius: 50%; background: rgba(255, 255, 255, 0.15);
-            border: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center;
-            color: white; cursor: pointer;
-        }
-        
-        .hide-btn {
-            position: fixed; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border); border-radius: 10px; width: 38px; height: 38px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
-        
+        .bg-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.15); border: 1px solid var(--f); display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; }
+        .hide-btn { position: fixed; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: 1px solid var(--f); border-radius: 10px; width: 38px; height: 38px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .hide-btn svg { width: 20px; height: 20px; fill: #fff; }
-        
-        #player {
-            position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
-            background: rgba(255, 255, 255, 0.15); border: 1px solid var(--glass-border); border-radius: 25px;
-            z-index: 9999; transition: all 0.4s; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-        
+        #player { position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px; background: rgba(255,255,255,0.15); border: 1px solid var(--f); border-radius: 25px; z-index: 9999; transition: all 0.4s; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; }
-        
-        .cd-box {
-            width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; position: absolute; top: 0; left: 0; z-index: 2;
-        }
-        
+        .cd-box { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: absolute; top: 0; left: 0; z-index: 2; }
         .cd-box svg { width: 22px; height: 22px; fill: #fff; transition: transform 0.3s ease; }
         .cd-box:hover svg { transform: scale(1.1); }
-
-        /* 播放器进度条样式 - 修复显示问题 */
-        .progress-container { 
-            width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer;
-            position: relative; -webkit-tap-highlight-color: transparent;
-        }
-        
-        .p-bg { 
-            width: 100%; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 3px; 
-            position: relative; cursor: pointer;
-        }
-        
-        .p-fill {
-            height: 100%; background: var(--blue); width: 0%; border-radius: 3px; position: relative;
-        }
-
-        #player:not(.dragging) .p-fill {
-            transition: width 0.1s ease;
-        }
-        
-        .p-fill::after { 
-            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px; 
-            background: #fff; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.5); transform: scale(0);
-            transition: transform 0.2s ease, background 0.3s ease;
-        }
-        
+        .progress-container { width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer; position: relative; -webkit-tap-highlight-color: transparent; }
+        .p-bg { width: 100%; height: 5px; background: rgba(255, 255, 255, 0.2); border-radius: 3px; position: relative; cursor: pointer; }
+        .p-fill { height: 100%; background: var(--b); width: 0%; border-radius: 3px; position: relative; }
+        #player:not(.dragging) .p-fill { transition: width 0.1s ease; }
+        .p-fill::after { content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.5); transform: scale(0); transition: transform 0.2s ease, background 0.3s ease; }
         #player.expanded .p-fill::after { transform: scale(1); }
-        
-        /* 进度条悬停效果 */
-        .progress-container:hover .p-bg {
-            height: 6px;
-        }
-        
-        .progress-container:hover .p-fill::after {
-            transform: scale(1.2) !important;
-        }
-        
-        /* 控制按钮样式 */
+        .progress-container:hover .p-bg { height: 6px; }
+        .progress-container:hover .p-fill::after { transform: scale(1.2) !important; }
         .ctrl-row { display: flex; justify-content: space-between; align-items: center; }
         .ctrl-btns { display: flex; gap: 12px; align-items: center; }
-        .ctrl-btns button {
-            background: rgba(255,255,255,0.1); border: none; cursor: pointer; padding: 6px; border-radius: 50%;
-            display: flex; transition: transform 0.1s;
-        }
-        
+        .ctrl-btns button { background: rgba(255,255,255,0.1); border: none; cursor: pointer; padding: 6px; border-radius: 50%; display: flex; transition: transform 0.1s; }
         .ctrl-btns button:active { transform: scale(0.92); }
         .ctrl-btns svg { width: 18px; height: 18px; fill: #fff; }
-        
-        .m-time { font-size: 10px; color: var(--blue); font-family: monospace; min-width: 70px; text-align: right; }
-        
-        /* 播放器内部UI */
-        .inner-ui { 
-            opacity: 0; pointer-events: none; transition: opacity 0.3s; height: 100%; 
-            display: flex; flex-direction: column; justify-content: space-between; 
-        }
-        
-        /* 修复：确保播放器展开时内部UI完全可见 */
-        #player.expanded .inner-ui { 
-            opacity: 1; 
-            pointer-events: auto; 
-        }
-        
-        .m-info { 
-            text-align: center; 
-            padding: 0 5px; 
-            overflow: hidden;
-        }
-        
-        .m-title { 
-            font-size: 14px; 
-            color: #fff; 
-            font-weight: bold; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            display: block; 
-            margin-bottom: 8px; 
-        }
-        
-        #toast {
-            visibility: hidden; position: fixed; top: 40px; left: 50%; transform: translateX(-50%);
-            background: #222; color: #fff; padding: 8px 20px; border-radius: 20px; z-index: 10002;
-            font-size: 0.8rem; box-sizing: border-box;
-        }
-        
+        .m-time { font-size: 10px; color: var(--b); font-family: monospace; min-width: 70px; text-align: right; }
+        .inner-ui { opacity: 0; pointer-events: none; transition: opacity 0.3s; height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+        #player.expanded .inner-ui { opacity: 1; pointer-events: auto; }
+        .m-info { text-align: center; padding: 0 5px; overflow: hidden; }
+        .m-title { font-size: 14px; color: #fff; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; margin-bottom: 8px; }
+        #toast { visibility: hidden; position: fixed; top: 40px; left: 50%; transform: translateX(-50%); background: #222; color: #fff; padding: 8px 20px; border-radius: 20px; z-index: 10002; font-size: 0.8rem; box-sizing: border-box; }
         #toast.show { visibility: visible; animation: fadeInOut 1.5s; }
         @keyframes fadeInOut { 0%,100% {opacity:0;} 20%,80% {opacity:1;} }
-        
-        #passwordDialog {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--glass);
-            backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px;
-            z-index: 99999; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; width: 350px; max-width: 90%;
-            pointer-events: auto; animation: dialogAppear 0.3s;
-        }
-        
+        #passwordDialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--e); backdrop-filter: blur(15px); border: 1px solid var(--f); border-radius: 20px; padding: 25px; z-index: 99999; box-shadow: 0 20px 50px rgba(0,0,0,0.5); display: none; width: 350px; max-width: 90%; pointer-events: auto; animation: dialogAppear 0.3s; }
         #passwordDialog.show { display: block; }
-        @keyframes dialogAppear { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } 
-                                  to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
-        
-        #passwordDialog h3 {
-            margin-top: 0; margin-bottom: 20px; color: var(--blue); text-align: center; font-size: 1.3rem;
-        }
-        
-        #passwordInput {
-            width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05); color: white; font-size: 1.1rem; box-sizing: border-box;
-            margin-bottom: 20px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            -webkit-text-security: disc;
-            text-security: disc;
-        }
-        
+        @keyframes dialogAppear { from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+        #passwordDialog h3 { margin-top: 0; margin-bottom: 20px; color: var(--b); text-align: center; font-size: 1.3rem; }
+        #passwordInput { width: 100%; padding: 14px 18px; border: 1px solid var(--f); border-radius: 12px; background: rgba(255, 255, 255, 0.05); color: white; font-size: 1.1rem; box-sizing: border-box; margin-bottom: 20px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1); -webkit-text-security: disc; text-security: disc; }
         .password-buttons { display: flex; gap: 15px; }
-        .password-buttons button { flex: 1; padding: 12px 0; border: none; border-radius: 12px; 
-                                  cursor: pointer; font-weight: bold; font-size: 1rem; }
-        
-        #passwordConfirm {
-            background: linear-gradient(135deg, #6ba4ff, #4a86e9); color: white;
-            box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3);
-        }
-        
-        #passwordCancel {
-            background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border);
-        }
-        
+        .password-buttons button { flex: 1; padding: 12px 0; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+        #passwordConfirm { background: linear-gradient(135deg, #6ba4ff, #4a86e9); color: white; box-shadow: 0 4px 15px rgba(74, 134, 233, 0.3); }
+        #passwordCancel { background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--f); }
         .rgb-switch-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .rgb-switch-label {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;
-            color: rgba(255,255,255,0.9); font-size: 0.95rem;
-        }
-        
+        .rgb-switch-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; color: rgba(255,255,255,0.9); font-size: 0.95rem; }
         .rgb-speed-container { margin-top: 15px; }
-        .rgb-speed-label {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
-            color: rgba(255,255,255,0.8); font-size: 0.9rem;
-        }
-        
-        .speed-value { color: var(--blue); font-weight: bold; font-family: monospace; font-size: 0.95rem; }
+        .rgb-speed-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: rgba(255,255,255,0.8); font-size: 0.9rem; }
+        .speed-value { color: var(--b); font-weight: bold; font-family: monospace; font-size: 0.95rem; }
         .speed-limit { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 3px; text-align: center; }
-        
-        .speed-slider {
-            width: 100%; height: 8px; -webkit-appearance: none; appearance: none; 
-            background: rgba(255,255,255,0.1); border-radius: 4px; outline: none; margin: 10px 0; 
-        }
-        
-        .speed-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%;
-            background: var(--blue); cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.3);
-        }
-        
+        .speed-slider { width: 100%; height: 8px; -webkit-appearance: none; appearance: none; background: rgba(255,255,255,0.1); border-radius: 4px; outline: none; margin: 10px 0; }
+        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--b); cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.3); }
         .rgb-switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .rgb-switch input { opacity: 0; width: 0; height: 0; }
-        .rgb-slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px;
-        }
-        
-        .rgb-slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px;
-            background-color: white; transition: .4s; border-radius: 50%;
-        }
-        
+        .rgb-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
+        .rgb-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .rgb-slider { background: linear-gradient(90deg, #ff0000, #00ff00, #0000ff); }
         input:checked + .rgb-slider:before { transform: translateX(24px); }
-        
-        #passwordOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);
-            z-index: 99998; display: none; pointer-events: auto;
-        }
-        
+        #passwordOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 99998; display: none; pointer-events: auto; }
         #passwordOverlay.show { display: block; animation: overlayAppear 0.3s; }
         @keyframes overlayAppear { from { opacity: 0; } to { opacity: 1; } }
-        
         .about-text { text-align: center; line-height: 1.6; }
-        
-        /* RGB激活时的样式 */
-        body.rgb-active h1,
-        body.rgb-active h2,
-        body.rgb-active .version-info,
-        body.rgb-active .about-text,
-        body.rgb-active .server-note,
-        body.rgb-active .addr-box span,
-        body.rgb-active .addr-box strong,
-        body.rgb-active .comm-row span,
-        body.rgb-active .footer-info,
-        body.rgb-active .disclaimer,
-        body.rgb-active #passwordDialog h3,
-        body.rgb-active .rgb-switch-label span,
-        body.rgb-active .rgb-speed-label span,
-        body.rgb-active .speed-value,
-        body.rgb-active .speed-limit,
-        body.rgb-active .m-title,
-        body.rgb-active .m-time {
-            color: rgba(var(--rgb-color), 0.9) !important;
-            text-shadow: 0 0 5px rgba(var(--rgb-color), 0.4) !important;
-        }
-        
-        body.rgb-active h2::before,
-        body.rgb-active h2::after {
-            background: rgba(var(--rgb-color), 0.7) !important;
-        }
-        
-        body.rgb-active .card {
-            box-shadow: 0 5px 20px rgba(var(--rgb-color), 0.1) !important;
-            border-color: rgba(var(--rgb-color), 0.3) !important;
-        }
-        
-        body.rgb-active .btn-join {
-            background: linear-gradient(135deg, rgba(var(--rgb-color), 0.7), rgba(var(--rgb-color), 0.5)) !important;
-            box-shadow: 0 4px 15px rgba(var(--rgb-color), 0.3) !important;
-        }
-        
-        body.rgb-active .addr-box {
-            box-shadow: 0 3px 10px rgba(var(--rgb-color), 0.15) !important;
-            border-color: rgba(var(--rgb-color), 0.2) !important;
-        }
-        
-        body.rgb-active .comm-row {
-            background: rgba(var(--rgb-color), 0.05) !important;
-            border-color: rgba(var(--rgb-color), 0.2) !important;
-        }
-        
-        body.rgb-active #timer {
-            color: rgba(var(--rgb-color), 0.9) !important;
-            border-color: rgba(var(--rgb-color), 0.3) !important;
-        }
-        
-        body.rgb-active #passwordInput {
-            border-color: rgba(var(--rgb-color), 0.4) !important;
-        }
-        
-        body.rgb-active #passwordConfirm {
-            background: linear-gradient(135deg, rgba(var(--rgb-color), 0.7), rgba(var(--rgb-color), 0.5)) !important;
-        }
-        
-        body.rgb-active .speed-slider {
-            background: rgba(var(--rgb-color), 0.1) !important;
-        }
-        
-        body.rgb-active .speed-slider::-webkit-slider-thumb {
-            background: rgba(var(--rgb-color), 0.9) !important;
-        }
-        
-        body.rgb-active .bg-btn,
-        body.rgb-active .hide-btn,
-        body.rgb-active #player {
-            box-shadow: 0 0 10px rgba(var(--rgb-color), 0.2) !important;
-            border-color: rgba(var(--rgb-color), 0.3) !important;
-        }
-        
-        body.rgb-active #toast.show {
-            background: rgba(var(--rgb-color), 0.8) !important;
-            color: #000 !important;
-        }
-        
-        /* 修复：免责声明左侧边框跟随RGB变化 */
-        body.rgb-active .disclaimer {
-            border-left-color: rgba(var(--rgb-color), 0.7) !important;
-        }
-        
-        /* 播放器滑条跟随RGB */
-        body.rgb-active .p-fill {
-            background: rgba(var(--rgb-color), 0.9) !important;
-            box-shadow: 0 0 5px rgba(var(--rgb-color), 0.5) !important;
-        }
-        
-        body.rgb-active .p-fill::after {
-            background: rgb(var(--rgb-color)) !important;
-            box-shadow: 0 0 8px rgba(var(--rgb-color), 0.8) !important;
-        }
-        
-        body.rgb-active .ctrl-btns button:hover {
-            background: rgba(var(--rgb-color), 0.2) !important;
-        }
-
-        body.rgb-active .footer-info a {
-            color: rgba(var(--rgb-color), 0.9) !important;
-            text-shadow: 0 0 5px rgba(var(--rgb-color), 0.4) !important;
-            text-decoration: none !important;
-            transition: all 0.3s ease !important;
-        }
-
-        body.rgb-active .footer-info a:hover {
-            color: rgb(var(--rgb-color)) !important;
-            text-shadow: 0 0 10px rgba(var(--rgb-color), 0.8) !important;
-        }
-        
-        @media (max-width: 767px) {
-            .container { padding: 20px 15px 80px; }
-            .server-icon { width: 75px; height: 75px; }
-            h1 { font-size: 1.8rem; }
-            .card { padding: 16px; }
-            #passwordDialog { width: 320px; padding: 20px; }
-        }
+        body.rgb-active h1, body.rgb-active h2, body.rgb-active .version-info, body.rgb-active .about-text, body.rgb-active .server-note, body.rgb-active .addr-box span, body.rgb-active .addr-box strong, body.rgb-active .comm-row span, body.rgb-active .footer-info, body.rgb-active .disclaimer, body.rgb-active #passwordDialog h3, body.rgb-active .rgb-switch-label span, body.rgb-active .rgb-speed-label span, body.rgb-active .speed-value, body.rgb-active .speed-limit, body.rgb-active .m-title, body.rgb-active .m-time { color: rgba(var(--r), 0.9) !important; text-shadow: 0 0 5px rgba(var(--r), 0.4) !important; }
+        body.rgb-active h2::before, body.rgb-active h2::after { background: rgba(var(--r), 0.7) !important; }
+        body.rgb-active .card { box-shadow: 0 5px 20px rgba(var(--r), 0.1) !important; border-color: rgba(var(--r), 0.3) !important; }
+        body.rgb-active .btn-join { background: linear-gradient(135deg, rgba(var(--r), 0.7), rgba(var(--r), 0.5)) !important; box-shadow: 0 4px 15px rgba(var(--r), 0.3) !important; }
+        body.rgb-active .addr-box { box-shadow: 0 3px 10px rgba(var(--r), 0.15) !important; border-color: rgba(var(--r), 0.2) !important; }
+        body.rgb-active .comm-row { background: rgba(var(--r), 0.05) !important; border-color: rgba(var(--r), 0.2) !important; }
+        body.rgb-active #timer { color: rgba(var(--r), 0.9) !important; border-color: rgba(var(--r), 0.3) !important; }
+        body.rgb-active #passwordInput { border-color: rgba(var(--r), 0.4) !important; }
+        body.rgb-active #passwordConfirm { background: linear-gradient(135deg, rgba(var(--r), 0.7), rgba(var(--r), 0.5)) !important; }
+        body.rgb-active .speed-slider { background: rgba(var(--r), 0.1) !important; }
+        body.rgb-active .speed-slider::-webkit-slider-thumb { background: rgba(var(--r), 0.9) !important; }
+        body.rgb-active .bg-btn, body.rgb-active .hide-btn, body.rgb-active #player { box-shadow: 0 0 10px rgba(var(--r), 0.2) !important; border-color: rgba(var(--r), 0.3) !important; }
+        body.rgb-active #toast.show { background: rgba(var(--r), 0.8) !important; color: #000 !important; }
+        body.rgb-active .disclaimer { border-left-color: rgba(var(--r), 0.7) !important; }
+        body.rgb-active .p-fill { background: rgba(var(--r), 0.9) !important; box-shadow: 0 0 5px rgba(var(--r), 0.5) !important; }
+        body.rgb-active .p-fill::after { background: rgb(var(--r)) !important; box-shadow: 0 0 8px rgba(var(--r), 0.8) !important; }
+        body.rgb-active .ctrl-btns button:hover { background: rgba(var(--r), 0.2) !important; }
+        body.rgb-active .footer-info a { color: rgba(var(--r), 0.9) !important; text-shadow: 0 0 5px rgba(var(--r), 0.4) !important; }
+        body.rgb-active .footer-info a:hover { color: rgb(var(--r)) !important; text-shadow: 0 0 10px rgba(var(--r), 0.8) !important; }
+        body.kikyo-theme h2, body.kikyo-theme .addr-box span, body.kikyo-theme .comm-row span:last-child, body.kikyo-theme .speed-value { color: #585eaa !important; text-shadow: 0 0 8px rgba(88, 94, 170, 0.4) !important; }
+        body.kikyo-theme h2::before, body.kikyo-theme h2::after { background: #585eaa !important; }
+        body.kikyo-theme .p-fill { background: #585eaa !important; box-shadow: 0 0 5px rgba(88, 94, 170, 0.5) !important; }
+        body.kikyo-theme .p-fill::after { background: #585eaa !important; }
+        body.kikyo-theme .disclaimer { border-left-color: #585eaa !important; }
+        body.kikyo-theme .version-info { color: #585eaa !important; border-color: rgba(88, 94, 170, 0.4) !important; }
+        body.kikyo-theme .speed-slider::-webkit-slider-thumb { background: #585eaa !important; }
+        body.kikyo-theme #passwordDialog h3 { color: #585eaa !important; }
+        @media (max-width: 767px) { .container { padding: 20px 15px 80px; } .server-icon { width: 75px; height: 75px; } h1 { font-size: 1.8rem; } .card { padding: 16px; } #passwordDialog { width: 320px; padding: 20px; } }
     </style>
 </head>
 <body>
-    <div class="bg-container">
-        <div class="bg-image" id="bgImage1"></div>
-        <div class="bg-image" id="bgImage2" style="opacity:0;"></div>
-    </div>
+    <div class="bg-container"><div class="bg-image" id="bgImage1"></div><div class="bg-image" id="bgImage2" style="opacity:0;"></div></div>
     <div class="bg-overlay"></div>
-    
     <div class="bg-controls ui-element">
-        <div class="bg-btn" onclick="y.l()" title="下载当前背景"><i class="fas fa-download"></i></div>
-        <div class="bg-btn" onclick="y.k()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
+        <div class="bg-btn" onclick="y.d()" title="下载当前背景"><i class="fas fa-download"></i></div>
+        <div class="bg-btn" onclick="y.c()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
     </div>
-    
-    <button class="hide-btn" onclick="A.o()" id="hideUiBtn">
-        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-    </button>
-    
+    <button class="hide-btn" onclick="B.o()" id="hideUiBtn"><svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg></button>
     <div id="passwordOverlay"></div>
     <div id="passwordDialog">
-        <h3>高级主题设置</h3>
-        <input type="text" id="passwordInput" placeholder="输入主题码..." autocomplete="off">
-        <div class="password-buttons">
-            <button id="passwordConfirm">应用</button>
-            <button id="passwordCancel">取消</button>
-        </div>
-        
+        <h3>主题控制台</h3>
+        <input type="text" id="passwordInput" placeholder="输入主题代码..." autocomplete="off">
+        <div class="password-buttons"><button id="passwordConfirm">应用</button><button id="passwordCancel">取消</button></div>
         <div class="rgb-switch-container">
-            <div class="rgb-switch-label">
-                <span>启用RGB主题效果</span>
-                <label class="rgb-switch"><input type="checkbox" id="rgbSwitch"><span class="rgb-slider"></span></label>
-            </div>
-            
-            <div class="rgb-speed-container">
-                <div class="rgb-speed-label">
-                    <span>RGB速度调节</span>
-                    <span class="speed-value" id="speedValue">3</span>
-                </div>
-                <input type="range" min="1" max="10" value="3" class="speed-slider" id="speedSlider">
-                <div class="speed-limit">速度范围: 1 (慢) ~ 10 (快)</div>
-            </div>
+            <div class="rgb-switch-label"><span>启用RGB主题效果</span><label class="rgb-switch"><input type="checkbox" id="rgbSwitch"><span class="rgb-slider"></span></label></div>
+            <div class="rgb-speed-container"><div class="rgb-speed-label"><span>RGB速度调节</span><span class="speed-value" id="speedValue">3</span></div><input type="range" min="1" max="10" value="3" class="speed-slider" id="speedSlider"><div class="speed-limit">速度范围: 1 (慢) ~ 10 (快)</div></div>
         </div>
     </div>
-    
     <div id="toast">已复制</div>
-    
     <div id="player" class="ui-element">
-        <div class="cd-box" onclick="B.ad()">
-            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-        </div>
-        
+        <div class="cd-box" onclick="E.ad()"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
         <div class="inner-ui">
             <div class="m-info"><span class="m-title" id="mName">正在初始化...</span></div>
-            
-            <div class="progress-container" id="progressBar">
-                <div class="p-bg"><div class="p-fill" id="pBar"></div></div>
-            </div>
-            
+            <div class="progress-container" id="progressBar"><div class="p-bg"><div class="p-fill" id="pBar"></div></div></div>
             <div class="ctrl-row">
-                <div class="ctrl-btns">
-                    <button onclick="B.ah()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-                    <button onclick="B.ag()">
-                        <svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                        <svg id="pauseIco" style="display:none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                    <button onclick="B.Y()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
-                </div>
+                <div class="ctrl-btns"><button onclick="E.ah()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button><button onclick="E.ag()"><svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg id="pauseIco" style="display:none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button><button onclick="E.Y()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button></div>
                 <div class="m-time"><span id="cTime">00:00</span> / <span id="tTime">00:00</span></div>
             </div>
         </div>
         <audio id="audio"></audio>
-    </div> 
-    
-    <div class="container ui-element">
-        <header>
-            <div class="server-icon"></div>
-            <h1>HAGo Server</h1>
-            <div class="version-info">9 周目 | 1.18.x - 1.21.x | 离线服</div>
-        </header>
-        
-        <div class="card">
-            <h2>关于我们</h2>
-            <div class="about-text">
-                始于 2022 年 6 月 13 日<br>
-                由热爱 MC 的少年共同创建<br>
-                目前已开启 9 周目 欢迎加入
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>连接地址</h2>
-            <div class="server-note">注意：本服务器需绑定QQ</div>
-            <div class="addr-box" onclick="x.e('mc.qianxin520.xyz')">
-                <span>主线路</span>
-                <strong>mc.qianxin520.xyz</strong>
-            </div>
-            <div class="addr-box" onclick="x.e('mc.520pro.top')">
-                <span>副线路</span>
-                <strong>mc.520pro.top</strong>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>官方社区</h2>
-            <div class="comm-list">
-                <div class="comm-row">
-                    <span>官方 QQ 交流群</span>
-                    <span style="color:var(--yellow)">771976804</span>
-                </div>
-                <a href="https://kdocs.cn/l/cgWcf35aLjPg" target="_blank" class="comm-row">
-                    <span>服务器文档</span>
-                    <span>点击跳转</span>
-                </a>
-                <a href="https://f.wps.cn/g/NB3cyCFf/" target="_blank" class="comm-row">
-                    <span>服务器反馈</span>
-                    <span>点击跳转</span>
-                </a>
-            </div>
-            <a href="https://qm.qq.com/q/SFImYropqu" class="btn-join" target="_blank">立即加入玩家交流群</a>
-        </div>
-
-        <div class="disclaimer">
-            免责声明：<br>
-            本页面背景图由第三方接口随机生成，展示内容不代表本站立场<br>
-            如遇不适内容请点击上方按钮更换背景
-        </div>
-
-        <div id="timer">00 天 00 时 00 分 00 秒</div>
-
-        <footer class="footer-info">
-            <div>Powered by Tencent cloud</div>
-            <div style="margin-top:5px;">
-                CDN 提供<br>
-                Alibaba ESA / Cloudflare / Tencent EdgeOne
-            </div>
-            <div style="margin-top:10px;">
-                <a href="https://icp.gov.moe/?keyword=20266648" target="_blank">萌ICP备20266648号</a>
-            </div>
-            <div style="margin-top:15px;">© 2022-2026 HAGo Server Team</div>
-        </footer>
     </div>
-    
+    <div class="container ui-element">
+        <header><div class="server-icon"></div><h1>HAGo Server</h1><div class="version-info">9 周目 | 1.18.x - 1.21.x | 离线服</div></header>
+        <div class="card"><h2>关于我们</h2><div class="about-text">始于 2022 年 6 月 13 日<br>由热爱 MC 的少年共同创建<br>目前已开启 9 周目 欢迎加入</div></div>
+        <div class="card"><h2>连接地址</h2><div class="server-note">注意：本服务器需绑定QQ</div><div class="addr-box" onclick="f.x('mc.qianxin520.xyz')"><span>主线路</span><strong>mc.qianxin520.xyz</strong></div><div class="addr-box" onclick="f.x('mc.520pro.top')"><span>副线路</span><strong>mc.520pro.top</strong></div></div>
+        <div class="card"><h2>官方社区</h2><div class="comm-list"><div class="comm-row"><span>官方 QQ 交流群</span><span style="color:var(--a)">771976804</span></div><a href="https://kdocs.cn/l/cgWcf35aLjPg" target="_blank" class="comm-row"><span>服务器文档</span><span>点击跳转</span></a><a href="https://f.wps.cn/g/NB3cyCFf/" target="_blank" class="comm-row"><span>服务器反馈</span><span>点击跳转</span></a></div><a href="https://qm.qq.com/q/SFImYropqu" class="btn-join" target="_blank">立即加入玩家交流群</a></div>
+        <div class="disclaimer">免责声明：<br>本页面背景图由第三方接口随机生成，展示内容不代表本站立场<br>如遇不适内容请点击上方按钮更换背景</div>
+        <div id="timer">00 天 00 时 00 分 00 秒</div>
+        <footer class="footer-info"><div>Powered by Tencent cloud</div><div style="margin-top:5px;">CDN 提供<br>Alibaba ESA / Cloudflare / Tencent EdgeOne</div><div style="margin-top:10px;"><a href="https://icp.gov.moe/?keyword=20266648" target="_blank">萌ICP备20266648号</a></div><div style="margin-top:15px;">© 2022-2026 HAGo Server Team</div></footer>
+    </div>
     <script>
-        const c={
-            a:'https://img.072103.xyz/h',
-            b:'2022-06-13T00:00:00',
-            d:[
-                {n:"星茶会",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3"},
-                {n:"I Can't Wait",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3"},
-                {n:"你最近还好吗",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E4%BD%A0%E6%9C%80%E8%BF%91%E8%BF%98%E5%A5%BD%E5%90%97.mp3"},
-                {n:"带我走",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E5%B8%A6%E6%88%91%E8%B5%B0.mp3"},
-                {n:"我们",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%88%91%E4%BB%AC.mp3"},
-                {n:"爱你",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3"},
-                {n:"雨爱",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3"},
-                {n:"鸟之诗-八音盒",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3"}
-            ]
-        };
-        const x={
-            e(t){
-                navigator.clipboard.writeText(t).then(()=>this.s('已复制: '+t)).catch(()=>{
-                    const a=document.createElement('textarea');
-                    a.value=t;
-                    document.body.appendChild(a);
-                    a.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(a);
-                    this.s('已复制: '+t);
-                });
-            },
-            s(m){
-                const a=document.getElementById('toast');
-                a.textContent=m;
-                a.className='show';
-                setTimeout(()=>a.className='',1500);
-            },
-            f(t){
-                if(isNaN(t)||t===Infinity)return"00:00";
-                const m=Math.floor(t/60),s=Math.floor(t%60);
-                return`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
-            }
-        };
-        const y={
-            g:1,
-            i(){
-                this.j('bgImage1',true);
-                this.j('bgImage2',false);
-            },
-            j(e,z=false){
-                const a=document.getElementById(e);
-                a.style.backgroundImage=`url('${c.a}?t=${new Date().getTime()}')`;
-                if(z)a.style.opacity=1;
-            },
-            k(){
-                const a=document.getElementById(`bgImage${this.g}`);
-                const b=document.getElementById(`bgImage${3-this.g}`);
-                a.style.opacity=0;
-                setTimeout(()=>this.j(`bgImage${3-this.g}`,true),300);
-                setTimeout(()=>this.j(`bgImage${this.g}`,false),5000);
-                this.g=3-this.g;
-            },
-            l(){
-                try{
-                    const a=document.getElementById('bgImage1');
-                    const b=document.getElementById('bgImage2');
-                    let d=null;
-                    if(a.style.opacity!=='0'&&a.style.display!=='none')d=a;
-                    else if(b.style.opacity!=='0'&&b.style.display!=='none')d=b;
-                    else{
-                        const w=window.getComputedStyle(a);
-                        const v=window.getComputedStyle(b);
-                        if(w.opacity==='1')d=a;else d=b;
-                    }
-                    if(!d){x.s('未找到当前背景图');return;}
-                    const u=d.style.backgroundImage.slice(5,-2);
-                    if(!u||u==='none'){x.s('背景图URL无效');return;}
-                    const i=new Image();
-                    i.crossOrigin='anonymous';
-                    i.onload=()=>{
-                        const canvas=document.createElement('canvas');
-                        canvas.width=i.naturalWidth;
-                        canvas.height=i.naturalHeight;
-                        const ctx=canvas.getContext('2d');
-                        ctx.drawImage(i,0,0);
-                        canvas.toBlob((blob)=>{
-                            if(blob){
-                                const url=URL.createObjectURL(blob);
-                                const a=document.createElement('a');
-                                a.href=url;
-                                a.download=`HAGo_Background_${new Date().getTime()}.png`;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-                                x.s('背景图下载中...');
-                            }else{x.s('图片转换失败');}
-                        },'image/png');
-                    };
-                    i.onerror=()=>{
-                        x.s('尝试直接下载...');
-                        const a=document.createElement('a');
-                        a.href=u;
-                        a.download=`HAGo_Background_${new Date().getTime()}.jpg`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                    };
-                    i.src=u;
-                }catch(e){console.error('下载背景图失败:',e);x.s('下载失败，请重试');}
-            }
-        };
-        const z={
-            m(){
-                const a=new Date(c.b).getTime();
-                const b=new Date().getTime()-a;
-                const d=Math.floor(b/86400000);
-                const h=Math.floor((b%86400000)/3600000);
-                const n=Math.floor((b%3600000)/60000);
-                const s=Math.floor((b%60000)/1000);
-                document.getElementById('timer').innerText=`${d} 天 ${h} 时 ${n} 分 ${s} 秒`;
-            },
-            n(){
-                this.m();
-                setInterval(()=>this.m(),1000);
-            }
-        };
-        const A={
-            o(){
-                const a=document.body.classList.contains('hide-ui');
-                if(a)document.body.classList.remove('hide-ui');
-                else document.body.classList.add('hide-ui');
-            }
-        };
-        const B={
-            audio:document.getElementById("audio"),
-            pBar:document.getElementById('pBar'),
-            player:document.getElementById('player'),
-            q:0,
-            r:false,
-            S:false,
-            T:0,
-            U:0,
-            i(){
-                this.V(0);
-                this.audio.addEventListener('timeupdate',()=>this.W());
-                this.audio.addEventListener('loadedmetadata',()=>this.X());
-                this.audio.addEventListener('ended',()=>this.Y());
-                this.Z();
-                setTimeout(()=>{this.player.style.visibility='visible';},100);
-            },
-            Z(){
-                const a=document.getElementById('progressBar');
-                if(!a)return;
-                a.addEventListener('mousedown',(e)=>this.aa(e));
-                a.addEventListener('touchstart',(e)=>{e.preventDefault();this.aa(e.touches[0]);},{passive:false});
-                a.addEventListener('click',(e)=>{if(!this.S)this.ab(e);});
-            },
-            aa(e){
-                this.S=true;
-                const a=document.getElementById('progressBar');
-                const b=document.getElementById('player');
-                a.classList.add('dragging');
-                b.classList.add('dragging');
-                const c=a.getBoundingClientRect();
-                this.T=e.clientX;
-                this.U=c.width;
-                this.ac(e);
-                const d=(e)=>{if(this.S){const f=e.type==='touchmove'?e.touches[0]:e;this.ac(f);}};
-                const g=()=>{
-                    this.S=false;
-                    a.classList.remove('dragging');
-                    b.classList.remove('dragging');
-                    document.removeEventListener('mousemove',d);
-                    document.removeEventListener('touchmove',d);
-                    document.removeEventListener('mouseup',g);
-                    document.removeEventListener('touchend',g);
-                };
-                document.addEventListener('mousemove',d);
-                document.addEventListener('touchmove',d,{passive:false});
-                document.addEventListener('mouseup',g);
-                document.addEventListener('touchend',g);
-            },
-            ac(e){
-                if(!this.audio.duration)return;
-                const a=document.getElementById('progressBar');
-                const b=a.getBoundingClientRect();
-                const c=e.clientX-b.left;
-                const d=b.width;
-                const f=Math.max(0,Math.min(1,c/d));
-                this.audio.currentTime=f*this.audio.duration;
-                this.pBar.style.width=`${f*100}%`;
-                document.getElementById('cTime').innerText=x.f(this.audio.currentTime);
-                if(this.r){this.audio.play().catch(e=>console.log("播放错误:",e));}
-            },
-            ab(e){this.ac(e);},
-            ad(){this.player.classList.toggle('expanded');},
-            ae(){if(this.player.classList.contains('expanded'))this.ad();},
-            V(index){
-                this.q=(index+c.d.length)%c.d.length;
-                document.getElementById("mName").innerText=c.d[this.q].n;
-                this.audio.src=c.d[this.q].u;
-                this.audio.load();
-                this.pBar.style.width='0%';
-                document.getElementById('cTime').innerText='00:00';
-                document.getElementById('tTime').innerText='00:00';
-                if(this.r){
-                    this.audio.play().then(()=>this.af(true)).catch(e=>{
-                        this.r=false;
-                        this.af(false);
-                    });
-                }
-            },
-            ag(){
-                if(!this.audio.src||this.audio.src==='')this.V(this.q);
-                if(this.audio.paused){
-                    this.audio.play().then(()=>{
-                        this.r=true;
-                        this.af(true);
-                    }).catch(e=>{
-                        this.audio.load();
-                        this.audio.play().then(()=>{
-                            this.r=true;
-                            this.af(true);
-                        });
-                    });
-                }else{
-                    this.audio.pause();
-                    this.r=false;
-                    this.af(false);
-                }
-            },
-            Y(){this.V(this.q+1);},
-            ah(){this.V(this.q-1);},
-            af(isPlaying){
-                document.getElementById('playIco').style.display=isPlaying?'none':'block';
-                document.getElementById('pauseIco').style.display=isPlaying?'block':'none';
-            },
-            W(){
-                if(this.audio.duration&&!this.S){
-                    const a=this.audio.currentTime;
-                    const b=this.audio.duration;
-                    this.pBar.style.width=`${(a/b)*100}%`;
-                    document.getElementById('cTime').innerText=x.f(a);
-                }
-            },
-            X(){
-                if(this.audio.duration&&!isNaN(this.audio.duration)){
-                    document.getElementById('tTime').innerText=x.f(this.audio.duration);
-                }
-            }
-        };
-        const C={
-            ai:false,
-            aj:null,
-            ak:0,
-            al:3,
-            i(){
-                const a=document.getElementById('rgbSwitch');
-                const b=document.getElementById('speedSlider');
-                const d=document.getElementById('speedValue');
-                a.addEventListener('change',()=>this.am());
-                b.addEventListener('input',()=>{
-                    this.al=parseInt(b.value);
-                    d.textContent=this.al;
-                    this.an();
-                    localStorage.setItem('hago_rgb_speed',this.al.toString());
-                });
-                const e=localStorage.getItem('hago_rgb_enabled');
-                const f=localStorage.getItem('hago_rgb_speed');
-                if(e==='true'){a.checked=true;this.am();}
-                if(f){
-                    this.al=parseInt(f);
-                    b.value=this.al;
-                    d.textContent=this.al;
-                    if(this.ai)this.an();
-                }
-            },
-            ao(){return 0.3+(this.al*0.2);},
-            am(){if(this.ai)this.ap();else this.aq();localStorage.setItem('hago_rgb_enabled',this.ai.toString());},
-            aq(){
-                this.ai=true;
-                document.body.classList.add('rgb-active');
-                this.ar();
-            },
-            ar(){
-                if(!this.ai)return;
-                if(this.aj)clearInterval(this.aj);
-                this.aj=setInterval(()=>{
-                    const a=this.ao();
-                    this.ak=(this.ak+a)%360;
-                    const b=this.as(this.ak,80,50);
-                    document.documentElement.style.setProperty('--rgb-color',`${b.r}, ${b.g}, ${b.b}`);
-                },60);
-            },
-            as(h,s,l){
-                h/=360;s/=100;l/=100;
-                let r,g,b;
-                if(s===0)r=g=b=l;
-                else{
-                    const at=(p,q,t)=>{
-                        if(t<0)t+=1;if(t>1)t-=1;
-                        if(t<1/6)return p+(q-p)*6*t;
-                        if(t<1/2)return q;
-                        if(t<2/3)return p+(q-p)*(2/3-t)*6;
-                        return p;
-                    };
-                    const q=l<0.5?l*(1+s):l+s-l*s;
-                    const p=2*l-q;
-                    r=at(p,q,h+1/3);
-                    g=at(p,q,h);
-                    b=at(p,q,h-1/3);
-                }
-                return{r:Math.round(r*255),g:Math.round(g*255),b:Math.round(b*255)};
-            },
-            an(){if(this.ai)this.ar();},
-            ap(){
-                this.ai=false;
-                document.body.classList.remove('rgb-active');
-                if(this.aj){clearInterval(this.aj);this.aj=null;}
-                document.documentElement.style.setProperty('--rgb-color','255, 255, 255');
-            }
-        };
-        const D={
-            au:0,
-            av:null,
-            i(){
-                const a=document.getElementById('hideUiBtn');
-                a.addEventListener('click',(e)=>this.aw(e));
-                document.getElementById('passwordConfirm').addEventListener('click',()=>this.ax());
-                document.getElementById('passwordCancel').addEventListener('click',()=>this.ay());
-                document.getElementById('passwordInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')this.ax();});
-            },
-            aw(e){
-                e.stopPropagation();
-                this.au++;
-                if(this.av)clearTimeout(this.av);
-                this.av=setTimeout(()=>this.au=0,1000);
-                if(this.au>=5){
-                    this.az();
-                    this.au=0;
-                }
-            },
-            az(){
-                document.getElementById('passwordDialog').classList.add('show');
-                document.getElementById('passwordOverlay').classList.add('show');
-                document.getElementById('passwordInput').value='';
-                document.getElementById('passwordInput').focus();
-            },
-            ay(){
-                document.getElementById('passwordDialog').classList.remove('show');
-                document.getElementById('passwordOverlay').classList.remove('show');
-                document.getElementById('passwordInput').value='';
-            },
-            ax(){
-                const a=document.getElementById('passwordInput').value.trim();
-                if(a===''){
-                    this.ay();
-                    setTimeout(()=>window.location.reload(),300);
-                    return;
-                }
-                if(a==="@@@@@"){
-                    this.ay();
-                    this.bA();
-                    x.s('主题设置已应用，保护功能已解除');
-                    const b=document.createElement('div');
-                    b.innerHTML='🔓 保护功能已完全禁用';
-                    b.style.cssText=`position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
-                        background: rgba(0, 255, 0, 0.2); color: #4CAF50; padding: 10px 20px; border-radius: 20px;
-                        border: 1px solid #4CAF50; z-index: 10003; font-weight: bold; backdrop-filter: blur(5px);`;
-                    document.body.appendChild(b);
-                    setTimeout(()=>{if(b.parentNode)b.remove();},3000);
-                }else{this.ay();}
-            },
-            bA(){
-                if(E.bB){clearInterval(E.bB);E.bB=null;}
-                if(E.bC){clearInterval(E.bC);E.bC=null;}
-                if(E.bD){document.removeEventListener('contextmenu',E.bD);E.bD=null;}
-                if(E.bE){document.removeEventListener('keydown',E.bE);E.bE=null;}
-                if(E.bF){document.removeEventListener('selectstart',E.bF);E.bF=null;}
-                if(E.bG){document.removeEventListener('dragstart',E.bG);E.bG=null;}
-                if(E.bH){document.removeEventListener('drop',E.bH);E.bH=null;}
-                if(F.bI){document.removeEventListener('keydown',F.bI);F.bI=null;}
-                if(F.bJ){document.removeEventListener('keydown',F.bJ);F.bJ=null;}
-                if(F.bK){document.removeEventListener('keydown',F.bK);F.bK=null;}
-                document.oncontextmenu=null;
-                document.onselectstart=null;
-                document.onkeydown=null;
-                document.ondragstart=null;
-                document.ondrop=null;
-                document.body.style.userSelect='text';
-                document.body.style.webkitUserSelect='text';
-                document.body.style.mozUserSelect='text';
-                document.body.style.msUserSelect='text';
-                E.bL=true;
-                F.bM=true;
-                console.log('所有保护功能已完全禁用');
-            }
-        };
-        const E={
-            bD:null,
-            bE:null,
-            bF:null,
-            bG:null,
-            bH:null,
-            bB:null,
-            bC:null,
-            bL:false,
-            i(){
-                this.bN();
-                this.bO();
-                this.bP();
-                this.bQ();
-                this.bR();
-            },
-            bN(){
-                this.bD=(e)=>{
-                    e.preventDefault();
-                    x.s('右键菜单已禁用');
-                };
-                document.addEventListener('contextmenu',this.bD);
-            },
-            bO(){
-                this.bE=(e)=>{
-                    const a={
-                        'F12':true,
-                        'I':e.ctrlKey&&e.shiftKey,
-                        'C':e.ctrlKey&&e.shiftKey,
-                        'J':e.ctrlKey&&e.shiftKey,
-                        'K':e.ctrlKey&&e.shiftKey,
-                        'u':e.ctrlKey,
-                        's':e.ctrlKey&&!e.shiftKey,
-                        'a':e.ctrlKey,
-                        'p':e.ctrlKey,
-                        'KeyI':e.ctrlKey&&e.shiftKey,
-                        'KeyC':e.ctrlKey&&e.shiftKey,
-                        'KeyJ':e.ctrlKey&&e.shiftKey,
-                        'KeyK':e.ctrlKey&&e.shiftKey,
-                        'KeyU':e.ctrlKey,
-                        'KeyS':e.ctrlKey&&!e.shiftKey,
-                        'KeyA':e.ctrlKey,
-                        'KeyP':e.ctrlKey,
-                        'KeyQ':e.ctrlKey&&e.shiftKey,
-                        'KeyR':e.ctrlKey&&e.shiftKey,
-                        'KeyD':e.ctrlKey&&e.shiftKey,
-                        'Escape':false,
-                        'F8':true,
-                        'F9':true,
-                        'F10':true,
-                        'F11':true
-                    };
-                    if(a[e.key]||a[e.code]){e.preventDefault();x.s('此操作已被禁用');}
-                };
-                document.addEventListener('keydown',this.bE);
-            },
-            bP(){
-                this.bF=(e)=>{e.preventDefault();return false;};
-                document.addEventListener('selectstart',this.bF);
-            },
-            bQ(){
-                this.bG=(e)=>{e.preventDefault();return false;};
-                this.bH=(e)=>{e.preventDefault();return false;};
-                document.addEventListener('dragstart',this.bG);
-                document.addEventListener('drop',this.bH);
-            },
-            bR(){
-                const a=()=>{
-                    const b=160;
-                    const c=window.outerWidth-window.innerWidth>b;
-                    const d=window.outerHeight-window.innerHeight>b;
-                    if(c||d&&!this.bL){window.location.reload();}
-                };
-                this.bB=setInterval(a,1000);
-                const e=()=>{
-                    if(this.bL)return;
-                    const f=Date.now();
-                    debugger;
-                    const g=Date.now();
-                    if(g-f>100&&!this.bL){window.location.reload();}
-                };
-                this.bC=setInterval(e,1000);
-            }
-        };
-        const F={
-            bI:null,
-            bJ:null,
-            bK:null,
-            bM:false,
-            i(){
-                this.bS();
-                this.bT();
-                this.bU();
-            },
-            bS(){
-                this.bI=(e)=>{
-                    if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();x.s('此页面禁止保存');}
-                    if((e.ctrlKey||e.metaKey)&&e.key==='p'){e.preventDefault();x.s('此页面禁止打印');}
-                };
-                document.addEventListener('keydown',this.bI);
-            },
-            bT(){
-                this.bJ=(e)=>{
-                    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
-                        e.preventDefault();
-                        x.s('开发者工具已被禁用');
-                        return false;
-                    }
-                };
-                document.addEventListener('keydown',this.bJ);
-            },
-            bU(){
-                this.bK=(e)=>{
-                    if(e.ctrlKey&&e.shiftKey){
-                        if(e.key==='C'||e.key==='J'||e.key==='K'||e.key==='Q'||e.key==='R'||e.key==='D'){
-                            e.preventDefault();
-                            x.s('开发者工具已被禁用');
-                            return false;
-                        }
-                    }
-                };
-                document.addEventListener('keydown',this.bK);
-            }
-        };
+        const o={u:'https://img.072103.xyz/h',t:'2022-06-13T00:00:00',m:[{n:"星茶会",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3"},{n:"I Can't Wait",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3"},{n:"你最近还好吗",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E4%BD%A0%E6%9C%80%E8%BF%91%E8%BF%98%E5%A5%BD%E5%90%97.mp3"},{n:"带我走",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E5%B8%A6%E6%88%91%E8%B5%B0.mp3"},{n:"我们",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%88%91%E4%BB%AC.mp3"},{n:"爱你",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3"},{n:"雨爱",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3"},{n:"鸟之诗-八音盒",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3"}]};
+        const f={x(t){navigator.clipboard.writeText(t).then(()=>this.s('已复制: '+t)).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a);this.s('已复制: '+t);});},s(m){const a=document.getElementById('toast');a.textContent=m;a.className='show';setTimeout(()=>a.className='',1500);},z(t){if(isNaN(t)||t===Infinity)return"00:00";const m=Math.floor(t/60),s=Math.floor(t%60);return`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;}};
+        const y={g:1,r(){return Math.random().toString(36).substring(2,8);},i(){const a=document.getElementById('bgImage1'),b=document.getElementById('bgImage2');a.style.background='#1a1a2e';b.style.background='#1a1a2e';a.style.opacity=1;requestIdleCallback(()=>{const i=new Image(),r=this.r();i.onload=()=>{a.style.backgroundImage=`url('${o.u}?r=${r}')`;a.style.backgroundSize='cover';a.style.backgroundPosition='center';};i.src=`${o.u}?r=${r}`;});},j(e,f=false){const a=document.getElementById(e),i=new Image(),r=this.r();i.onload=()=>{a.style.backgroundImage=`url('${o.u}?r=${r}')`;a.style.backgroundSize='cover';a.style.backgroundPosition='center';if(f)a.style.opacity=1;};i.src=`${o.u}?r=${r}`;},c(){const a=document.getElementById(`bgImage${this.g}`),b=document.getElementById(`bgImage${3-this.g}`);a.style.opacity=0;setTimeout(()=>this.j(`bgImage${3-this.g}`,true),50);setTimeout(()=>this.j(`bgImage${this.g}`,false),3000);this.g=3-this.g;},d(){try{const a=document.getElementById('bgImage1'),b=document.getElementById('bgImage2');let d=null;if(a.style.opacity!=='0'&&a.style.display!=='none')d=a;else if(b.style.opacity!=='0'&&b.style.display!=='none')d=b;else{const w=window.getComputedStyle(a),v=window.getComputedStyle(b);if(w.opacity==='1')d=a;else d=b;}if(!d){f.s('未找到当前背景图');return;}const u=d.style.backgroundImage.slice(5,-2);if(!u||u==='none'){f.s('背景图URL无效');return;}const i=new Image();i.crossOrigin='anonymous';i.onload=()=>{const c=document.createElement('canvas');c.width=i.naturalWidth;c.height=i.naturalHeight;c.getContext('2d').drawImage(i,0,0);c.toBlob(b=>{if(b){const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=`BG_${Date.now()}.png`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);f.s('下载中...');}else f.s('转换失败');},'image/png');};i.onerror=()=>{f.s('直接下载...');const a=document.createElement('a');a.href=u;a.download=`BG_${Date.now()}.jpg`;document.body.appendChild(a);a.click();document.body.removeChild(a);};i.src=u;}catch(e){f.s('下载失败');}}};
+        const A={m(){const a=new Date(o.t).getTime(),b=Date.now()-a,d=Math.floor(b/864e5),h=Math.floor((b%864e5)/36e5),n=Math.floor((b%36e5)/6e4),s=Math.floor((b%6e4)/1e3);document.getElementById('timer').innerText=`${d} 天 ${h} 时 ${n} 分 ${s} 秒`;},n(){this.m();setInterval(()=>this.m(),1000);}};
+        const B={o(){document.body.classList.toggle('hide-ui');}};
+        const E={p:document.getElementById("audio"),b:document.getElementById('pBar'),q:0,r:false,S:false,i(){this.V(0);this.p.addEventListener('timeupdate',()=>this.W());this.p.addEventListener('loadedmetadata',()=>this.X());this.p.addEventListener('ended',()=>this.Y());this.Z();requestIdleCallback(()=>document.getElementById('player').style.visibility='visible');},Z(){const a=document.getElementById('progressBar');if(!a)return;a.addEventListener('mousedown',e=>this.aa(e));a.addEventListener('touchstart',e=>{e.preventDefault();this.aa(e.touches[0]);},{passive:false});a.addEventListener('click',e=>{if(!this.S)this.ab(e)});},aa(e){this.S=true;const a=document.getElementById('progressBar'),b=document.getElementById('player'),c=a.getBoundingClientRect();this.T=e.clientX;this.U=c.width;this.ac(e);const d=e=>{if(this.S){const f=e.type==='touchmove'?e.touches[0]:e;this.ac(f)}},g=()=>{this.S=false;a.classList.remove('dragging');b.classList.remove('dragging');document.removeEventListener('mousemove',d);document.removeEventListener('touchmove',d);document.removeEventListener('mouseup',g);document.removeEventListener('touchend',g);};document.addEventListener('mousemove',d);document.addEventListener('touchmove',d,{passive:false});document.addEventListener('mouseup',g);document.addEventListener('touchend',g);a.classList.add('dragging');b.classList.add('dragging');},ac(e){if(!this.p.duration)return;const a=document.getElementById('progressBar'),b=a.getBoundingClientRect(),c=Math.max(0,Math.min(1,(e.clientX-b.left)/b.width));this.p.currentTime=c*this.p.duration;this.b.style.width=`${c*100}%`;document.getElementById('cTime').innerText=f.z(this.p.currentTime);if(this.r)this.p.play().catch(()=>{});},ab(e){this.ac(e);},ad(){document.getElementById('player').classList.toggle('expanded');},ae(){const p=document.getElementById('player');if(p.classList.contains('expanded'))p.classList.remove('expanded');},V(i){this.q=(i+o.m.length)%o.m.length;document.getElementById("mName").innerText=o.m[this.q].n;this.p.src=o.m[this.q].u;this.p.load();this.b.style.width='0%';document.getElementById('cTime').innerText='00:00';document.getElementById('tTime').innerText='00:00';if(this.r)this.p.play().then(()=>this.af(true)).catch(()=>{this.r=false;this.af(false);});},ag(){if(!this.p.src)this.V(this.q);if(this.p.paused){this.p.play().then(()=>{this.r=true;this.af(true);}).catch(()=>{this.p.load();this.p.play().then(()=>{this.r=true;this.af(true);});});}else{this.p.pause();this.r=false;this.af(false);}},Y(){this.V(this.q+1);},ah(){this.V(this.q-1);},af(p){document.getElementById('playIco').style.display=p?'none':'block';document.getElementById('pauseIco').style.display=p?'block':'none';},W(){if(this.p.duration&&!this.S){this.b.style.width=`${(this.p.currentTime/this.p.duration)*100}%`;document.getElementById('cTime').innerText=f.z(this.p.currentTime);}},X(){if(this.p.duration&&!isNaN(this.p.duration))document.getElementById('tTime').innerText=f.z(this.p.duration);}};
+        const F={a:false,b:null,c:0,d:3,f(){const a=document.getElementById('rgbSwitch'),b=document.getElementById('speedSlider'),d=document.getElementById('speedValue');a.addEventListener('change',()=>this.h());b.addEventListener('input',()=>{this.d=parseInt(b.value);d.textContent=this.d;this.i();});},g(){return 0.3+this.d*0.2;},h(){this.a=!this.a;this.a?this.i():this.j();},i(){if(!this.a)return;if(this.b)clearInterval(this.b);this.b=setInterval(()=>{this.c=(this.c+this.g())%360;const h=this.k(this.c,80,50);document.documentElement.style.setProperty('--r',`${h.r},${h.g},${h.b}`);document.body.classList.add('rgb-active');},60);},k(h,s,l){h/=360;s/=100;l/=100;let r,g,b;if(s===0)r=g=b=l;else{const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q,m=(n,o,w)=>{if(w<0)w+=1;if(w>1)w-=1;if(w<1/6)return n+(o-n)*6*w;if(w<0.5)return o;if(w<2/3)return n+(o-n)*(2/3-w)*6;return n;};r=m(p,q,h+1/3);g=m(p,q,h);b=m(p,q,h-1/3);}return{r:Math.round(r*255),g:Math.round(g*255),b:Math.round(b*255)};},j(){this.a=false;document.body.classList.remove('rgb-active');if(this.b){clearInterval(this.b);this.b=null;}document.documentElement.style.setProperty('--r','255,255,255');}};
+        const G={a:0,b:null,c(){const a=document.getElementById('hideUiBtn');a.addEventListener('click',e=>this.d(e));document.getElementById('passwordConfirm').addEventListener('click',()=>this.e());document.getElementById('passwordCancel').addEventListener('click',()=>this.f());document.getElementById('passwordInput').addEventListener('keypress',e=>{if(e.key==='Enter')this.e();});},d(e){e.stopPropagation();this.a++;if(this.b)clearTimeout(this.b);this.b=setTimeout(()=>this.a=0,800);if(this.a>=5){this.g();this.a=0;}},g(){document.getElementById('passwordDialog').classList.add('show');document.getElementById('passwordOverlay').classList.add('show');document.getElementById('passwordInput').value='';document.getElementById('passwordInput').focus();},f(){document.getElementById('passwordDialog').classList.remove('show');document.getElementById('passwordOverlay').classList.remove('show');document.getElementById('passwordInput').value='';},e(){const a=document.getElementById('passwordInput').value.trim();if(a===''){this.f();setTimeout(()=>location.reload(),300);return;}const c=this.l(a);if(c.t){this.f();this.h();f.s(c.m);if(c.k){document.body.classList.add('kikyo-theme');}
+                if(c.r){document.getElementById('rgbSwitch').checked=true;F.h();}const j=document.createElement('div');j.innerHTML='✨ 主题应用成功';j.style.cssText='position:fixed;top:10px;left:50%;transform:translateX(-50%);background:rgba(88,94,170,0.3);color:rgba(255,255,255,0.9);padding:10px 20px;border-radius:20px;border:1px solid #585eaa;z-index:10003;font-weight:bold;backdrop-filter:blur(5px)';document.body.appendChild(j);setTimeout(()=>j.remove(),3000);}else{this.f();f.s('主题代码无效');}},l(x){const t={m:'',t:false,k:false},p=String.fromCharCode(35,35,35);if(x===p||x==='###'||x==='\u0023\u0023\u0023'){t.m='管理员模式已激活';t.t=true;return t;}if(x==='ERX399'){t.m='桔梗色主题已应用';t.t=true;t.k=true;return t;}if(x.toLowerCase()==='rgb'){t.m='RGB流光模式已开启';t.t=true;t.r=true;return t;}return t;},h(){if(H.a){document.removeEventListener('contextmenu',H.a);H.a=null;}if(H.b){document.removeEventListener('keydown',H.b);H.b=null;}if(H.c){document.removeEventListener('selectstart',H.c);H.c=null;}if(H.d){document.removeEventListener('dragstart',H.d);H.d=null;}if(H.e){document.removeEventListener('drop',H.e);H.e=null;}if(H.f){clearInterval(H.f);H.f=null;}if(H.g){clearInterval(H.g);H.g=null;}if(J.a){document.removeEventListener('keydown',J.a);J.a=null;}if(J.b){document.removeEventListener('keydown',J.b);J.b=null;}if(J.c){document.removeEventListener('keydown',J.c);J.c=null;}document.oncontextmenu=null;document.onselectstart=null;document.onkeydown=null;document.ondragstart=null;document.ondrop=null;document.body.style.userSelect='text';}};
+        const H={a:null,b:null,c:null,d:null,e:null,f:null,g:null,i(){this.j();this.k();this.l();this.m();this.n();},j(){this.a=e=>{e.preventDefault();f.s('右键已禁用');};document.addEventListener('contextmenu',this.a);},k(){this.b=e=>{const a={'F12':1,'I':e.ctrlKey&&e.shiftKey,'C':e.ctrlKey&&e.shiftKey,'J':e.ctrlKey&&e.shiftKey,'K':e.ctrlKey&&e.shiftKey,'u':e.ctrlKey,'s':e.ctrlKey&&!e.shiftKey,'a':e.ctrlKey,'p':e.ctrlKey,'KeyI':e.ctrlKey&&e.shiftKey,'KeyC':e.ctrlKey&&e.shiftKey,'KeyJ':e.ctrlKey&&e.shiftKey,'KeyK':e.ctrlKey&&e.shiftKey,'KeyU':e.ctrlKey,'KeyS':e.ctrlKey&&!e.shiftKey,'KeyA':e.ctrlKey,'KeyP':e.ctrlKey,'KeyQ':e.ctrlKey&&e.shiftKey,'KeyR':e.ctrlKey&&e.shiftKey,'KeyD':e.ctrlKey&&e.shiftKey};if(a[e.key]||a[e.code]){e.preventDefault();f.s('操作被禁用');}};document.addEventListener('keydown',this.b);},l(){this.c=e=>{e.preventDefault();return false;};document.addEventListener('selectstart',this.c);},m(){this.d=e=>{e.preventDefault();return false;};this.e=e=>{e.preventDefault();return false;};document.addEventListener('dragstart',this.d);document.addEventListener('drop',this.e);},n(){this.f=setInterval(()=>{const b=160,c=window.outerWidth-window.innerWidth>b,d=window.outerHeight-window.innerHeight>b;if((c||d)&&!this.bL)location.reload();},1000);this.g=setInterval(()=>{const g=Date.now();debugger;const h=Date.now();if(h-g>100&&!this.bL)location.reload();},1000);}};
+        const J={a:null,b:null,c:null,e(){this.a=g=>{if((g.ctrlKey||g.metaKey)&&g.key==='s'){g.preventDefault();f.s('保存已禁用');}if((g.ctrlKey||g.metaKey)&&g.key==='p'){g.preventDefault();f.s('打印已禁用');}};document.addEventListener('keydown',this.a);},b(){this.b=g=>{if(g.key==='F12'||g.ctrlKey&&g.shiftKey&&g.key==='I'){g.preventDefault();f.s('开发者工具已禁用');return false;}};document.addEventListener('keydown',this.b);},c(){this.c=g=>{if(g.ctrlKey&&g.shiftKey&&['C','J','K','Q','R','D'].includes(g.key)){g.preventDefault();f.s('开发者工具已禁用');return false;}};document.addEventListener('keydown',this.c);}};
 //恭喜你发现了!给我的github点个Starred吧!
-        document.addEventListener('DOMContentLoaded',()=>{
-            E.i();
-            F.i();
-            D.i();
-            C.i();
-            y.i();
-            z.n();
-            B.i();
-            document.addEventListener('click',(e)=>{
-                if(!B.player.contains(e.target))B.ae();
-            });
-            setTimeout(()=>{document.body.style.visibility='visible';},300);
-        });
+        document.addEventListener('DOMContentLoaded',()=>{y.i();A.n();H.i();J.e();G.c();J.b();J.c();requestIdleCallback(()=>{E.i();F.f();});localStorage.clear();document.addEventListener('click',e=>{if(!document.getElementById('player').contains(e.target))E.ae();});document.body.style.visibility='visible';});
     </script>
 </body>
 </html>
