@@ -487,11 +487,11 @@
     <div class="bg-overlay"></div>
     
     <div class="bg-controls ui-element">
-        <div class="bg-btn" onclick="y.d()" title="下载当前背景"><i class="fas fa-download"></i></div>
-        <div class="bg-btn" onclick="y.c()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
+        <div class="bg-btn" onclick="y.l()" title="下载当前背景"><i class="fas fa-download"></i></div>
+        <div class="bg-btn" onclick="y.k()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
     </div>
-
-    <button class="hide-btn" onclick="B.o()" id="hideUiBtn">
+    
+    <button class="hide-btn" onclick="A.o()" id="hideUiBtn">
         <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
     </button>
     
@@ -620,10 +620,10 @@
     </div>
     
     <script>
-        const o={
-            u:'https://img.072103.xyz/h',
-            t:'2022-06-13T00:00:00',
-            m:[
+        const c={
+            a:'https://img.072103.xyz/h',
+            b:'2022-06-13T00:00:00',
+            d:[
                 {n:"星茶会",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3"},
                 {n:"I Can't Wait",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3"},
                 {n:"你最近还好吗",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E4%BD%A0%E6%9C%80%E8%BF%91%E8%BF%98%E5%A5%BD%E5%90%97.mp3"},
@@ -632,11 +632,10 @@
                 {n:"爱你",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3"},
                 {n:"雨爱",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3"},
                 {n:"鸟之诗-八音盒",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3"}
-            ],
-            y:'\u0023\u0023\u0023'
+            ]
         };
-        const f={
-            x(t){
+        const x={
+            e(t){
                 navigator.clipboard.writeText(t).then(()=>this.s('已复制: '+t)).catch(()=>{
                     const a=document.createElement('textarea');
                     a.value=t;
@@ -653,22 +652,10 @@
                 a.className='show';
                 setTimeout(()=>a.className='',1500);
             },
-            z(t){
+            f(t){
                 if(isNaN(t)||t===Infinity)return"00:00";
                 const m=Math.floor(t/60),s=Math.floor(t%60);
                 return`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
-            },
-            c(p){
-                const a=[35,35,35];
-                return p===String.fromCharCode.apply(null,a)||p===o.y;
-            },
-            w(x){
-                const a=String.fromCharCode.apply(null,[35,35,35]);
-                const b=x===a;
-                const c=x.length===3;
-                const d=x.split('').map(z=>z.charCodeAt(0));
-                const e=d.every((z,i)=>z===35);
-                return b||(c&&e);
             }
         };
         const y={
@@ -677,12 +664,12 @@
                 this.j('bgImage1',true);
                 this.j('bgImage2',false);
             },
-            j(e,f=false){
+            j(e,z=false){
                 const a=document.getElementById(e);
-                a.style.backgroundImage=`url('${o.u}?t=${new Date().getTime()}')`;
-                if(f)a.style.opacity=1;
+                a.style.backgroundImage=`url('${c.a}?t=${new Date().getTime()}')`;
+                if(z)a.style.opacity=1;
             },
-            c(){
+            k(){
                 const a=document.getElementById(`bgImage${this.g}`);
                 const b=document.getElementById(`bgImage${3-this.g}`);
                 a.style.opacity=0;
@@ -690,7 +677,7 @@
                 setTimeout(()=>this.j(`bgImage${this.g}`,false),5000);
                 this.g=3-this.g;
             },
-            d(){
+            l(){
                 try{
                     const a=document.getElementById('bgImage1');
                     const b=document.getElementById('bgImage2');
@@ -702,9 +689,9 @@
                         const v=window.getComputedStyle(b);
                         if(w.opacity==='1')d=a;else d=b;
                     }
-                    if(!d){f.s('未找到当前背景图');return;}
+                    if(!d){x.s('未找到当前背景图');return;}
                     const u=d.style.backgroundImage.slice(5,-2);
-                    if(!u||u==='none'){f.s('背景图URL无效');return;}
+                    if(!u||u==='none'){x.s('背景图URL无效');return;}
                     const i=new Image();
                     i.crossOrigin='anonymous';
                     i.onload=()=>{
@@ -723,12 +710,12 @@
                                 a.click();
                                 document.body.removeChild(a);
                                 URL.revokeObjectURL(url);
-                                f.s('背景图下载中...');
-                            }else{f.s('图片转换失败');}
+                                x.s('背景图下载中...');
+                            }else{x.s('图片转换失败');}
                         },'image/png');
                     };
                     i.onerror=()=>{
-                        f.s('尝试直接下载...');
+                        x.s('尝试直接下载...');
                         const a=document.createElement('a');
                         a.href=u;
                         a.download=`HAGo_Background_${new Date().getTime()}.jpg`;
@@ -737,69 +724,32 @@
                         document.body.removeChild(a);
                     };
                     i.src=u;
-                }catch(e){console.error('下载背景图失败:',e);f.s('下载失败，请重试');}
-            },
-            h(x){
-                const a=atob('IyMjIyMjIw==');
-                const b=btoa(x);
-                const c=a===b;
-                const d=x.length===3;
-                const e=x.split('').map(z=>z.charCodeAt(0));
-                const f=[35,35,35];
-                const g=e.every((z,i)=>z===f[i]);
-                return c&&(d||g);
+                }catch(e){console.error('下载背景图失败:',e);x.s('下载失败，请重试');}
             }
         };
-        const A={
+        const z={
             m(){
-                const a=new Date(o.u).getTime();
+                const a=new Date(c.b).getTime();
                 const b=new Date().getTime()-a;
                 const d=Math.floor(b/86400000);
                 const h=Math.floor((b%86400000)/3600000);
                 const n=Math.floor((b%3600000)/60000);
                 const s=Math.floor((b%60000)/1000);
                 document.getElementById('timer').innerText=`${d} 天 ${h} 时 ${n} 分 ${s} 秒`;
-                this.q();
             },
-            q(){
-                this.d=Array(3).fill(35).map(String.fromCharCode).join('');
-            },
-            d:'',
             n(){
                 this.m();
                 setInterval(()=>this.m(),1000);
-            },
-            k(p){
-                const a=this.d||'';
-                const b=String.fromCharCode(35,35,35);
-                const c=p.split('').map(x=>x.charCodeAt(0));
-                const d=[35,35,35];
-                const e=c.every((x,i)=>x===d[i]);
-                return p===a||p===b||e;
             }
         };
-        const B={
+        const A={
             o(){
                 const a=document.body.classList.contains('hide-ui');
                 if(a)document.body.classList.remove('hide-ui');
                 else document.body.classList.add('hide-ui');
-            },
-            g(x){
-                const a=['#','\u0023','\uFE5F'];
-                const b=a.map(x=>x.charCodeAt(0)).filter(x=>x===35);
-                const c=x.length===3&&x.split('').every(z=>b.includes(z.charCodeAt(0)));
-                return c||x==='###'||x==='\u0023\u0023\u0023';
-            },
-            h(p){
-                const a=parseInt(p,36);
-                const b=parseInt('zzz',36);
-                const c=[35,35,35];
-                const d=p.split('').map(x=>x.charCodeAt(0)).join('');
-                const e=c.map(String.fromCharCode).join('');
-                return a>=b&&d===e;
             }
         };
-        const E={
+        const B={
             audio:document.getElementById("audio"),
             pBar:document.getElementById('pBar'),
             player:document.getElementById('player'),
@@ -857,16 +807,16 @@
                 const f=Math.max(0,Math.min(1,c/d));
                 this.audio.currentTime=f*this.audio.duration;
                 this.pBar.style.width=`${f*100}%`;
-                document.getElementById('cTime').innerText=f.z(this.audio.currentTime);
+                document.getElementById('cTime').innerText=x.f(this.audio.currentTime);
                 if(this.r){this.audio.play().catch(e=>console.log("播放错误:",e));}
             },
             ab(e){this.ac(e);},
             ad(){this.player.classList.toggle('expanded');},
             ae(){if(this.player.classList.contains('expanded'))this.ad();},
             V(index){
-                this.q=(index+o.m.length)%o.m.length;
-                document.getElementById("mName").innerText=o.m[this.q].n;
-                this.audio.src=o.m[this.q].u;
+                this.q=(index+c.d.length)%c.d.length;
+                document.getElementById("mName").innerText=c.d[this.q].n;
+                this.audio.src=c.d[this.q].u;
                 this.audio.load();
                 this.pBar.style.width='0%';
                 document.getElementById('cTime').innerText='00:00';
@@ -903,80 +853,69 @@
                 document.getElementById('playIco').style.display=isPlaying?'none':'block';
                 document.getElementById('pauseIco').style.display=isPlaying?'block':'none';
             },
-            aj(x){
-                const a=[238,165,137];
-                const b=x.split('').map(z=>z.charCodeAt(0));
-                const c=b.every((z,i)=>z===a[i]);
-                const d=[35,35,35];
-                const e=b.every((z,i)=>z===d[i]);
-                return c||e;
-            },
             W(){
                 if(this.audio.duration&&!this.S){
                     const a=this.audio.currentTime;
                     const b=this.audio.duration;
                     this.pBar.style.width=`${(a/b)*100}%`;
-                    document.getElementById('cTime').innerText=f.z(a);
+                    document.getElementById('cTime').innerText=x.f(a);
                 }
             },
             X(){
                 if(this.audio.duration&&!isNaN(this.audio.duration)){
-                    document.getElementById('tTime').innerText=f.z(this.audio.duration);
+                    document.getElementById('tTime').innerText=x.f(this.audio.duration);
                 }
             }
         };
-        const F={
-            a:false,
-            b:null,
-            c:0,
-            d:3,
-            e:'',
-            f(){
+        const C={
+            ai:false,
+            aj:null,
+            ak:0,
+            al:3,
+            i(){
                 const a=document.getElementById('rgbSwitch');
                 const b=document.getElementById('speedSlider');
                 const d=document.getElementById('speedValue');
-                a.addEventListener('change',()=>this.g());
+                a.addEventListener('change',()=>this.am());
                 b.addEventListener('input',()=>{
-                    this.d=parseInt(b.value);
-                    d.textContent=this.d;
-                    this.h();
-                    localStorage.setItem('hago_rgb_speed',this.d.toString());
+                    this.al=parseInt(b.value);
+                    d.textContent=this.al;
+                    this.an();
+                    localStorage.setItem('hago_rgb_speed',this.al.toString());
                 });
                 const e=localStorage.getItem('hago_rgb_enabled');
-                const j=localStorage.getItem('hago_rgb_speed');
-                if(e==='true'){a.checked=true;this.g();}
-                if(j){
-                    this.d=parseInt(j);
-                    b.value=this.d;
-                    d.textContent=this.d;
-                    if(this.a)this.h();
+                const f=localStorage.getItem('hago_rgb_speed');
+                if(e==='true'){a.checked=true;this.am();}
+                if(f){
+                    this.al=parseInt(f);
+                    b.value=this.al;
+                    d.textContent=this.al;
+                    if(this.ai)this.an();
                 }
             },
-            g(){return 0.3+(this.d*0.2);},
-            h(){if(this.a)this.i();else this.j();localStorage.setItem('hago_rgb_enabled',this.a.toString());},
-            j(){
-                this.a=true;
+            ao(){return 0.3+(this.al*0.2);},
+            am(){if(this.ai)this.ap();else this.aq();localStorage.setItem('hago_rgb_enabled',this.ai.toString());},
+            aq(){
+                this.ai=true;
                 document.body.classList.add('rgb-active');
-                this.k();
+                this.ar();
             },
-            k(){
-                if(!this.a)return;
-                if(this.b)clearInterval(this.b);
-                this.b=setInterval(()=>{
-                    const a=this.g();
-                    this.c=(this.c+a)%360;
-                    const b=this.l(this.c,80,50);
+            ar(){
+                if(!this.ai)return;
+                if(this.aj)clearInterval(this.aj);
+                this.aj=setInterval(()=>{
+                    const a=this.ao();
+                    this.ak=(this.ak+a)%360;
+                    const b=this.as(this.ak,80,50);
                     document.documentElement.style.setProperty('--rgb-color',`${b.r}, ${b.g}, ${b.b}`);
-                    const c=[35,35,35];
-                    this.e=String.fromCharCode.apply(null,c);
                 },60);
             },
-            l(h,s,l){
+            as(h,s,l){
                 h/=360;s/=100;l/=100;
                 let r,g,b;
                 if(s===0)r=g=b=l;
                 else{
-                    const m=(p,q,t)=>{
+                    const at=(p,q,t)=>{
                         if(t<0)t+=1;if(t>1)t-=1;
                         if(t<1/6)return p+(q-p)*6*t;
                         if(t<1/2)return q;
@@ -985,102 +924,82 @@
                     };
                     const q=l<0.5?l*(1+s):l+s-l*s;
                     const p=2*l-q;
-                    r=m(p,q,h+1/3);
-                    g=m(p,q,h);
-                    b=m(p,q,h-1/3);
+                    r=at(p,q,h+1/3);
+                    g=at(p,q,h);
+                    b=at(p,q,h-1/3);
                 }
                 return{r:Math.round(r*255),g:Math.round(g*255),b:Math.round(b*255)};
             },
-            m(x){
-                const a=x.split('').map(y=>y.charCodeAt(0));
-                const b=[35,35,35];
-                const c=a.every((z,i)=>z===b[i]);
-                const d=[238,165,137];
-                const e=a.length===3&&d.every((z,i)=>z===a[i]);
-                return c||e;
-            },
-            i(){if(this.a)this.k();},
-            n(){
-                this.a=false;
+            an(){if(this.ai)this.ar();},
+            ap(){
+                this.ai=false;
                 document.body.classList.remove('rgb-active');
-                if(this.b){clearInterval(this.b);this.b=null;}
+                if(this.aj){clearInterval(this.aj);this.aj=null;}
                 document.documentElement.style.setProperty('--rgb-color','255, 255, 255');
             }
         };
-        const G={
-            a:0,
-            b:null,
-            c(){
+        const D={
+            au:0,
+            av:null,
+            i(){
                 const a=document.getElementById('hideUiBtn');
-                a.addEventListener('click',(e)=>this.d(e));
-                document.getElementById('passwordConfirm').addEventListener('click',()=>this.e());
-                document.getElementById('passwordCancel').addEventListener('click',()=>this.f());
-                document.getElementById('passwordInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')this.e();});
+                a.addEventListener('click',(e)=>this.aw(e));
+                document.getElementById('passwordConfirm').addEventListener('click',()=>this.ax());
+                document.getElementById('passwordCancel').addEventListener('click',()=>this.ay());
+                document.getElementById('passwordInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')this.ax();});
             },
-            d(e){
+            aw(e){
                 e.stopPropagation();
-                this.a++;
-                if(this.b)clearTimeout(this.b);
-                this.b=setTimeout(()=>this.a=0,1000);
-                if(this.a>=5){
-                    this.g();
-                    this.a=0;
+                this.au++;
+                if(this.av)clearTimeout(this.av);
+                this.av=setTimeout(()=>this.au=0,1000);
+                if(this.au>=5){
+                    this.az();
+                    this.au=0;
                 }
             },
-            g(){
+            az(){
                 document.getElementById('passwordDialog').classList.add('show');
                 document.getElementById('passwordOverlay').classList.add('show');
                 document.getElementById('passwordInput').value='';
                 document.getElementById('passwordInput').focus();
             },
-            f(){
+            ay(){
                 document.getElementById('passwordDialog').classList.remove('show');
                 document.getElementById('passwordOverlay').classList.remove('show');
                 document.getElementById('passwordInput').value='';
             },
-            e(){
+            ax(){
                 const a=document.getElementById('passwordInput').value.trim();
-                const b=typeof document.hidden!=='undefined'?document.hidden:!document.hidden;
                 if(a===''){
-                    this.f();
+                    this.ay();
                     setTimeout(()=>window.location.reload(),300);
                     return;
                 }
-                const c=function(){
-                    const x=a;
-                    const y=B.g(x);
-                    const z=A.k(x);
-                    const w=F.e===x||F.e===String.fromCharCode(35,35,35);
-                    const v=y.h(x);
-                    const u=F.m(x);
-                    const t=f.w(x);
-                    const s=E.aj(x);
-                    return y||z||w||v||u||t||s;
-                }();
-                if(c){
-                    this.f();
-                    this.h();
-                    f.s('主题设置已应用，保护功能已解除');
-                    const j=document.createElement('div');
-                    j.innerHTML='🔓 保护功能已完全禁用';
-                    j.style.cssText=`position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+                if(a==="@@@@@"){
+                    this.ay();
+                    this.bA();
+                    x.s('主题设置已应用，保护功能已解除');
+                    const b=document.createElement('div');
+                    b.innerHTML='🔓 保护功能已完全禁用';
+                    b.style.cssText=`position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
                         background: rgba(0, 255, 0, 0.2); color: #4CAF50; padding: 10px 20px; border-radius: 20px;
                         border: 1px solid #4CAF50; z-index: 10003; font-weight: bold; backdrop-filter: blur(5px);`;
-                    document.body.appendChild(j);
-                    setTimeout(()=>{if(j.parentNode)j.remove();},3000);
-                }else{this.f();}
+                    document.body.appendChild(b);
+                    setTimeout(()=>{if(b.parentNode)b.remove();},3000);
+                }else{this.ay();}
             },
-            h(){
-                if(H.a){clearInterval(H.a);H.a=null;}
-                if(H.b){clearInterval(H.b);H.b=null;}
-                if(H.c){document.removeEventListener('contextmenu',H.c);H.c=null;}
-                if(H.d){document.removeEventListener('keydown',H.d);H.d=null;}
-                if(H.e){document.removeEventListener('selectstart',H.e);H.e=null;}
-                if(H.f){document.removeEventListener('dragstart',H.f);H.f=null;}
-                if(H.g){document.removeEventListener('drop',H.g);H.g=null;}
-                if(I.a){document.removeEventListener('keydown',I.a);I.a=null;}
-                if(I.b){document.removeEventListener('keydown',I.b);I.b=null;}
-                if(I.c){document.removeEventListener('keydown',I.c);I.c=null;}
+            bA(){
+                if(E.bB){clearInterval(E.bB);E.bB=null;}
+                if(E.bC){clearInterval(E.bC);E.bC=null;}
+                if(E.bD){document.removeEventListener('contextmenu',E.bD);E.bD=null;}
+                if(E.bE){document.removeEventListener('keydown',E.bE);E.bE=null;}
+                if(E.bF){document.removeEventListener('selectstart',E.bF);E.bF=null;}
+                if(E.bG){document.removeEventListener('dragstart',E.bG);E.bG=null;}
+                if(E.bH){document.removeEventListener('drop',E.bH);E.bH=null;}
+                if(F.bI){document.removeEventListener('keydown',F.bI);F.bI=null;}
+                if(F.bJ){document.removeEventListener('keydown',F.bJ);F.bJ=null;}
+                if(F.bK){document.removeEventListener('keydown',F.bK);F.bK=null;}
                 document.oncontextmenu=null;
                 document.onselectstart=null;
                 document.onkeydown=null;
@@ -1090,12 +1009,12 @@
                 document.body.style.webkitUserSelect='text';
                 document.body.style.mozUserSelect='text';
                 document.body.style.msUserSelect='text';
-                H.d=true;
-                I.e=true;
+                E.bL=true;
+                F.bM=true;
                 console.log('所有保护功能已完全禁用');
             }
         };
-        const H={
+        const E={
             bD:null,
             bE:null,
             bF:null,
@@ -1179,52 +1098,57 @@
                 this.bC=setInterval(e,1000);
             }
         };
-        const J={
-            a:null,
-            b:null,
-            c:null,
-            d:false,
-            e(){
-                this.a=(f)=>{
-                    if((f.ctrlKey||f.metaKey)&&f.key==='s'){f.preventDefault();f.s('此页面禁止保存');}
-                    if((f.ctrlKey||f.metaKey)&&f.key==='p'){f.preventDefault();f.s('此页面禁止打印');}
-                };
-                document.addEventListener('keydown',this.a);
+        const F={
+            bI:null,
+            bJ:null,
+            bK:null,
+            bM:false,
+            i(){
+                this.bS();
+                this.bT();
+                this.bU();
             },
-            b(){
-                this.b=(f)=>{
-                    if(f.key==='F12'||(f.ctrlKey&&f.shiftKey&&f.key==='I')){
-                        f.preventDefault();
-                        f.s('开发者工具已被禁用');
+            bS(){
+                this.bI=(e)=>{
+                    if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();x.s('此页面禁止保存');}
+                    if((e.ctrlKey||e.metaKey)&&e.key==='p'){e.preventDefault();x.s('此页面禁止打印');}
+                };
+                document.addEventListener('keydown',this.bI);
+            },
+            bT(){
+                this.bJ=(e)=>{
+                    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
+                        e.preventDefault();
+                        x.s('开发者工具已被禁用');
                         return false;
                     }
                 };
-                document.addEventListener('keydown',this.b);
+                document.addEventListener('keydown',this.bJ);
             },
-            c(){
-                this.c=(f)=>{
-                    if(f.ctrlKey&&f.shiftKey){
-                        if(f.key==='C'||f.key==='J'||f.key==='K'||f.key==='Q'||f.key==='R'||f.key==='D'){
-                            f.preventDefault();
-                            f.s('开发者工具已被禁用');
+            bU(){
+                this.bK=(e)=>{
+                    if(e.ctrlKey&&e.shiftKey){
+                        if(e.key==='C'||e.key==='J'||e.key==='K'||e.key==='Q'||e.key==='R'||e.key==='D'){
+                            e.preventDefault();
+                            x.s('开发者工具已被禁用');
                             return false;
                         }
                     }
                 };
-                document.addEventListener('keydown',this.c);
+                document.addEventListener('keydown',this.bK);
             }
         };
 //恭喜你发现了!给我的github点个Starred吧!
         document.addEventListener('DOMContentLoaded',()=>{
-            H.d();
-            I.e();
-            G.c();
-            J.e();
-            y.b();
-            A.n();
             E.i();
+            F.i();
+            D.i();
+            C.i();
+            y.i();
+            z.n();
+            B.i();
             document.addEventListener('click',(e)=>{
-                if(!E.player.contains(e.target))E.ae();
+                if(!B.player.contains(e.target))B.ae();
             });
             setTimeout(()=>{document.body.style.visibility='visible';},300);
         });
