@@ -172,10 +172,10 @@
         #player {
             position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
             background: rgba(255, 255, 255, 0.15); border: 1px solid var(--glass-border); border-radius: 25px;
-            z-index: 9999; transition: all 0.4s ease; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 9999; transition: all 0.4s; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
         
-        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; }
         
         .cd-box {
             width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
@@ -184,7 +184,7 @@
         
         .cd-box svg { width: 22px; height: 22px; fill: #fff; transition: transform 0.3s ease; }
         .cd-box:hover svg { transform: scale(1.1); }
-        
+
         /* 播放器进度条样式 - 修复显示问题 */
         .progress-container { 
             width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer;
@@ -201,13 +201,13 @@
         }
 
         #player:not(.dragging) .p-fill {
-            transition: width 0.1s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: width 0.1s ease;
         }
         
-        .p-fill::after {
-            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px;
+        .p-fill::after { 
+            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px; 
             background: #fff; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.5); transform: scale(0);
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
+            transition: transform 0.2s ease, background 0.3s ease;
         }
         
         #player.expanded .p-fill::after { transform: scale(1); }
@@ -487,11 +487,11 @@
     <div class="bg-overlay"></div>
     
     <div class="bg-controls ui-element">
-        <div class="bg-btn" onclick="backgroundModule.downloadBackground()" title="下载当前背景"><i class="fas fa-download"></i></div>
-        <div class="bg-btn" onclick="backgroundModule.changeBackground()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
+        <div class="bg-btn" onclick="y.l()" title="下载当前背景"><i class="fas fa-download"></i></div>
+        <div class="bg-btn" onclick="y.k()" title="更换背景"><i class="fas fa-sync-alt"></i></div>
     </div>
     
-    <button class="hide-btn" onclick="uiModule.toggleUI()" id="hideUiBtn">
+    <button class="hide-btn" onclick="A.o()" id="hideUiBtn">
         <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
     </button>
     
@@ -524,7 +524,7 @@
     <div id="toast">已复制</div>
     
     <div id="player" class="ui-element">
-        <div class="cd-box" onclick="musicPlayer.toggleExpand()">
+        <div class="cd-box" onclick="B.ad()">
             <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
         </div>
         
@@ -537,12 +537,12 @@
             
             <div class="ctrl-row">
                 <div class="ctrl-btns">
-                    <button onclick="musicPlayer.prevTrack()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-                    <button onclick="musicPlayer.toggleMusic()">
+                    <button onclick="B.ah()"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+                    <button onclick="B.ag()">
                         <svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         <svg id="pauseIco" style="display:none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
                     </button>
-                    <button onclick="musicPlayer.nextTrack()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+                    <button onclick="B.Y()"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
                 </div>
                 <div class="m-time"><span id="cTime">00:00</span> / <span id="tTime">00:00</span></div>
             </div>
@@ -569,11 +569,11 @@
         <div class="card">
             <h2>连接地址</h2>
             <div class="server-note">注意：本服务器需绑定QQ</div>
-            <div class="addr-box" onclick="utils.copyText('mc.qianxin520.xyz')">
+            <div class="addr-box" onclick="x.e('mc.qianxin520.xyz')">
                 <span>主线路</span>
                 <strong>mc.qianxin520.xyz</strong>
             </div>
-            <div class="addr-box" onclick="utils.copyText('mc.520pro.top')">
+            <div class="addr-box" onclick="x.e('mc.520pro.top')">
                 <span>副线路</span>
                 <strong>mc.520pro.top</strong>
             </div>
@@ -620,743 +620,537 @@
     </div>
     
     <script>
-        const config = {
-            bgApiUrl: 'https://img.072103.xyz/h',
-            serverStartDate: '2022-06-13T00:00:00',
-            playlist: [
-                { name: "星茶会", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3" },
-                { name: "I Can't Wait", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3" },
-                { name: "你最近还好吗", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E4%BD%A0%E6%9C%80%E8%BF%91%E8%BF%98%E5%A5%BD%E5%90%97.mp3" },
-                { name: "带我走", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E5%B8%A6%E6%88%91%E8%B5%B0.mp3" },
-                { name: "我们", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%88%91%E4%BB%AC.mp3" },
-                { name: "爱你", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3" },
-                { name: "雨爱", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3" },
-                { name: "鸟之诗-八音盒", url: "https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3" }
+        const c={
+            a:'https://img.072103.xyz/h',
+            b:'2022-06-13T00:00:00',
+            d:[
+                {n:"星茶会",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%98%9F%E8%8C%B6%E4%BC%9A.mp3"},
+                {n:"I Can't Wait",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/I%20Can%27t%20Wait.mp3"},
+                {n:"你最近还好吗",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E4%BD%A0%E6%9C%80%E8%BF%91%E8%BF%98%E5%A5%BD%E5%90%97.mp3"},
+                {n:"带我走",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E5%B8%A6%E6%88%91%E8%B5%B0.mp3"},
+                {n:"我们",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E6%88%91%E4%BB%AC.mp3"},
+                {n:"爱你",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3"},
+                {n:"雨爱",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3"},
+                {n:"鸟之诗-八音盒",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3"}
             ]
         };
-
-        const utils = {
-            copyText(text) {
-                navigator.clipboard.writeText(text).then(() => {
-                    this.showToast('已复制: ' + text);
-                }).catch(err => {
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
+        const x={
+            e(t){
+                navigator.clipboard.writeText(t).then(()=>this.s('已复制: '+t)).catch(()=>{
+                    const a=document.createElement('textarea');
+                    a.value=t;
+                    document.body.appendChild(a);
+                    a.select();
                     document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    this.showToast('已复制: ' + text);
+                    document.body.removeChild(a);
+                    this.s('已复制: '+t);
                 });
             },
-
-            showToast(message) {
-                const toast = document.getElementById('toast');
-                toast.textContent = message;
-                toast.className = 'show';
-                setTimeout(() => toast.className = '', 1500);
+            s(m){
+                const a=document.getElementById('toast');
+                a.textContent=m;
+                a.className='show';
+                setTimeout(()=>a.className='',1500);
             },
-
-            formatTime(seconds) {
-                if (isNaN(seconds) || seconds === Infinity) return "00:00";
-                const mins = Math.floor(seconds / 60);
-                const secs = Math.floor(seconds % 60);
-                return `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+            f(t){
+                if(isNaN(t)||t===Infinity)return"00:00";
+                const m=Math.floor(t/60),s=Math.floor(t%60);
+                return`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
             }
         };
-
-        const backgroundModule = {
-            currentBgIndex: 1,
-            init() {
-                this.setBackgroundImage('bgImage1', true);
-                this.setBackgroundImage('bgImage2', false);
+        const y={
+            g:1,
+            i(){
+                this.j('bgImage1',true);
+                this.j('bgImage2',false);
             },
-            setBackgroundImage(elementId, show = false) {
-                const element = document.getElementById(elementId);
-                element.style.backgroundImage = `url('${config.bgApiUrl}?t=${new Date().getTime()}')`;
-                if (show) element.style.opacity = 1;
+            j(e,z=false){
+                const a=document.getElementById(e);
+                a.style.backgroundImage=`url('${c.a}?t=${new Date().getTime()}')`;
+                if(z)a.style.opacity=1;
             },
-            changeBackground() {
-                const current = document.getElementById(`bgImage${this.currentBgIndex}`);
-                const next = document.getElementById(`bgImage${3 - this.currentBgIndex}`);
-                current.style.opacity = 0;
-                setTimeout(() => this.setBackgroundImage(`bgImage${3 - this.currentBgIndex}`, true), 300);
-                setTimeout(() => this.setBackgroundImage(`bgImage${this.currentBgIndex}`, false), 5000);
-                this.currentBgIndex = 3 - this.currentBgIndex;
+            k(){
+                const a=document.getElementById(`bgImage${this.g}`);
+                const b=document.getElementById(`bgImage${3-this.g}`);
+                a.style.opacity=0;
+                setTimeout(()=>this.j(`bgImage${3-this.g}`,true),300);
+                setTimeout(()=>this.j(`bgImage${this.g}`,false),5000);
+                this.g=3-this.g;
             },
-            downloadBackground() {
-                try {
-                    const bgImage1 = document.getElementById('bgImage1');
-                    const bgImage2 = document.getElementById('bgImage2');
-                    let currentBg = null;
-
-                    if (bgImage1.style.opacity !== '0' && bgImage1.style.display !== 'none') {
-                        currentBg = bgImage1;
-                    } else if (bgImage2.style.opacity !== '0' && bgImage2.style.display !== 'none') {
-                        currentBg = bgImage2;
-                    } else {
-                        const style1 = window.getComputedStyle(bgImage1);
-                        const style2 = window.getComputedStyle(bgImage2);
-                        if (style1.opacity === '1') {
-                            currentBg = bgImage1;
-                        } else {
-                            currentBg = bgImage2;
-                        }
+            l(){
+                try{
+                    const a=document.getElementById('bgImage1');
+                    const b=document.getElementById('bgImage2');
+                    let d=null;
+                    if(a.style.opacity!=='0'&&a.style.display!=='none')d=a;
+                    else if(b.style.opacity!=='0'&&b.style.display!=='none')d=b;
+                    else{
+                        const w=window.getComputedStyle(a);
+                        const v=window.getComputedStyle(b);
+                        if(w.opacity==='1')d=a;else d=b;
                     }
-
-                    if (!currentBg) {
-                        utils.showToast('未找到当前背景图');
-                        return;
-                    }
-
-                    const bgUrl = currentBg.style.backgroundImage.slice(5, -2);
-
-                    if (!bgUrl || bgUrl === 'none') {
-                        utils.showToast('背景图URL无效');
-                        return;
-                    }
-
-                    const img = new Image();
-                    img.crossOrigin = 'anonymous';
-
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        canvas.width = img.naturalWidth;
-                        canvas.height = img.naturalHeight;
-
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0);
-
-                        canvas.toBlob((blob) => {
-                            if (blob) {
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `HAGo_Background_${new Date().getTime()}.png`;
+                    if(!d){x.s('未找到当前背景图');return;}
+                    const u=d.style.backgroundImage.slice(5,-2);
+                    if(!u||u==='none'){x.s('背景图URL无效');return;}
+                    const i=new Image();
+                    i.crossOrigin='anonymous';
+                    i.onload=()=>{
+                        const canvas=document.createElement('canvas');
+                        canvas.width=i.naturalWidth;
+                        canvas.height=i.naturalHeight;
+                        const ctx=canvas.getContext('2d');
+                        ctx.drawImage(i,0,0);
+                        canvas.toBlob((blob)=>{
+                            if(blob){
+                                const url=URL.createObjectURL(blob);
+                                const a=document.createElement('a');
+                                a.href=url;
+                                a.download=`HAGo_Background_${new Date().getTime()}.png`;
                                 document.body.appendChild(a);
                                 a.click();
                                 document.body.removeChild(a);
                                 URL.revokeObjectURL(url);
-                                utils.showToast('背景图下载中...');
-                            } else {
-                                utils.showToast('图片转换失败');
-                            }
-                        }, 'image/png');
+                                x.s('背景图下载中...');
+                            }else{x.s('图片转换失败');}
+                        },'image/png');
                     };
-
-                    img.onerror = () => {
-                        utils.showToast('尝试直接下载...');
-                        const a = document.createElement('a');
-                        a.href = bgUrl;
-                        a.download = `HAGo_Background_${new Date().getTime()}.jpg`;
+                    i.onerror=()=>{
+                        x.s('尝试直接下载...');
+                        const a=document.createElement('a');
+                        a.href=u;
+                        a.download=`HAGo_Background_${new Date().getTime()}.jpg`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
                     };
-
-                    img.src = bgUrl;
-
-                } catch (error) {
-                    console.error('下载背景图失败:', error);
-                    utils.showToast('下载失败，请重试');
-                }
+                    i.src=u;
+                }catch(e){console.error('下载背景图失败:',e);x.s('下载失败，请重试');}
             }
         };
-
-        const timerModule = {
-            update() {
-                const start = new Date(config.serverStartDate).getTime();
-                const diff = new Date().getTime() - start;
-                const d = Math.floor(diff / 86400000);
-                const h = Math.floor((diff % 86400000) / 3600000);
-                const m = Math.floor((diff % 3600000) / 60000);
-                const s = Math.floor((diff % 60000) / 1000);
-                document.getElementById('timer').innerText = `${d} 天 ${h} 时 ${m} 分 ${s} 秒`;
+        const z={
+            m(){
+                const a=new Date(c.b).getTime();
+                const b=new Date().getTime()-a;
+                const d=Math.floor(b/86400000);
+                const h=Math.floor((b%86400000)/3600000);
+                const n=Math.floor((b%3600000)/60000);
+                const s=Math.floor((b%60000)/1000);
+                document.getElementById('timer').innerText=`${d} 天 ${h} 时 ${n} 分 ${s} 秒`;
             },
-            start() {
-                this.update();
-                setInterval(() => this.update(), 1000);
+            n(){
+                this.m();
+                setInterval(()=>this.m(),1000);
             }
         };
-
-        const uiModule = {
-            toggleUI() {
-                const isHidden = document.body.classList.contains('hide-ui');
-                
-                if (isHidden) {
-                    // 显示UI
-                    document.body.classList.remove('hide-ui');
-                } else {
-                    // 隐藏UI
-                    document.body.classList.add('hide-ui');
-                }
+        const A={
+            o(){
+                const a=document.body.classList.contains('hide-ui');
+                if(a)document.body.classList.remove('hide-ui');
+                else document.body.classList.add('hide-ui');
             }
         };
-
-        const musicPlayer = {
-            audio: document.getElementById("audio"),
-            pBar: document.getElementById('pBar'),
-            player: document.getElementById('player'),
-            currentIndex: 0,
-            isPlaying: false,
-            isDragging: false,
-            dragStartX: 0,
-            dragStartWidth: 0,
-            
-            init() {
-                this.loadTrack(0);
-                this.audio.addEventListener('timeupdate', () => this.updateProgress());
-                this.audio.addEventListener('loadedmetadata', () => this.updateTotalTime());
-                this.audio.addEventListener('ended', () => this.nextTrack());
-                
-                this.addProgressEvents();
-                
-                // 修复：确保播放器内部UI初始化
-                setTimeout(() => {
-                    this.player.style.visibility = 'visible';
-                }, 100);
+        const B={
+            audio:document.getElementById("audio"),
+            pBar:document.getElementById('pBar'),
+            player:document.getElementById('player'),
+            q:0,
+            r:false,
+            S:false,
+            T:0,
+            U:0,
+            i(){
+                this.V(0);
+                this.audio.addEventListener('timeupdate',()=>this.W());
+                this.audio.addEventListener('loadedmetadata',()=>this.X());
+                this.audio.addEventListener('ended',()=>this.Y());
+                this.Z();
+                setTimeout(()=>{this.player.style.visibility='visible';},100);
             },
-            
-            addProgressEvents() {
-                const progressBar = document.getElementById('progressBar');
-                if (!progressBar) return;
-                
-                // 鼠标事件
-                progressBar.addEventListener('mousedown', (e) => this.startSeek(e));
-                
-                // 触摸事件
-                progressBar.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.startSeek(e.touches[0]);
-                }, { passive: false });
-                
-                // 点击事件
-                progressBar.addEventListener('click', (e) => {
-                    if (!this.isDragging) {
-                        this.handleClick(e);
-                    }
-                });
+            Z(){
+                const a=document.getElementById('progressBar');
+                if(!a)return;
+                a.addEventListener('mousedown',(e)=>this.aa(e));
+                a.addEventListener('touchstart',(e)=>{e.preventDefault();this.aa(e.touches[0]);},{passive:false});
+                a.addEventListener('click',(e)=>{if(!this.S)this.ab(e);});
             },
-            
-            startSeek(e) {
-                this.isDragging = true;
-                const progressBar = document.getElementById('progressBar');
-                const player = document.getElementById('player');
-                progressBar.classList.add('dragging');
-                player.classList.add('dragging');
-
-                const rect = progressBar.getBoundingClientRect();
-                this.dragStartX = e.clientX;
-                this.dragStartWidth = rect.width;
-
-                // 立即更新一次位置
-                this.handleSeek(e);
-
-                // 添加全局事件监听
-                const moveHandler = (e) => {
-                    if (this.isDragging) {
-                        const event = e.type === 'touchmove' ? e.touches[0] : e;
-                        this.handleSeek(event);
-                    }
+            aa(e){
+                this.S=true;
+                const a=document.getElementById('progressBar');
+                const b=document.getElementById('player');
+                a.classList.add('dragging');
+                b.classList.add('dragging');
+                const c=a.getBoundingClientRect();
+                this.T=e.clientX;
+                this.U=c.width;
+                this.ac(e);
+                const d=(e)=>{if(this.S){const f=e.type==='touchmove'?e.touches[0]:e;this.ac(f);}};
+                const g=()=>{
+                    this.S=false;
+                    a.classList.remove('dragging');
+                    b.classList.remove('dragging');
+                    document.removeEventListener('mousemove',d);
+                    document.removeEventListener('touchmove',d);
+                    document.removeEventListener('mouseup',g);
+                    document.removeEventListener('touchend',g);
                 };
-
-                const endHandler = () => {
-                    this.isDragging = false;
-                    progressBar.classList.remove('dragging');
-                    player.classList.remove('dragging');
-                    document.removeEventListener('mousemove', moveHandler);
-                    document.removeEventListener('touchmove', moveHandler);
-                    document.removeEventListener('mouseup', endHandler);
-                    document.removeEventListener('touchend', endHandler);
-                };
-                
-                document.addEventListener('mousemove', moveHandler);
-                document.addEventListener('touchmove', moveHandler, { passive: false });
-                document.addEventListener('mouseup', endHandler);
-                document.addEventListener('touchend', endHandler);
+                document.addEventListener('mousemove',d);
+                document.addEventListener('touchmove',d,{passive:false});
+                document.addEventListener('mouseup',g);
+                document.addEventListener('touchend',g);
             },
-            
-            handleSeek(e) {
-                if (!this.audio.duration) return;
-                const progressBar = document.getElementById('progressBar');
-                const rect = progressBar.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const width = rect.width;
-                const percentage = Math.max(0, Math.min(1, x / width));
-                
-                this.audio.currentTime = percentage * this.audio.duration;
-                this.pBar.style.width = `${percentage * 100}%`;
-                document.getElementById('cTime').innerText = utils.formatTime(this.audio.currentTime);
-                
-                if (this.isPlaying) {
-                    this.audio.play().catch(e => console.log("播放错误:", e));
-                }
+            ac(e){
+                if(!this.audio.duration)return;
+                const a=document.getElementById('progressBar');
+                const b=a.getBoundingClientRect();
+                const c=e.clientX-b.left;
+                const d=b.width;
+                const f=Math.max(0,Math.min(1,c/d));
+                this.audio.currentTime=f*this.audio.duration;
+                this.pBar.style.width=`${f*100}%`;
+                document.getElementById('cTime').innerText=x.f(this.audio.currentTime);
+                if(this.r){this.audio.play().catch(e=>console.log("播放错误:",e));}
             },
-            
-            handleClick(e) {
-                this.handleSeek(e);
-            },
-            
-            toggleExpand() {
-                this.player.classList.toggle('expanded');
-            },
-            
-            collapse() {
-                if (this.player.classList.contains('expanded')) this.toggleExpand();
-            },
-            
-            loadTrack(index) {
-                this.currentIndex = (index + config.playlist.length) % config.playlist.length;
-                document.getElementById("mName").innerText = config.playlist[this.currentIndex].name;
-                this.audio.src = config.playlist[this.currentIndex].url;
+            ab(e){this.ac(e);},
+            ad(){this.player.classList.toggle('expanded');},
+            ae(){if(this.player.classList.contains('expanded'))this.ad();},
+            V(index){
+                this.q=(index+c.d.length)%c.d.length;
+                document.getElementById("mName").innerText=c.d[this.q].n;
+                this.audio.src=c.d[this.q].u;
                 this.audio.load();
-                this.pBar.style.width = '0%';
-                document.getElementById('cTime').innerText = '00:00';
-                document.getElementById('tTime').innerText = '00:00';
-                if (this.isPlaying) {
-                    this.audio.play().then(() => this.updateIco(true)).catch(e => {
-                        this.isPlaying = false;
-                        this.updateIco(false);
+                this.pBar.style.width='0%';
+                document.getElementById('cTime').innerText='00:00';
+                document.getElementById('tTime').innerText='00:00';
+                if(this.r){
+                    this.audio.play().then(()=>this.af(true)).catch(e=>{
+                        this.r=false;
+                        this.af(false);
                     });
                 }
             },
-            
-            toggleMusic() {
-                if (!this.audio.src || this.audio.src === '') this.loadTrack(this.currentIndex);
-                if (this.audio.paused) {
-                    this.audio.play().then(() => {
-                        this.isPlaying = true;
-                        this.updateIco(true);
-                    }).catch(e => {
+            ag(){
+                if(!this.audio.src||this.audio.src==='')this.V(this.q);
+                if(this.audio.paused){
+                    this.audio.play().then(()=>{
+                        this.r=true;
+                        this.af(true);
+                    }).catch(e=>{
                         this.audio.load();
-                        this.audio.play().then(() => {
-                            this.isPlaying = true;
-                            this.updateIco(true);
+                        this.audio.play().then(()=>{
+                            this.r=true;
+                            this.af(true);
                         });
                     });
-                } else {
+                }else{
                     this.audio.pause();
-                    this.isPlaying = false;
-                    this.updateIco(false);
+                    this.r=false;
+                    this.af(false);
                 }
             },
-            
-            nextTrack() { this.loadTrack(this.currentIndex + 1); },
-            prevTrack() { this.loadTrack(this.currentIndex - 1); },
-            
-            updateIco(isPlaying) {
-                document.getElementById('playIco').style.display = isPlaying ? 'none' : 'block';
-                document.getElementById('pauseIco').style.display = isPlaying ? 'block' : 'none';
+            Y(){this.V(this.q+1);},
+            ah(){this.V(this.q-1);},
+            af(isPlaying){
+                document.getElementById('playIco').style.display=isPlaying?'none':'block';
+                document.getElementById('pauseIco').style.display=isPlaying?'block':'none';
             },
-            
-            updateProgress() {
-                if (this.audio.duration && !this.isDragging) {
-                    const currentTime = this.audio.currentTime;
-                    const duration = this.audio.duration;
-                    this.pBar.style.width = `${(currentTime / duration) * 100}%`;
-                    document.getElementById('cTime').innerText = utils.formatTime(currentTime);
+            W(){
+                if(this.audio.duration&&!this.S){
+                    const a=this.audio.currentTime;
+                    const b=this.audio.duration;
+                    this.pBar.style.width=`${(a/b)*100}%`;
+                    document.getElementById('cTime').innerText=x.f(a);
                 }
             },
-            
-            updateTotalTime() {
-                if (this.audio.duration && !isNaN(this.audio.duration)) {
-                    document.getElementById('tTime').innerText = utils.formatTime(this.audio.duration);
+            X(){
+                if(this.audio.duration&&!isNaN(this.audio.duration)){
+                    document.getElementById('tTime').innerText=x.f(this.audio.duration);
                 }
             }
         };
-
-        const rgbModule = {
-            isActive: false,
-            intervalId: null,
-            hue: 0,
-            speed: 3,
-            
-            init() {
-                const rgbSwitch = document.getElementById('rgbSwitch');
-                const speedSlider = document.getElementById('speedSlider');
-                const speedValue = document.getElementById('speedValue');
-                rgbSwitch.addEventListener('change', () => this.toggleRGB());
-                speedSlider.addEventListener('input', () => {
-                    this.speed = parseInt(speedSlider.value);
-                    speedValue.textContent = this.speed;
-                    this.updateSpeed();
-                    localStorage.setItem('hago_rgb_speed', this.speed.toString());
+        const C={
+            ai:false,
+            aj:null,
+            ak:0,
+            al:3,
+            i(){
+                const a=document.getElementById('rgbSwitch');
+                const b=document.getElementById('speedSlider');
+                const d=document.getElementById('speedValue');
+                a.addEventListener('change',()=>this.am());
+                b.addEventListener('input',()=>{
+                    this.al=parseInt(b.value);
+                    d.textContent=this.al;
+                    this.an();
+                    localStorage.setItem('hago_rgb_speed',this.al.toString());
                 });
-                const savedState = localStorage.getItem('hago_rgb_enabled');
-                const savedSpeed = localStorage.getItem('hago_rgb_speed');
-                if (savedState === 'true') {
-                    rgbSwitch.checked = true;
-                    this.toggleRGB();
-                }
-                if (savedSpeed) {
-                    this.speed = parseInt(savedSpeed);
-                    speedSlider.value = this.speed;
-                    speedValue.textContent = this.speed;
-                    if (this.isActive) this.updateSpeed();
+                const e=localStorage.getItem('hago_rgb_enabled');
+                const f=localStorage.getItem('hago_rgb_speed');
+                if(e==='true'){a.checked=true;this.am();}
+                if(f){
+                    this.al=parseInt(f);
+                    b.value=this.al;
+                    d.textContent=this.al;
+                    if(this.ai)this.an();
                 }
             },
-            
-            calculateSpeed() { 
-                return 0.3 + (this.speed * 0.2);
-            },
-            
-            toggleRGB() {
-                if (this.isActive) this.stopRGB();
-                else this.startRGB();
-                localStorage.setItem('hago_rgb_enabled', this.isActive.toString());
-            },
-            
-            startRGB() {
-                this.isActive = true;
+            ao(){return 0.3+(this.al*0.2);},
+            am(){if(this.ai)this.ap();else this.aq();localStorage.setItem('hago_rgb_enabled',this.ai.toString());},
+            aq(){
+                this.ai=true;
                 document.body.classList.add('rgb-active');
-                this.updateRGB();
+                this.ar();
             },
-            
-            updateRGB() {
-                if (!this.isActive) return;
-                if (this.intervalId) clearInterval(this.intervalId);
-                this.intervalId = setInterval(() => {
-                    const hueStep = this.calculateSpeed();
-                    this.hue = (this.hue + hueStep) % 360;
-                    const rgb = this.hslToRgb(this.hue, 80, 50);
-                    document.documentElement.style.setProperty('--rgb-color', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
-                }, 60);
+            ar(){
+                if(!this.ai)return;
+                if(this.aj)clearInterval(this.aj);
+                this.aj=setInterval(()=>{
+                    const a=this.ao();
+                    this.ak=(this.ak+a)%360;
+                    const b=this.as(this.ak,80,50);
+                    document.documentElement.style.setProperty('--rgb-color',`${b.r}, ${b.g}, ${b.b}`);
+                },60);
             },
-            
-            hslToRgb(h, s, l) {
-                h /= 360; s /= 100; l /= 100;
-                let r, g, b;
-                if (s === 0) r = g = b = l;
-                else {
-                    const hue2rgb = (p, q, t) => {
-                        if (t < 0) t += 1; if (t > 1) t -= 1;
-                        if (t < 1/6) return p + (q - p) * 6 * t;
-                        if (t < 1/2) return q;
-                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            as(h,s,l){
+                h/=360;s/=100;l/=100;
+                let r,g,b;
+                if(s===0)r=g=b=l;
+                else{
+                    const at=(p,q,t)=>{
+                        if(t<0)t+=1;if(t>1)t-=1;
+                        if(t<1/6)return p+(q-p)*6*t;
+                        if(t<1/2)return q;
+                        if(t<2/3)return p+(q-p)*(2/3-t)*6;
                         return p;
                     };
-                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                    const p = 2 * l - q;
-                    r = hue2rgb(p, q, h + 1/3);
-                    g = hue2rgb(p, q, h);
-                    b = hue2rgb(p, q, h - 1/3);
+                    const q=l<0.5?l*(1+s):l+s-l*s;
+                    const p=2*l-q;
+                    r=at(p,q,h+1/3);
+                    g=at(p,q,h);
+                    b=at(p,q,h-1/3);
                 }
-                return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
+                return{r:Math.round(r*255),g:Math.round(g*255),b:Math.round(b*255)};
             },
-            
-            updateSpeed() { if (this.isActive) this.updateRGB(); },
-            
-            stopRGB() {
-                this.isActive = false;
+            an(){if(this.ai)this.ar();},
+            ap(){
+                this.ai=false;
                 document.body.classList.remove('rgb-active');
-                if (this.intervalId) {
-                    clearInterval(this.intervalId);
-                    this.intervalId = null;
-                }
-                document.documentElement.style.setProperty('--rgb-color', '255, 255, 255');
+                if(this.aj){clearInterval(this.aj);this.aj=null;}
+                document.documentElement.style.setProperty('--rgb-color','255, 255, 255');
             }
         };
-
-        const passwordModule = {
-            clickCount: 0,
-            clickTimer: null,
-            
-            init() {
-                const hideBtn = document.getElementById('hideUiBtn');
-                hideBtn.addEventListener('click', (e) => this.handleHideBtnClick(e));
-                document.getElementById('passwordConfirm').addEventListener('click', () => this.checkPassword());
-                document.getElementById('passwordCancel').addEventListener('click', () => this.closeDialog());
-                document.getElementById('passwordInput').addEventListener('keypress', (e) => { 
-                    if (e.key === 'Enter') this.checkPassword(); 
-                });
+        const D={
+            au:0,
+            av:null,
+            i(){
+                const a=document.getElementById('hideUiBtn');
+                a.addEventListener('click',(e)=>this.aw(e));
+                document.getElementById('passwordConfirm').addEventListener('click',()=>this.ax());
+                document.getElementById('passwordCancel').addEventListener('click',()=>this.ay());
+                document.getElementById('passwordInput').addEventListener('keypress',(e)=>{if(e.key==='Enter')this.ax();});
             },
-            
-            handleHideBtnClick(e) {
+            aw(e){
                 e.stopPropagation();
-                this.clickCount++;
-                if (this.clickTimer) clearTimeout(this.clickTimer);
-                this.clickTimer = setTimeout(() => this.clickCount = 0, 1000);
-                if (this.clickCount >= 5) {
-                    this.showDialog();
-                    this.clickCount = 0;
+                this.au++;
+                if(this.av)clearTimeout(this.av);
+                this.av=setTimeout(()=>this.au=0,1000);
+                if(this.au>=5){
+                    this.az();
+                    this.au=0;
                 }
             },
-            
-            showDialog() {
+            az(){
                 document.getElementById('passwordDialog').classList.add('show');
                 document.getElementById('passwordOverlay').classList.add('show');
-                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').value='';
                 document.getElementById('passwordInput').focus();
             },
-            
-            closeDialog() {
+            ay(){
                 document.getElementById('passwordDialog').classList.remove('show');
                 document.getElementById('passwordOverlay').classList.remove('show');
-                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').value='';
             },
-            
-            checkPassword() {
-                const password = document.getElementById('passwordInput').value.trim();
-                if (password === '') {
-                    this.closeDialog();
-                    setTimeout(() => window.location.reload(), 300);
+            ax(){
+                const a=document.getElementById('passwordInput').value.trim();
+                if(a===''){
+                    this.ay();
+                    setTimeout(()=>window.location.reload(),300);
                     return;
                 }
-                
-                if (password === "*****") {
-                    this.closeDialog();
-                    this.disableAllProtection();
-                    utils.showToast('主题设置已应用，保护功能已解除');
-                    const unlockMsg = document.createElement('div');
-                    unlockMsg.innerHTML = '🔓 保护功能已完全禁用';
-                    unlockMsg.style.cssText = `position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+                if(a==="@@@@@"){
+                    this.ay();
+                    this.bA();
+                    x.s('主题设置已应用，保护功能已解除');
+                    const b=document.createElement('div');
+                    b.innerHTML='🔓 保护功能已完全禁用';
+                    b.style.cssText=`position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
                         background: rgba(0, 255, 0, 0.2); color: #4CAF50; padding: 10px 20px; border-radius: 20px;
                         border: 1px solid #4CAF50; z-index: 10003; font-weight: bold; backdrop-filter: blur(5px);`;
-                    document.body.appendChild(unlockMsg);
-                    setTimeout(() => { if (unlockMsg.parentNode) unlockMsg.remove(); }, 3000);
-                } else {
-                    // 修复：移除密码错误提示，直接关闭对话框
-                    this.closeDialog();
-                }
+                    document.body.appendChild(b);
+                    setTimeout(()=>{if(b.parentNode)b.remove();},3000);
+                }else{this.ay();}
             },
-            
-            disableAllProtection() {
-                // 清除所有定时器
-                if (protection.devToolsCheckInterval) {
-                    clearInterval(protection.devToolsCheckInterval);
-                    protection.devToolsCheckInterval = null;
-                }
-                if (protection.debuggerCheckInterval) {
-                    clearInterval(protection.debuggerCheckInterval);
-                    protection.debuggerCheckInterval = null;
-                }
-                
-                // 移除保护模块的所有事件监听器
-                if (protection.contextMenuHandler) {
-                    document.removeEventListener('contextmenu', protection.contextMenuHandler);
-                }
-                if (protection.keydownHandler) {
-                    document.removeEventListener('keydown', protection.keydownHandler);
-                }
-                if (protection.selectStartHandler) {
-                    document.removeEventListener('selectstart', protection.selectStartHandler);
-                }
-                if (protection.dragStartHandler) {
-                    document.removeEventListener('dragstart', protection.dragStartHandler);
-                }
-                if (protection.dropHandler) {
-                    document.removeEventListener('drop', protection.dropHandler);
-                }
-                
-                // 移除增强保护模块的事件监听器
-                if (protectionEnhance.preventSaveAsHandler) {
-                    document.removeEventListener('keydown', protectionEnhance.preventSaveAsHandler);
-                }
-                if (protectionEnhance.preventF12Handler) {
-                    document.removeEventListener('keydown', protectionEnhance.preventF12Handler);
-                }
-                if (protectionEnhance.preventDevToolsHandler) {
-                    document.removeEventListener('keydown', protectionEnhance.preventDevToolsHandler);
-                }
-                
-                // 移除所有事件处理器
-                document.oncontextmenu = null;
-                document.onselectstart = null;
-                document.onkeydown = null;
-                document.ondragstart = null;
-                document.ondrop = null;
-                
-                // 启用文本选择
-                document.body.style.userSelect = 'text';
-                document.body.style.webkitUserSelect = 'text';
-                document.body.style.mozUserSelect = 'text';
-                document.body.style.msUserSelect = 'text';
-
-                // 禁用防护检测
-                protection.isDisabled = true;
-                protectionEnhance.isDisabled = true;
-
+            bA(){
+                if(E.bB){clearInterval(E.bB);E.bB=null;}
+                if(E.bC){clearInterval(E.bC);E.bC=null;}
+                if(E.bD){document.removeEventListener('contextmenu',E.bD);E.bD=null;}
+                if(E.bE){document.removeEventListener('keydown',E.bE);E.bE=null;}
+                if(E.bF){document.removeEventListener('selectstart',E.bF);E.bF=null;}
+                if(E.bG){document.removeEventListener('dragstart',E.bG);E.bG=null;}
+                if(E.bH){document.removeEventListener('drop',E.bH);E.bH=null;}
+                if(F.bI){document.removeEventListener('keydown',F.bI);F.bI=null;}
+                if(F.bJ){document.removeEventListener('keydown',F.bJ);F.bJ=null;}
+                if(F.bK){document.removeEventListener('keydown',F.bK);F.bK=null;}
+                document.oncontextmenu=null;
+                document.onselectstart=null;
+                document.onkeydown=null;
+                document.ondragstart=null;
+                document.ondrop=null;
+                document.body.style.userSelect='text';
+                document.body.style.webkitUserSelect='text';
+                document.body.style.mozUserSelect='text';
+                document.body.style.msUserSelect='text';
+                E.bL=true;
+                F.bM=true;
                 console.log('所有保护功能已完全禁用');
             }
         };
-
-        const protection = {
-            contextMenuHandler: null,
-            keydownHandler: null,
-            selectStartHandler: null,
-            dragStartHandler: null,
-            dropHandler: null,
-            devToolsCheckInterval: null,
-            debuggerCheckInterval: null,
-            isDisabled: false,
-
-            init() {
-                this.disableRightClick();
-                this.disableShortcuts();
-                this.disableSelection();
-                this.disableDrag();
-                this.detectDevTools();
+        const E={
+            bD:null,
+            bE:null,
+            bF:null,
+            bG:null,
+            bH:null,
+            bB:null,
+            bC:null,
+            bL:false,
+            i(){
+                this.bN();
+                this.bO();
+                this.bP();
+                this.bQ();
+                this.bR();
             },
-            
-            disableRightClick() {
-                this.contextMenuHandler = (e) => {
+            bN(){
+                this.bD=(e)=>{
                     e.preventDefault();
-                    utils.showToast('右键菜单已禁用');
+                    x.s('右键菜单已禁用');
                 };
-                document.addEventListener('contextmenu', this.contextMenuHandler);
+                document.addEventListener('contextmenu',this.bD);
             },
-            
-            // 加强：禁用所有可能打开开发者工具的快捷键
-            disableShortcuts() {
-                this.keydownHandler = (e) => {
-                    const disabledKeys = {
-                        'F12': true,
-                        'I': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+I
-                        'C': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+C
-                        'J': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+J
-                        'K': e.ctrlKey && e.shiftKey,  // Ctrl+Shift+K
-                        'u': e.ctrlKey,                // Ctrl+U
-                        's': e.ctrlKey && !e.shiftKey, // Ctrl+S
-                        'a': e.ctrlKey,                // Ctrl+A
-                        'p': e.ctrlKey,                // Ctrl+P
-                        'KeyI': e.ctrlKey && e.shiftKey,
-                        'KeyC': e.ctrlKey && e.shiftKey,
-                        'KeyJ': e.ctrlKey && e.shiftKey,
-                        'KeyK': e.ctrlKey && e.shiftKey,
-                        'KeyU': e.ctrlKey,
-                        'KeyS': e.ctrlKey && !e.shiftKey,
-                        'KeyA': e.ctrlKey,
-                        'KeyP': e.ctrlKey,
-                        'KeyQ': e.ctrlKey && e.shiftKey, // Ctrl+Shift+Q
-                        'KeyR': e.ctrlKey && e.shiftKey, // Ctrl+Shift+R
-                        'KeyD': e.ctrlKey && e.shiftKey, // Ctrl+Shift+D
-                        'Escape': false,
-                        'F8': true,
-                        'F9': true,
-                        'F10': true,
-                        'F11': true
+            bO(){
+                this.bE=(e)=>{
+                    const a={
+                        'F12':true,
+                        'I':e.ctrlKey&&e.shiftKey,
+                        'C':e.ctrlKey&&e.shiftKey,
+                        'J':e.ctrlKey&&e.shiftKey,
+                        'K':e.ctrlKey&&e.shiftKey,
+                        'u':e.ctrlKey,
+                        's':e.ctrlKey&&!e.shiftKey,
+                        'a':e.ctrlKey,
+                        'p':e.ctrlKey,
+                        'KeyI':e.ctrlKey&&e.shiftKey,
+                        'KeyC':e.ctrlKey&&e.shiftKey,
+                        'KeyJ':e.ctrlKey&&e.shiftKey,
+                        'KeyK':e.ctrlKey&&e.shiftKey,
+                        'KeyU':e.ctrlKey,
+                        'KeyS':e.ctrlKey&&!e.shiftKey,
+                        'KeyA':e.ctrlKey,
+                        'KeyP':e.ctrlKey,
+                        'KeyQ':e.ctrlKey&&e.shiftKey,
+                        'KeyR':e.ctrlKey&&e.shiftKey,
+                        'KeyD':e.ctrlKey&&e.shiftKey,
+                        'Escape':false,
+                        'F8':true,
+                        'F9':true,
+                        'F10':true,
+                        'F11':true
                     };
-                    
-                    if (disabledKeys[e.key] || disabledKeys[e.code]) {
-                        e.preventDefault();
-                        utils.showToast('此操作已被禁用');
-                    }
+                    if(a[e.key]||a[e.code]){e.preventDefault();x.s('此操作已被禁用');}
                 };
-                document.addEventListener('keydown', this.keydownHandler);
+                document.addEventListener('keydown',this.bE);
             },
-            
-            disableSelection() {
-                this.selectStartHandler = (e) => {
-                    e.preventDefault();
-                    return false;
-                };
-                document.addEventListener('selectstart', this.selectStartHandler);
+            bP(){
+                this.bF=(e)=>{e.preventDefault();return false;};
+                document.addEventListener('selectstart',this.bF);
             },
-            
-            disableDrag() {
-                this.dragStartHandler = (e) => {
-                    e.preventDefault();
-                    return false;
-                };
-                this.dropHandler = (e) => {
-                    e.preventDefault();
-                    return false;
-                };
-                document.addEventListener('dragstart', this.dragStartHandler);
-                document.addEventListener('drop', this.dropHandler);
+            bQ(){
+                this.bG=(e)=>{e.preventDefault();return false;};
+                this.bH=(e)=>{e.preventDefault();return false;};
+                document.addEventListener('dragstart',this.bG);
+                document.addEventListener('drop',this.bH);
             },
-            
-            detectDevTools() {
-                const devToolsCheck = () => {
-                    const threshold = 160;
-                    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-
-                    if (widthThreshold || heightThreshold && !this.isDisabled) {
-                        window.location.reload();
-                    }
+            bR(){
+                const a=()=>{
+                    const b=160;
+                    const c=window.outerWidth-window.innerWidth>b;
+                    const d=window.outerHeight-window.innerHeight>b;
+                    if(c||d&&!this.bL){window.location.reload();}
                 };
-
-                this.devToolsCheckInterval = setInterval(devToolsCheck, 1000);
-
-                const debuggerCheck = () => {
-                    if (this.isDisabled) return;
-                    const startTime = Date.now();
+                this.bB=setInterval(a,1000);
+                const e=()=>{
+                    if(this.bL)return;
+                    const f=Date.now();
                     debugger;
-                    const endTime = Date.now();
-
-                    if (endTime - startTime > 100 && !this.isDisabled) {
-                        window.location.reload();
-                    }
+                    const g=Date.now();
+                    if(g-f>100&&!this.bL){window.location.reload();}
                 };
-                this.debuggerCheckInterval = setInterval(debuggerCheck, 1000);
+                this.bC=setInterval(e,1000);
             }
         };
-
-        const protectionEnhance = {
-            preventSaveAsHandler: null,
-            preventF12Handler: null,
-            preventDevToolsHandler: null,
-            isDisabled: false,
-
-            init() {
-                this.preventSaveAs();
-                this.preventF12();
-                this.preventDevToolsMenu();
+        const F={
+            bI:null,
+            bJ:null,
+            bK:null,
+            bM:false,
+            i(){
+                this.bS();
+                this.bT();
+                this.bU();
             },
-            
-            preventSaveAs() {
-                this.preventSaveAsHandler = (e) => {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                        e.preventDefault();
-                        utils.showToast('此页面禁止保存');
-                    }
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
-                        e.preventDefault();
-                        utils.showToast('此页面禁止打印');
-                    }
+            bS(){
+                this.bI=(e)=>{
+                    if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();x.s('此页面禁止保存');}
+                    if((e.ctrlKey||e.metaKey)&&e.key==='p'){e.preventDefault();x.s('此页面禁止打印');}
                 };
-                document.addEventListener('keydown', this.preventSaveAsHandler);
+                document.addEventListener('keydown',this.bI);
             },
-            
-            preventF12() {
-                this.preventF12Handler = (e) => {
-                    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+            bT(){
+                this.bJ=(e)=>{
+                    if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&e.key==='I')){
                         e.preventDefault();
-                        utils.showToast('开发者工具已被禁用');
+                        x.s('开发者工具已被禁用');
                         return false;
                     }
                 };
-                document.addEventListener('keydown', this.preventF12Handler);
+                document.addEventListener('keydown',this.bJ);
             },
-            
-            preventDevToolsMenu() {
-                this.preventDevToolsHandler = (e) => {
-                    // 检测更多开发者工具快捷键
-                    if (e.ctrlKey && e.shiftKey) {
-                        if (e.key === 'C' || e.key === 'J' || e.key === 'K' || e.key === 'Q' || e.key === 'R' || e.key === 'D') {
+            bU(){
+                this.bK=(e)=>{
+                    if(e.ctrlKey&&e.shiftKey){
+                        if(e.key==='C'||e.key==='J'||e.key==='K'||e.key==='Q'||e.key==='R'||e.key==='D'){
                             e.preventDefault();
-                            utils.showToast('开发者工具已被禁用');
+                            x.s('开发者工具已被禁用');
                             return false;
                         }
                     }
                 };
-                document.addEventListener('keydown', this.preventDevToolsHandler);
+                document.addEventListener('keydown',this.bK);
             }
         };
 //恭喜你发现了!给我的github点个Starred吧!
-        document.addEventListener('DOMContentLoaded', () => {
-            protection.init();
-            protectionEnhance.init();
-            passwordModule.init();
-            rgbModule.init();
-            backgroundModule.init();
-            timerModule.start();
-            musicPlayer.init();
-            document.addEventListener('click', (e) => {
-                if (!musicPlayer.player.contains(e.target)) musicPlayer.collapse();
+        document.addEventListener('DOMContentLoaded',()=>{
+            E.i();
+            F.i();
+            D.i();
+            C.i();
+            y.i();
+            z.n();
+            B.i();
+            document.addEventListener('click',(e)=>{
+                if(!B.player.contains(e.target))B.ae();
             });
-            setTimeout(() => { document.body.style.visibility = 'visible'; }, 300);
+            setTimeout(()=>{document.body.style.visibility='visible';},300);
         });
     </script>
 </body>
