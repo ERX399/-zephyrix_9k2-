@@ -172,10 +172,10 @@
         #player {
             position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
             background: rgba(255, 255, 255, 0.15); border: 1px solid var(--glass-border); border-radius: 25px;
-            z-index: 9999; transition: all 0.4s; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 9999; transition: all 0.4s ease; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
         }
         
-        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; }
+        #player.expanded { width: 300px; height: 130px; border-radius: 20px; padding: 15px; box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         
         .cd-box {
             width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
@@ -184,9 +184,7 @@
         
         .cd-box svg { width: 22px; height: 22px; fill: #fff; transition: transform 0.3s ease; }
         .cd-box:hover svg { transform: scale(1.1); }
-        .cd-box.playing svg { animation: rotateDisk 3s linear infinite; }
-        @keyframes rotateDisk { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
+        
         /* 播放器进度条样式 - 修复显示问题 */
         .progress-container { 
             width: 100%; height: 30px; display: flex; align-items: center; cursor: pointer;
@@ -203,13 +201,13 @@
         }
 
         #player:not(.dragging) .p-fill {
-            transition: width 0.1s ease;
+            transition: width 0.1s ease, background-color 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .p-fill::after { 
-            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px; 
+        .p-fill::after {
+            content: ''; position: absolute; right: -6px; top: -4px; width: 12px; height: 12px;
             background: #fff; border-radius: 50%; box-shadow: 0 0 6px rgba(0,0,0,0.5); transform: scale(0);
-            transition: transform 0.2s ease, background 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), background 0.3s ease;
         }
         
         #player.expanded .p-fill::after { transform: scale(1); }
@@ -293,6 +291,8 @@
             width: 100%; padding: 14px 18px; border: 1px solid var(--glass-border); border-radius: 12px;
             background: rgba(255, 255, 255, 0.05); color: white; font-size: 1.1rem; box-sizing: border-box;
             margin-bottom: 20px; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            -webkit-text-security: disc;
+            text-security: disc;
         }
         
         .password-buttons { display: flex; gap: 15px; }
@@ -498,7 +498,7 @@
     <div id="passwordOverlay"></div>
     <div id="passwordDialog">
         <h3>高级主题设置</h3>
-        <input type="text" id="passwordInput" placeholder="输入主题设置..." autocomplete="off">
+        <input type="text" id="passwordInput" placeholder="输入主题码..." autocomplete="off">
         <div class="password-buttons">
             <button id="passwordConfirm">应用</button>
             <button id="passwordCancel">取消</button>
@@ -947,7 +947,6 @@
             updateIco(isPlaying) {
                 document.getElementById('playIco').style.display = isPlaying ? 'none' : 'block';
                 document.getElementById('pauseIco').style.display = isPlaying ? 'block' : 'none';
-                document.querySelector('.cd-box').classList.toggle('playing', isPlaying);
             },
             
             updateProgress() {
@@ -1104,6 +1103,7 @@
                     return;
                 }
                 
+                // 修复：使用简单的字符串比较，密码是"*****"
                 if (password === "*****") {
                     this.closeDialog();
                     this.disableAllProtection();
@@ -1131,50 +1131,42 @@
                     clearInterval(protection.debuggerCheckInterval);
                     protection.debuggerCheckInterval = null;
                 }
-
+                
                 // 移除保护模块的所有事件监听器
                 if (protection.contextMenuHandler) {
                     document.removeEventListener('contextmenu', protection.contextMenuHandler);
-                    protection.contextMenuHandler = null;
                 }
                 if (protection.keydownHandler) {
                     document.removeEventListener('keydown', protection.keydownHandler);
-                    protection.keydownHandler = null;
                 }
                 if (protection.selectStartHandler) {
                     document.removeEventListener('selectstart', protection.selectStartHandler);
-                    protection.selectStartHandler = null;
                 }
                 if (protection.dragStartHandler) {
                     document.removeEventListener('dragstart', protection.dragStartHandler);
-                    protection.dragStartHandler = null;
                 }
                 if (protection.dropHandler) {
                     document.removeEventListener('drop', protection.dropHandler);
-                    protection.dropHandler = null;
                 }
-
+                
                 // 移除增强保护模块的事件监听器
                 if (protectionEnhance.preventSaveAsHandler) {
                     document.removeEventListener('keydown', protectionEnhance.preventSaveAsHandler);
-                    protectionEnhance.preventSaveAsHandler = null;
                 }
                 if (protectionEnhance.preventF12Handler) {
                     document.removeEventListener('keydown', protectionEnhance.preventF12Handler);
-                    protectionEnhance.preventF12Handler = null;
                 }
                 if (protectionEnhance.preventDevToolsHandler) {
                     document.removeEventListener('keydown', protectionEnhance.preventDevToolsHandler);
-                    protectionEnhance.preventDevToolsHandler = null;
                 }
-
+                
                 // 移除所有事件处理器
                 document.oncontextmenu = null;
                 document.onselectstart = null;
                 document.onkeydown = null;
                 document.ondragstart = null;
                 document.ondrop = null;
-
+                
                 // 启用文本选择
                 document.body.style.userSelect = 'text';
                 document.body.style.webkitUserSelect = 'text';
