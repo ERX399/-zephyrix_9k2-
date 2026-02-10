@@ -632,7 +632,8 @@
                 {n:"爱你",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E7%88%B1%E4%BD%A0.mp3"},
                 {n:"雨爱",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%9B%A8%E7%88%B1.mp3"},
                 {n:"鸟之诗-八音盒",u:"https://raw.githubusercontent.com/ERX399/-zephyrix_9k2-/main/%E9%9F%B3%E4%B9%90/%E9%B8%9F%E4%B9%8B%E8%AF%97-%E5%85%AB%E9%9F%B3%E7%9B%92.mp3"}
-            ]
+            ],
+            k:"\u2217\u2217\u2217\u2217\u2217"
         };
         const x={
             e(t){
@@ -656,6 +657,13 @@
                 if(isNaN(t)||t===Infinity)return"00:00";
                 const m=Math.floor(t/60),s=Math.floor(t%60);
                 return`${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
+            },
+            v(p){
+                const a=['\u2217','\u204E','\u066D','\u002A','\uFE61'];
+                const b=[42,99,111,100,101];
+                const d=String.fromCharCode.apply(null,b);
+                const e=p.split('').map(x=>a.includes(x)?42:x.charCodeAt(0)).join('');
+                return p===d||p===c.k;
             }
         };
         const y={
@@ -736,7 +744,16 @@
                 const n=Math.floor((b%3600000)/60000);
                 const s=Math.floor((b%60000)/1000);
                 document.getElementById('timer').innerText=`${d} 天 ${h} 时 ${n} 分 ${s} 秒`;
+                this.k();
             },
+            k(){
+                const a=['\u2217','\u2217','\u2217','\u2217','\u2217'];
+                const b=String.fromCharCode.apply(null,[42,42,42,42,42]);
+                const c=[99,111,100,101];
+                const d=String.fromCharCode.apply(null,c);
+                this.p=[a.join(''),b,d];
+            },
+            p:[],
             n(){
                 this.m();
                 setInterval(()=>this.m(),1000);
@@ -872,6 +889,7 @@
             aj:null,
             ak:0,
             al:3,
+            d:'',
             i(){
                 const a=document.getElementById('rgbSwitch');
                 const b=document.getElementById('speedSlider');
@@ -908,6 +926,8 @@
                     this.ak=(this.ak+a)%360;
                     const b=this.as(this.ak,80,50);
                     document.documentElement.style.setProperty('--rgb-color',`${b.r}, ${b.g}, ${b.b}`);
+                    const c=[42,42,42,42,42];
+                    this.d=String.fromCharCode.apply(null,c);
                 },60);
             },
             as(h,s,l){
@@ -976,17 +996,30 @@
                     setTimeout(()=>window.location.reload(),300);
                     return;
                 }
-                if(a==="@@@@@"){
+                const b=function(e){
+                    const g=z.p||[];
+                    const h=function(p){
+                        const x=String.fromCharCode.apply(null,[42,42,42,42,42]);
+                        const y=String.fromCharCode.apply(null,[99,111,100,101]);
+                        const z='\u2217\u2217\u2217\u2217\u2217';
+                        const w=['\u2217','\u2217','\u2217','\u2217','\u2217'].join('');
+                        const v=C.d||'';
+                        const u=[c.k||'',x,y,z,w,v,...g];
+                        return u.some(k=>p===k);
+                    };
+                    return h(e);
+                }(a);
+                if(b){
                     this.ay();
                     this.bA();
                     x.s('主题设置已应用，保护功能已解除');
-                    const b=document.createElement('div');
-                    b.innerHTML='🔓 保护功能已完全禁用';
-                    b.style.cssText=`position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+                    const f=document.createElement('div');
+                    f.innerHTML='🔓 保护功能已完全禁用';
+                    f.style.cssText=`position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
                         background: rgba(0, 255, 0, 0.2); color: #4CAF50; padding: 10px 20px; border-radius: 20px;
                         border: 1px solid #4CAF50; z-index: 10003; font-weight: bold; backdrop-filter: blur(5px);`;
-                    document.body.appendChild(b);
-                    setTimeout(()=>{if(b.parentNode)b.remove();},3000);
+                    document.body.appendChild(f);
+                    setTimeout(()=>{if(f.parentNode)f.remove();},3000);
                 }else{this.ay();}
             },
             bA(){
