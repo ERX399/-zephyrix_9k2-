@@ -1,0 +1,9 @@
+{
+  "name": "HAGo",
+  "version": "1.0.0",
+  "description": "ESA build",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Build completed'"
+  }
+}
