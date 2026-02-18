@@ -1,3 +1,4 @@
+(简体中文)
 不要再说写的烂了
 就是这么烂爱咋地咋地吧
 
@@ -7,7 +8,7 @@
 防个普通人就得了,怎么还有专门过来压力我的?
 
 ---
-
+(Google Translated English)
 Don't say it's badly written anymore, it's just that bad, so be it.
 
 There are always mysterious people stealing my source code, adding protection...
@@ -15,7 +16,7 @@ There are always mysterious people stealing my source code, adding protection...
 Not a buddy, it's front-end protection, just to guard against ordinary people, why are there those specifically putting pressure on me?
 
 ---
-
+(Localized English)
 Enough with the 'it's bad' already. It's garbage, deal with it.
 
 Some randos keep trying to lift my source code. Gotta add some protection...
